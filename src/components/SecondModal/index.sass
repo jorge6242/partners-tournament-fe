@@ -1,0 +1,76 @@
+.second-modal-main
+  background-color: rgba(0, 0, 0, 0.6)
+  width: 100vw
+  height: 100vh
+  position: fixed
+  left: 0
+  top: 0
+  z-index: 1400
+  pointer-events: unset
+  opacity: 1
+  display: none
+.second-modal-main.second-modal-main--active
+  display: block
+  animation: show 0.8s
+  animation-fill-mode: forwards
+  .second-modal-main__backdrop
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    height: auto
+    margin: 48px
+  .second-modal-main__content
+    background-color: #fff
+    max-width: 660px
+    border-radius: 4px
+    z-index: 999
+    pointer-events: auto
+    cursor: auto
+    box-shadow: 0 3px 7px rgba(0, 0, 0, 0.6)
+    position: absolute
+    top: 0
+    bottom: 0
+    left: 0
+    right: 0
+    height: fit-content
+    margin: auto
+    border-radius: 8px
+    flex-direction: column
+    overflow: hidden
+    .second-modal-main__loader
+      position: absolute
+      width: 100%
+      height: 100%
+      z-index: 10
+      display: none
+      text-align: center
+    .second-modal-main__loader.second-modal-main__active
+      z-index: 100
+      background-color: white
+      opacity: 0.9
+      display: block
+    .second-modal-main__children
+      padding: 10px 20px
+    .second-modal-main_header
+      margin-top: 10px
+      .second-modal-main_title
+        text-align: center
+        line-height: 1.6
+      .second-modal-main_close
+        cursor: pointer
+        text-align: right
+  .second-modal-main__content.second-modal-main__content--medium
+    max-width: 900px
+  .second-modal-main__content.second-modal-main__content--large
+    max-width: 1200px
+  @keyframes show
+    0%
+      opacity: 0
+    100%
+      opacity: 1
+
+
+  
+
