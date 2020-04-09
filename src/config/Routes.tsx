@@ -49,7 +49,7 @@ import { getList as getLockerLocationList } from "../actions/lockerLocationsActi
 // import GeneralReport from "../containers/reports/GeneralReport";
 // import SharesReport from "../containers/reports/SharesReport";
 // import AccessControlReport from "../containers/reports/AccessControlReport";
-// import Parameter from "../containers/parameter";
+import Parameter from "../containers/parameter";
 // import Locker from "../containers/locker";
 import Partners from "../containers/partner";
 import ReportePagos from "../containers/reportePagos";
@@ -60,6 +60,12 @@ import Permission from "../containers/permission";
 import Role from "../containers/role";
 import MainLoader from "../components/MainLoading";
 import MenuItem from "../containers/MenuItem";
+import Register from "../containers/register";
+import TCategoryType from "../containers/TCategoryType";
+import TCategory from "../containers/TCategory";
+import Tournament from "../containers/Tournament";
+import Group from "../containers/group";
+import CustomModal from "../components/CustomModal";
 
 export default function Routes() { 
   return (
@@ -67,6 +73,7 @@ export default function Routes() {
       <MainLayout>
         <Switch>
           <Route path="/" exact component={Login} />
+          <Route path="/register" exact component={Register} />
           <Route path="/template/expiration-cards" component={ExpirationCard} />
           <Route
             path="/dashboard"
@@ -86,10 +93,15 @@ export default function Routes() {
                       <Route path="/dashboard/actualizacion-datos" component={Person} />
                       <Route path="/dashboard/partner" component={Partners} />
                       <Route path="/dashboard/reporte-pagos" component={ReportePagos} />
-                      <Route path="/dashboard/status-account" component={StatusAccount} />
+                      <Route path="/dashboard/status-aPccount" component={StatusAccount} />
                       <Route path="/dashboard/widget" exact component={Widget} />
                       <Route path="/dashboard/menu" exact component={Menu} />
                       <Route path="/dashboard/menu-item" exact component={MenuItem} />
+                      <Route path="/dashboard/category" exact component={TCategory} />
+                      <Route path="/dashboard/category-type" exact component={TCategoryType} />
+                      <Route path="/dashboard/tournament" exact component={Tournament} />
+                      <Route path="/dashboard/group" exact component={Group} />
+                      <Route path="/dashboard/parameter" exact component={Parameter} />
                     </Dashboard>
                   </Switch>
                 );
@@ -98,6 +110,7 @@ export default function Routes() {
         </Switch>
         <Modal />
         <SecondModal />
+        <CustomModal />
         <SnackBar />
         <MainLoader />
       </MainLayout>

@@ -12,6 +12,8 @@ import TransferList from "../TransferList";
 import CustomTextField from "../FormElements/CustomTextField";
 import { update, create, get } from "../../actions/userActions";
 import { getAll as getAllRoles } from "../../actions/roleActions";
+import { getList as getGroupList } from "../../actions/groupActions";
+import CustomSelect from "../FormElements/CustomSelect";
 
 const useStyles = makeStyles(theme => ({
   rootUserForm: {
@@ -20,7 +22,7 @@ const useStyles = makeStyles(theme => ({
   paper: {
     display: "flex",
     flexDirection: "column",
-    alignItems: "center"
+    alignItems: "center",
   },
   form: {
     width: "100%", // Fix IE 11 issue.
@@ -52,9 +54,20 @@ const useStyles = makeStyles(theme => ({
 
 type FormData = {
   name: string;
+  last_name: string;
+  doc_id: string;
+  birth_date: string;
+  phone_number: string;
+  address: string;
+  username: string;
   email: string;
   password: string;
-  roles: string;
+  group_id: string;
+  isPartner: string;
+  handicap: number;
+  handicapFVG: number;
+  gender_id: string;
+  people_id: string;
 };
 
 type FormComponentProps = {
@@ -67,17 +80,51 @@ const UserForm: FunctionComponent<FormComponentProps> = ({ id }) => {
   const { handleSubmit, register, errors, reset, setValue } = useForm<
     FormData
   >();
-  const loading = useSelector((state: any) => state.userReducer.loading);
-  const { list } = useSelector((state: any) => state.roleReducer);
+
+  const {
+    userReducer: { loading },
+    roleReducer: { list },
+    groupReducer: { listData: groupList },
+  } = useSelector((state: any) => state);
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getAllRoles());
+    dispatch(getGroupList());
     async function fetch() {
       if (id) {
         const response: any = await dispatch(get(id));
-        const { name, email, roles } = response;
+        const {
+          name,
+          last_name,
+          doc_id,
+          birth_date,
+          phone_number,
+          address,
+          username,
+          email,
+          password,
+          group_id,
+          isPartner,
+          handicap,
+          handicapFVG,
+          gender_id,
+          people_id,
+          roles
+        } = response;
         setValue("name", name);
+        setValue("last_name", last_name);
+        setValue("doc_id", doc_id);
+        setValue("birth_date", birth_date);
+        setValue("phone_number", phone_number);
+        setValue("address", address);
+        setValue("username", username);
         setValue("email", email);
+        setValue("group_id", group_id);
+        setValue("isPartner", isPartner);
+        setValue("handicap", handicap);
+        setValue("handicapFVG", handicapFVG);
+        setValue("gender_id", gender_id);;
         if (roles.length > 0) {
           const list = roles.map((element: any) => element.id);
           setValue("roles", JSON.stringify(list));
@@ -98,9 +145,9 @@ const UserForm: FunctionComponent<FormComponentProps> = ({ id }) => {
 
   const handleForm = (form: object) => {
     if (id) {
-    dispatch(update({ id, ...form }));
+      dispatch(update({ id, ...form }));
     } else {
-    dispatch(create({...form, password: '123456'}));
+      dispatch(create({ ...form, password: '123456' }));
     }
   };
 
@@ -120,9 +167,9 @@ const UserForm: FunctionComponent<FormComponentProps> = ({ id }) => {
           noValidate
         >
           <Grid container spacing={2}>
-            <Grid item xs={4}>
+            <Grid item xs={12}>
               <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={3}>
                   <CustomTextField
                     placeholder="Nombre"
                     field="name"
@@ -132,7 +179,69 @@ const UserForm: FunctionComponent<FormComponentProps> = ({ id }) => {
                     errorsMessageField={errors.name && errors.name.message}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={3}>
+                  <CustomTextField
+                    placeholder="Apellido"
+                    field="last_name"
+                    required
+                    register={register}
+                    errorsField={errors.last_name}
+                    errorsMessageField={errors.last_name && errors.last_name.message}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <CustomTextField
+                    placeholder="ID Documento"
+                    field="doc_id"
+                    required
+                    register={register}
+                    errorsField={errors.doc_id}
+                    errorsMessageField={errors.doc_id && errors.doc_id.message}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <CustomTextField
+                    placeholder="Nacimiento"
+                    field="birth_date"
+                    required
+                    register={register}
+                    errorsField={errors.birth_date}
+                    errorsMessageField={errors.birth_date && errors.birth_date.message}
+                    type="date"
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <CustomTextField
+                    placeholder="Numero"
+                    field="phone_number"
+                    required
+                    register={register}
+                    errorsField={errors.phone_number}
+                    errorsMessageField={errors.phone_number && errors.phone_number.message}
+                    inputType="number"
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <CustomTextField
+                    placeholder="Direccion"
+                    field="address"
+                    required
+                    register={register}
+                    errorsField={errors.address}
+                    errorsMessageField={errors.address && errors.address.message}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <CustomTextField
+                    placeholder="Usuario"
+                    field="username"
+                    required
+                    register={register}
+                    errorsField={errors.username}
+                    errorsMessageField={errors.username && errors.username.message}
+                  />
+                </Grid>
+                <Grid item xs={3}>
                   <CustomTextField
                     placeholder="Correo"
                     field="email"
@@ -140,6 +249,61 @@ const UserForm: FunctionComponent<FormComponentProps> = ({ id }) => {
                     register={register}
                     errorsField={errors.email}
                     errorsMessageField={errors.email && errors.email.message}
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <CustomSelect
+                    label="Grupo"
+                    selectionMessage="Seleccione"
+                    field="group_id"
+                    required
+                    register={register}
+                    errorsMessageField={
+                      errors.group_id && errors.group_id.message
+                    }
+                  >
+                    {groupList.length > 0 && groupList.map((item: any) => (
+                      <option key={item.id} value={item.id}>
+                        {item.balance}
+                      </option>
+                    ))}
+                  </CustomSelect>
+                </Grid>
+                <Grid item xs={3}>
+                  <CustomSelect
+                    label="Tipo"
+                    selectionMessage="Seleccione"
+                    field="isPartner"
+                    register={register}
+                    errorsMessageField={
+                      errors.isPartner && errors.isPartner.message
+                    }
+                  >
+                    <option value={1}> Socio </option>
+                    <option value={2}> Familiar </option>
+                    <option value={3}> Invitado </option>
+                  </CustomSelect>
+                </Grid>
+                <Grid item xs={3}>
+                  <CustomTextField
+                    placeholder="Handicap"
+                    field="handicap"
+                    required
+                    register={register}
+                    errorsField={errors.handicap}
+                    errorsMessageField={errors.handicap && errors.handicap.message}
+                    inputType="number"
+                  />
+                </Grid>
+                <Grid item xs={3}>
+                  <CustomTextField
+                    placeholder="Handicap FGV"
+                    field="handicapFVG"
+                    required
+                    register={register}
+                    errorsField={errors.handicapFVG}
+                    errorsMessageField={errors.handicapFVG && errors.handicapFVG.message}
+                    inputType="number"
                   />
                 </Grid>
               </Grid>

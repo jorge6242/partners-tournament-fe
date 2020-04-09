@@ -63,6 +63,7 @@ import { getList as getMenuList, getWidgetList } from "../../actions/menuActions
 import Loader from "../../components/common/Loader";
 import { getClient } from "../../actions/personActions";
 import { getBalance } from "../../actions/webServiceActions";
+import icons from "../../helpers/collectionIcons";
 
 const drawerWidth = 240;
 
@@ -225,13 +226,20 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     </ListItem>
   )
 
-  const renderSecondMenu = (Icon: React.ReactType, title: string, route: string, menu: any, item: any) => {
+  const renderSecondMenu = (CustomIcon: React.ReactType, title: string, route: string, menu: any, item: any) => {
     const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
+    let Icon = SettingsIcon;
+    if(item.icons) {
+      let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
+      if(currenMenutIcon) {
+        Icon = currenMenutIcon.name;
+      }
+    }
     return (
       <React.Fragment>
         <ListItem button onClick={() => findChildrens.length > 0 ? setSecondSubMenu(item.id) : handeClick(item.route ? item.route : '')}>
           <ListItemIcon >
-            <SettingsIcon />
+          <SettingsIcon />
           </ListItemIcon>
           <ListItemText primary={item.name} />
           {findChildrens.length > 0 && (
@@ -257,11 +265,18 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     return menu.map((item: any, i: number) => {
       if (item.parent === "0") {
         const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
+        let Icon = SettingsIcon;
+        if(item.icons) {
+          let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
+          if(currenMenutIcon) {
+            Icon = currenMenutIcon.name;
+          }
+        }
         return (
           <React.Fragment>
             <ListItem button onClick={() => findChildrens.length > 0 ? setSubMenu(item.id) : handeClick(item.route ? item.route : '')}>
               <ListItemIcon >
-                <SettingsIcon />
+                <Icon />
               </ListItemIcon>
               <ListItemText primary={item.name} />
               {findChildrens.length > 0 && (
@@ -343,7 +358,11 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         <Divider />
         <List dense >
           {!_.isEmpty(menuList) && buildMenu(menuList.items)}
-          {/* <ListItem button onClick={() => handleClick(3)}>
+           {renderFirstMenu(SettingsIcon, "Categoria", "/dashboard/category")}
+           {renderFirstMenu(SettingsIcon, "Tipo Categoria", "/dashboard/category-type")}
+           {renderFirstMenu(SettingsIcon, "Torneo", "/dashboard/tournament")}
+           {renderFirstMenu(SettingsIcon, "Grupos", "/dashboard/group")}
+          <ListItem button onClick={() => handleClick(3)}>
           <ListItemIcon >
             <LockIcon />
           </ListItemIcon>
@@ -353,13 +372,14 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
         <Collapse in={open3} timeout="auto" unmountOnExit>
           <List dense>
+            {renderFirstMenu(PeopleIcon, "Usuarios", "/dashboard/user")}
             {renderFirstMenu(PeopleIcon, "Roles", "/dashboard/role")}
             {renderFirstMenu(LockIcon, "Permisos", "/dashboard/permission")}
             {renderFirstMenu(DoubleArrowIcon, "Widget", "/dashboard/widget")}
             {renderFirstMenu(DoubleArrowIcon, "Menu", "/dashboard/menu")}
             {renderFirstMenu(DoubleArrowIcon, "Menu Item", "/dashboard/menu-item")}
           </List>
-        </Collapse> */}
+        </Collapse>
         {/* {!_.isEmpty(user) && getRole('admin') && (
               <React.Fragment>
                 {renderFirstMenu(DashboardIcon, "Inicio", "/dashboard/main")}

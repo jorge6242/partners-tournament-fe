@@ -8,7 +8,7 @@ const API = {
   },
   create(data: any) {
     return AXIOS.post(
-      `${Prefix.api}/user`,
+      `${Prefix.api}/user-create`,
       {
         ...data
       },

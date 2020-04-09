@@ -1,6 +1,6 @@
 import API from "../api/MenuItem";
 import snackBarUpdate from "../actions/snackBarActions";
-import { updateModal } from "../actions/modalActions";
+import { updateModal } from "../actions/customModalActions";
 import { ACTIONS } from "../interfaces/actionTypes/menuItemTypes";
 
 export const getAll = (page: number = 1, perPage: number = 8) => async (
@@ -167,7 +167,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Transaction Created!",
+          message: "Menu Item Created!",
           type: "success",
           status: true,
         },
@@ -248,7 +248,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Transaction Updated!",
+          message: "Menu Item Updated!",
           type: "success",
           status: true,
         },
@@ -302,7 +302,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Transaction Removed!",
+          message: "Menu Item Removed!",
           type: "success",
           status: true,
         },

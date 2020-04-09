@@ -7,6 +7,7 @@ type InitState = {
   listData: any;
   widgetList: Array<string | number>;
   setWidgetLoading: boolean;
+  menuList: Array<string | number>;
 };
 
 const initialState: InitState = {
@@ -21,6 +22,7 @@ const initialState: InitState = {
   listData: [],
   widgetList: [],
   setWidgetLoading: false,
+  menuList: [],
 };
 
 const menuReducer = (state = initialState, action: ActionTypes) => {
@@ -35,6 +37,11 @@ const menuReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         listData: action.payload
       };
+      case ACTIONS.GET_MENU_LIST:
+        return {
+          ...state,
+          menuList: action.payload
+        };
     case ACTIONS.GET_WIDGET_LIST:
       return {
         ...state,

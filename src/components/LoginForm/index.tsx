@@ -8,6 +8,7 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -53,6 +54,10 @@ type LoginFormProps = {
 const LoginForm: FunctionComponent<LoginFormProps> = ({ handleForm, loading }) => {
   const classes = useStyles();
   const { handleSubmit, register, errors } = useForm<FormData>();
+  const history = useHistory();
+  const handleRegister = () => {
+      history.push('/register');
+  }
 
   return (
     <Container component="main" maxWidth="xs">
@@ -100,6 +105,7 @@ const LoginForm: FunctionComponent<LoginFormProps> = ({ handleForm, loading }) =
             error={errors.password ? true : false}
             helperText={errors.password && errors.password.message}
           />
+
           <div className={classes.wrapper}>
           <Button
             type="submit"
@@ -109,7 +115,22 @@ const LoginForm: FunctionComponent<LoginFormProps> = ({ handleForm, loading }) =
             disabled={loading}
             className={classes.submit}
           >
-            Sign In
+            Iniciar Sesion
+          </Button>
+        {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+      </div>
+
+      <div className={classes.wrapper}>
+          <Button
+            type="button"
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={loading}
+            className={classes.submit}
+            onClick={() => handleRegister()}
+          >
+            Registro
           </Button>
         {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
       </div>

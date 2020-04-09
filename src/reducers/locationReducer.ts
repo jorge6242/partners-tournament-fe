@@ -1,13 +1,13 @@
 import {  ACTIONS, ActionTypes } from '../interfaces/actionTypes/locationTypes';
 
-type BanksInitialState = {
+type InitState = {
     list: Array<string | number>;
     loading: boolean;
     pagination: any;
     listData: any;
 }
 
-const initialState: BanksInitialState = {
+const initialState: InitState = {
     list: [],
     loading: false,
     pagination: {

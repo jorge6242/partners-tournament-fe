@@ -10,10 +10,16 @@ const API = {
     return AXIOS.post(
       `${Prefix.api}/gender`,
       {
-        ...data
+        ...data,
       },
       { headers: headers() }
     );
+  },
+  getList() {
+    return AXIOS.get(`${Prefix.api}/gender-list`, { headers: headers() });
+  },
+  getListPublic() {
+    return AXIOS.get(`${Prefix.api}/gender-list-public`, { headers: headers() });
   },
   get(id: number) {
     return AXIOS.get(`${Prefix.api}/gender/${id}`, { headers: headers() });
@@ -22,7 +28,7 @@ const API = {
     return AXIOS.put(
       `${Prefix.api}/gender/${data.id}`,
       {
-        ...data
+        ...data,
       },
       { headers: headers() }
     );
@@ -31,8 +37,10 @@ const API = {
     return AXIOS.delete(`${Prefix.api}/gender/${id}`, { headers: headers() });
   },
   search(term: string) {
-    return AXIOS.get(`${Prefix.api}/gender-search?term=${term}`, { headers: headers() });
-  }
+    return AXIOS.get(`${Prefix.api}/gender-search?term=${term}`, {
+      headers: headers(),
+    });
+  },
 };
 
 export default API;

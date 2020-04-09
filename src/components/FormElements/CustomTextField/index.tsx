@@ -8,7 +8,7 @@ const email = {
 }
 
 const numbers = {
-  value : new RegExp('^[0-9]+$'),
+  value : new RegExp('^[0-9.]+$'),
   message: "Solo numeros"
 }
 

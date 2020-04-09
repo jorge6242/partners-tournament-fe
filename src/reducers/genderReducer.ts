@@ -2,12 +2,14 @@ import {  ACTIONS, ActionTypes } from '../interfaces/actionTypes/genderTypes';
 
 type InitialState = {
     list: Array<string | number>;
+    listData: any;
     loading: boolean;
 }
 
 const initialState: InitialState = {
     list: [],
-    loading: false
+    loading: false,
+    listData: [],
 };
 
 const maritalStatusReducer = (state = initialState, action: ActionTypes) => {
@@ -17,6 +19,11 @@ const maritalStatusReducer = (state = initialState, action: ActionTypes) => {
                 ...state,
                 list: action.payload,
             };
+            case ACTIONS.GET_LIST:
+                return {
+                    ...state,
+                    listData: action.payload,
+                };
             case ACTIONS.SET_LOADING:
             return {
                 ...state,

@@ -16,6 +16,9 @@ const API = {
   getList() {
     return AXIOS.get(`${Prefix.api}/menu-list`, { headers: headers() });
   },
+  getMenuList() {
+    return AXIOS.get(`${Prefix.api}/get-menu-list`, { headers: headers() });
+  },
   getWidgetList() {
     return AXIOS.get(`${Prefix.api}/widget-list`, { headers: headers() });
   },

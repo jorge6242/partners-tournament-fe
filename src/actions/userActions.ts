@@ -1,6 +1,6 @@
 import API from "../api/User";
 import snackBarUpdate from "../actions/snackBarActions";
-import { updateModal } from "../actions/modalActions";
+import { updateModal } from "../actions/customModalActions";
 import { ACTIONS } from '../interfaces/actionTypes/userTypes';
 import { mainStatusLoading } from '../actions/loadingMainActions';
 
@@ -89,20 +89,11 @@ export const create = (body: object) => async (dispatch: Function) => {
       response = apiResponse;
       snackBarUpdate({
         payload: {
-          message: "Gender Created!",
+          message: "Participante Registrado! , Se ha enviado una confirmacion por correo",
           type: "success",
           status: true
         }
       })(dispatch);
-      dispatch(getAll());
-      dispatch(
-        updateModal({
-          payload: {
-            status: false,
-            element: null
-          }
-        })
-      );
       dispatch({
         type: ACTIONS.SET_LOADING,
         payload: false
@@ -131,14 +122,35 @@ export const create = (body: object) => async (dispatch: Function) => {
 };
 
 export const get = (id: number) => async (dispatch: Function) => {
+  dispatch(
+    updateModal({
+      payload: {
+        isLoader: true,
+      }
+    })
+  );
   try {
     const { data: { data }, status } = await API.get(id);
     let response = [];
     if (status === 200) {
       response = data;
+      dispatch(
+        updateModal({
+          payload: {
+            isLoader: false,
+          }
+        })
+      );
     }
     return response;
   } catch (error) {
+    dispatch(
+      updateModal({
+        payload: {
+          isLoader: false,
+        }
+      })
+    );
     snackBarUpdate({
       payload: {
         message: error.message,
@@ -165,7 +177,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Gender Updated!",
+          message: "User Updated!",
           type: "success",
           status: true
         }
@@ -212,7 +224,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Gender Removed!",
+          message: "User Removed!",
           type: "success",
           status: true
         }

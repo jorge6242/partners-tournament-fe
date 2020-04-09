@@ -45,6 +45,15 @@ import menuReducer from './menuReducer';
 import widgetReducer from './widgetReducer';
 import menuItemReducer from './menuItemReducer';
 import mainLoaderReducer from './mainLoaderReducer';
+import tCategoryTypeReducer from './tCategoryTypeReducer';
+import tCategoryReducer from './tCategoryReducer';
+import tournamentReducer from './tournamentReducer';
+import tRuleTypeReducer from './tRuleTypeReducer';
+import tPaymentMethodReducer from './tPaymentMethodReducer';
+import tCategoriesGroupReducer from './tCategoriesGroupReducer';
+import groupReducer from './groupReducer';
+import customModalReducer from './customModalReducer';
+import menuItemIconReducer from './menuItemIconReducer';
 
 const rootReducer = combineReducers({
   modalReducer,
@@ -89,7 +98,16 @@ const rootReducer = combineReducers({
   menuReducer,
   widgetReducer,
   menuItemReducer,
-  mainLoaderReducer
+  mainLoaderReducer,
+  tCategoryTypeReducer,
+  tCategoryReducer,
+  tournamentReducer,
+  tRuleTypeReducer,
+  tPaymentMethodReducer,
+  tCategoriesGroupReducer,
+  groupReducer,
+  customModalReducer,
+  menuItemIconReducer
 });
 
 export default rootReducer;

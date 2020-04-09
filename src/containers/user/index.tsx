@@ -6,7 +6,7 @@ import Chip from '@material-ui/core/Chip';
 
 import './index.sass';
 import { getAll, remove, search } from "../../actions/userActions";
-import { updateModal } from "../../actions/modalActions";
+import { updateModal } from "../../actions/customModalActions";
 import UserForm from "../../components/UserForm";
 import DataTable2 from '../../components/DataTable2'
 import UserColumns from '../../interfaces/UserColumns';
