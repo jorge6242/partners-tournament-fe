@@ -366,6 +366,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
            {renderFirstMenu(SettingsIcon, "Categoria", "/dashboard/category")}
            {renderFirstMenu(SettingsIcon, "Tipo Categoria", "/dashboard/category-type")}
            {renderFirstMenu(SettingsIcon, "Torneo", "/dashboard/tournament")}
+           {renderFirstMenu(SettingsIcon, "Inscripcion de Torneo", "/dashboard/new-tournament")}
            {renderFirstMenu(SettingsIcon, "Inscripciones de Torneos", "/dashboard/inscriptions")}
            {renderFirstMenu(SettingsIcon, "Reporte Inscripcion de Torneos", "/dashboard/tournament-report")}
            {renderFirstMenu(SettingsIcon, "Grupos", "/dashboard/group")}
