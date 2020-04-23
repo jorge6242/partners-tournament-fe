@@ -66,6 +66,10 @@ import TCategory from "../containers/TCategory";
 import Tournament from "../containers/Tournament";
 import Group from "../containers/group";
 import CustomModal from "../components/CustomModal";
+import Stepper from "../containers/newTournament";
+import About from "../containers/about";
+import Inscriptions from "../containers/inscriptions";
+import TournamentReport from "../containers/tournamentReport";
 
 export default function Routes() { 
   return (
@@ -102,6 +106,10 @@ export default function Routes() {
                       <Route path="/dashboard/tournament" exact component={Tournament} />
                       <Route path="/dashboard/group" exact component={Group} />
                       <Route path="/dashboard/parameter" exact component={Parameter} />
+                      <Route path="/dashboard/tournament-new" exact component={Stepper} />
+                      <Route path="/dashboard/about" exact component={About} />
+                      <Route path="/dashboard/inscriptions" exact component={Inscriptions} />
+                      <Route path="/dashboard/tournament-report" exact component={TournamentReport} />
                     </Dashboard>
                   </Switch>
                 );

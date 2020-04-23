@@ -10,6 +10,8 @@ import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
 import { useHistory } from "react-router-dom";
 
+import Logo from "../Logo";
+
 const useStyles = makeStyles(theme => ({
   paper: {
     marginTop: theme.spacing(8),
@@ -62,9 +64,10 @@ const LoginForm: FunctionComponent<LoginFormProps> = ({ handleForm, loading }) =
   return (
     <Container component="main" maxWidth="xs">
       <div className={classes.paper}>
-        <Avatar className={classes.avatar}>
+      <Logo />
+        {/* <Avatar className={classes.avatar}>
           <SupervisorAccountIcon />
-        </Avatar>
+        </Avatar> */}
         <Typography component="h1" variant="h5">
           Portal de Torneos
         </Typography>

@@ -1,4 +1,4 @@
-import React, { useEffect, FunctionComponent } from "react";
+import React, { useEffect, FunctionComponent, useState } from "react";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Typography from "@material-ui/core/Typography";
@@ -6,11 +6,15 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardMedia from "@material-ui/core/CardMedia";
 
 import CustomTextField from "../FormElements/CustomTextField";
 import { update, create, get } from "../../actions/tCategoryActions";
 import { getList } from "../../actions/tCategoryTypeActions";
 import CustomSelect from "../FormElements/CustomSelect";
+import { Grid } from "@material-ui/core";
 
 const useStyles = makeStyles(theme => ({
     paper: {
@@ -43,13 +47,20 @@ const useStyles = makeStyles(theme => ({
         border: 0,
         borderBottom: "1px solid grey",
         fontSize: "16px"
-    }
+    },
+    pictureContainer: {
+        maxWidth: 185
+      },
+      media: {
+        height: 200
+      }
 }));
 
 type FormData = {
     description: string;
     status: string;
     t_category_type_id: string;
+    picture: string;
 };
 
 type ComponentProps = {
@@ -59,8 +70,10 @@ type ComponentProps = {
 const TCategoryForm: FunctionComponent<ComponentProps> = ({
     id
 }) => {
+    const [image, setImage] = useState({ preview: "", raw: "" });
+    const [imageField, setImageField] = useState();
     const classes = useStyles();
-    const { handleSubmit, register, errors, reset, setValue } = useForm<
+    const { handleSubmit, register, errors, reset, setValue, getValues } = useForm<
         FormData
     >();
     const {
@@ -68,15 +81,19 @@ const TCategoryForm: FunctionComponent<ComponentProps> = ({
         tCategoryTypeReducer: { listData: categoryTypeList },
     } = useSelector((state: any) => state);
     const dispatch = useDispatch();
+    const { picture } = getValues();
 
     useEffect(() => {
         dispatch(getList());
         async function fetch() {
             if (id) {
                 const response: any = await dispatch(get(id));
-                setValue("description", response.description);
-                setValue("status", response.status);
-                setValue("t_category_type_id", response.t_category_type_id);
+                const { description, status, t_category_type_id, picture } = response;
+                setValue("description", description);
+                setValue("status", status);
+                setValue("t_category_type_id", t_category_type_id);
+                setValue("picture", picture);
+                setImage({ ...image, preview: picture });
             }
         }
         fetch();
@@ -96,6 +113,30 @@ const TCategoryForm: FunctionComponent<ComponentProps> = ({
         }
     };
 
+    const triggerClick = (input: any) => {
+        if (input) {
+            setImageField(input);
+        }
+    };
+
+    const handleImage = () => {
+        imageField.click();
+        setImageField(imageField);
+    };
+
+    const loadImage = (e: any) => {
+        const ObjecUrlImage = window.URL.createObjectURL(e.target.files[0]);
+        setImage({
+            preview: ObjecUrlImage,
+            raw: e.target.files[0]
+        });
+        const reader: any = new FileReader();
+        reader.onload = () => {
+            setValue("picture", reader.result);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    };
+
     return (
         <Container component="main">
             <div className={classes.paper}>
@@ -107,47 +148,80 @@ const TCategoryForm: FunctionComponent<ComponentProps> = ({
                     onSubmit={handleSubmit(handleForm)}
                     noValidate
                 >
-                    <CustomTextField
-                        placeholder="Description"
-                        field="description"
-                        required
-                        register={register}
-                        errorsField={errors.description}
-                        errorsMessageField={
-                            errors.description && errors.description.message
-                        }
-                    />
+                    <Grid container spacing={3}>
+                        <Grid xs={6}>
+                            <Card className={classes.pictureContainer}>
+                                <CardActionArea onClick={() => handleImage()}>
+                                    <CardMedia className={classes.media} image={image.preview} />
+                                </CardActionArea>
+                            </Card>
+                            <input
+                                style={{ display: "none" }}
+                                type="file"
+                                id="load_image"
+                                accept="image/*"
+                                ref={triggerClick}
+                                onChange={loadImage}
+                            />
+                            <input
+                                style={{ display: "none" }}
+                                name="picture"
+                                ref={register}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Grid container spacing={3}>
+                                <Grid item xs={6}>
+                                    <CustomTextField
+                                        placeholder="Description"
+                                        field="description"
+                                        required
+                                        register={register}
+                                        errorsField={errors.description}
+                                        errorsMessageField={errors.description && errors.description.message}
+                                    />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <CustomSelect
+                                        label="Tipo Categoria"
+                                        selectionMessage="Seleccione"
+                                        field="t_category_type_id"
+                                        required
+                                        register={register}
+                                        errorsMessageField={
+                                            errors.t_category_type_id && errors.t_category_type_id.message
+                                        }
+                                    >
+                                        {categoryTypeList.length > 0 && categoryTypeList.map((item: any) => (
+                                            <option key={item.id} value={item.id}>
+                                                {item.description}
+                                            </option>
+                                        ))}
+                                    </CustomSelect>
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <CustomSelect
+                                        label="Status"
+                                        selectionMessage="Seleccione"
+                                        field="status"
+                                        register={register}
+                                        errorsMessageField={
+                                            errors.status && errors.status.message
+                                        }
+                                        optionValueSelected={0}
+                                    >
+                                        <option value={1}> Activo </option>
+                                        <option value={0}> Inactivo </option>
+                                    </CustomSelect>
+                                </Grid>
+                            </Grid>
+                        </Grid>
+                    </Grid>
 
-                    <CustomSelect
-                        label="Tipo Categoria"
-                        selectionMessage="Seleccione"
-                        field="t_category_type_id"
-                        required
-                        register={register}
-                        errorsMessageField={
-                            errors.t_category_type_id && errors.t_category_type_id.message
-                        }
-                    >
-                        {categoryTypeList.length > 0 && categoryTypeList.map((item: any) => (
-                            <option key={item.id} value={item.id}>
-                                {item.description}
-                            </option>
-                        ))}
-                    </CustomSelect>
 
-                    <CustomSelect
-                        label="Status"
-                        selectionMessage="Seleccione"
-                        field="status"
-                        register={register}
-                        errorsMessageField={
-                            errors.status && errors.status.message
-                        }
-                        optionValueSelected={0}
-                    >
-                        <option value={1}> Activo </option>
-                        <option value={0}> Inactivo </option>
-                    </CustomSelect>
+
+
+
 
                     <div className={classes.wrapper}>
                         <Button

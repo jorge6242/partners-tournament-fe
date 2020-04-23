@@ -1,5 +1,5 @@
 import React, { FunctionComponent, createElement, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -13,6 +13,22 @@ import IconButton from "@material-ui/core/IconButton";
 import EditIcon from "@material-ui/icons/Edit";
 import VisibilityIcon from '@material-ui/icons/Visibility';
 import DeleteIcon from "@material-ui/icons/Delete";
+import Switch from "@material-ui/core/Switch";
+import { green } from "@material-ui/core/colors";
+
+const GreenSwitch = withStyles({
+  switchBase: {
+    color: '#e74c3c',
+    "&$checked": {
+      color: '#27ae60'
+    },
+    "&$checked + $track": {
+      backgroundColor: green[500]
+    }
+  },
+  checked: {},
+  track: {}
+})(Switch);
 
 const useStyles = makeStyles({
   root: {
@@ -52,6 +68,7 @@ interface DataTableProps {
   renderSubRow?: any;
   aditionalColumn?: string;
   aditionalColumnLabel?: string;
+  handleSwitch?: Function;
 }
 
 const DataTable4: FunctionComponent<DataTableProps> = ({
@@ -70,6 +87,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
   fontSize = '12px',
   aditionalColumn,
   aditionalColumnLabel,
+  handleSwitch,
 }) => {
   const classes = useStyles();
   const [selectedRow, setSelectedRow] = useState(0);
@@ -137,7 +155,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                               key={column.id}
                               align={column.align}
                               className={classes.tableCellHeader}
-                              style={{ fontSize }}
+                              style={{ fontSize, minWidth: column.minWidth }}
                               onClick={() => handleSubRowComponent ? handleSubRowComponent() : {}}
                             >
                               {column.format && typeof value === "number"
@@ -146,6 +164,14 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             </TableCell>
                           );
                         })}
+                        {handleSwitch && (
+                          <TableCell style={{ minWidth: 5, fontSize }}>
+                            <GreenSwitch
+                              checked={row.status == "1" ? true : false}
+                              onChange={() => handleSwitch(row.id, row.status)}
+                            />
+                          </TableCell>
+                        )}
                         {handleView && (
                           <TableCell align="right" style={{ minWidth: 5 }}>
                             <IconButton

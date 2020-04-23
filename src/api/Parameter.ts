@@ -16,6 +16,9 @@ const API = {
   getList() {
     return AXIOS.get(`${Prefix.api}/parameter-list`, { headers: headers() });
   },
+  getLogo() {
+    return AXIOS.get(`${Prefix.api}/parameter-logo`, { headers: headers() });
+  },
   create(data: any) {
     return AXIOS.post(
       `${Prefix.api}/parameter`,

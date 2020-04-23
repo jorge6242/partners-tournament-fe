@@ -12,6 +12,9 @@ import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import _ from 'lodash';
+import Card from "@material-ui/core/Card";
+import CardActionArea from "@material-ui/core/CardActionArea";
+import CardMedia from "@material-ui/core/CardMedia";
 
 import CustomTextField from "../FormElements/CustomTextField";
 import { update, create, get } from "../../actions/tournamentActions";
@@ -70,28 +73,36 @@ const useStyles = makeStyles(theme => ({
         fontWeight: theme.typography.fontWeightRegular
     },
     dataContainer: {
-        overflowX: 'scroll',
-        height: 200
+
+    },
+    pictureContainer: {
+        maxWidth: 230,
+        textAlign: 'center',
+    },
+    media: {
+        height: 280,
+        backgroundSize: 'contain',
     }
 }));
 
 type FormData = {
     description: string;
     max_participants: string;
-    description_price: string;
+    description_details: string;
     template_welcome_mail: string;
     template_confirmation_mail: string;
     amount: number;
     participant_type: string;
-    date_register_from: Date;
-    date_register_to: Date;
-    date_from: Date;
-    date_to: Date;
+    date_register_from: string;
+    date_register_to: string;
+    date_from: string;
+    date_to: string;
     status: string;
     t_rule_type_id: string;
     currency_id: string;
     t_categories_id: number;
     t_category_type_id: number;
+    picture: string;
 };
 
 type ComponentProps = {
@@ -116,6 +127,8 @@ const initialGroupsSelectedItems = {
 const TournamentForm: FunctionComponent<ComponentProps> = ({
     id
 }) => {
+    const [image, setImage] = useState({ preview: "", raw: "" });
+    const [imageField, setImageField] = useState();
     const [selectedData, setSelectedData] = useState<any>([]);
     const [selectedGroupsData, setSelectedGroupsData] = useState<any>([]);
     const [selectedItems, setSelectedItems] = useState<SelectedItems>(
@@ -156,10 +169,10 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
         async function fetch() {
             if (id) {
                 const response: any = await dispatch(get(id));
-                const { 
-                    description, 
+                const {
+                    description,
                     max_participants,
-                    description_price,
+                    description_details,
                     template_welcome_mail,
                     template_confirmation_mail,
                     amount,
@@ -171,27 +184,29 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                     status,
                     t_rule_type_id,
                     currency_id,
-                    t_categories_id, 
+                    t_categories_id,
                     t_category_type_id,
-                    payments, 
-                    groups  
+                    payments,
+                    groups,
+                    picture
                 } = response;
                 setValue("description", description);
                 setValue("max_participants", max_participants);
-                setValue("description_price", description_price);
+                setValue("description_details", description_details);
                 setValue("template_welcome_mail", template_welcome_mail);
                 setValue("template_confirmation_mail", template_confirmation_mail);
                 setValue("amount", amount);
                 setValue("participant_type", participant_type);
-                setValue("date_register_from", date_register_from);
-                setValue("date_register_to", date_register_to);
-                setValue("date_from", date_from);
-                setValue("date_to", date_to);
+                setValue("date_register_from", getParseDateTime(date_register_from));
+                setValue("date_register_to", getParseDateTime(date_register_to));
+                setValue("date_from", getParseDateTime(date_from));
+                setValue("date_to", getParseDateTime(date_to));
                 setValue("status", status);
                 setValue("t_rule_type_id", t_rule_type_id);
                 setValue("currency_id", currency_id);
                 setValue("t_categories_id", t_categories_id);
                 setValue("t_category_type_id", t_category_type_id);
+                setImage({ ...image, preview: picture });
                 if (payments && payments.length > 0) {
                     setSelectedData(payments);
                     payments.forEach((element: any) => {
@@ -210,6 +225,16 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
         }
         fetch();
     }, [id, dispatch, setValue]);
+
+    const getParseDateTime = (date: string) => {
+        //"2017-05-24T10:30"
+        //"2020-01-01T2:01
+        const newDate = moment(date).format("YYYY-MM-DD");
+        const time = moment(date).format("hh:mm");
+        const parse = `${newDate}T${time}`;
+        console.log('parse ', parse);
+        return parse;
+    }
 
     useEffect(() => {
         return () => {
@@ -312,6 +337,34 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
         setSelectedCategoryGroupItems(currentList);
     };
 
+    const triggerClick = (input: any) => {
+        if (input) {
+            setImageField(input);
+        }
+    };
+
+    const handleImage = () => {
+        imageField.click();
+        setImageField(imageField);
+    };
+
+    const loadImage = (e: any) => {
+        if (e.target.files.length > 0) {
+            const ObjecUrlImage = window.URL.createObjectURL(e.target.files[0]);
+            setImage({
+                preview: ObjecUrlImage,
+                raw: e.target.files[0]
+            });
+            const reader: any = new FileReader();
+            reader.onload = () => {
+                setValue("picture", reader.result);
+            };
+            reader.readAsDataURL(e.target.files[0]);
+        }
+
+    };
+
+
     return (
         <Container component="main">
             <div className={classes.paper}>
@@ -324,7 +377,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                     noValidate
                 >
                     <Grid container spacing={3}>
-                        <Grid xs={12}>
+                        <Grid xs={12} style={{ textAlign: 'center' }}>
                             <ExpansionPanel
                                 expanded={expanded === "panel-register"}
                                 onChange={handleExpandedPanel("panel-register")}
@@ -338,20 +391,128 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Grid container spacing={2} className={classes.dataContainer}>
-                                        <Grid item xs={3}>
-
-                                            <CustomTextField
-                                                placeholder="Description"
-                                                field="description"
-                                                required
-                                                register={register}
-                                                errorsField={errors.description}
-                                                errorsMessageField={
-                                                    errors.description && errors.description.message
-                                                }
-                                            />
+                                        <Grid item xs={12}>
+                                            <Grid container spacing={2}>
+                                                <Grid item xs={4}>
+                                                    <Card className={classes.pictureContainer}>
+                                                        <CardActionArea onClick={() => handleImage()}>
+                                                            <CardMedia className={classes.media} image={image.preview} />
+                                                        </CardActionArea>
+                                                    </Card>
+                                                    <input
+                                                        style={{ display: "none" }}
+                                                        type="file"
+                                                        id="load_image"
+                                                        accept="image/*"
+                                                        ref={triggerClick}
+                                                        onChange={loadImage}
+                                                    />
+                                                    <input
+                                                        style={{ display: "none" }}
+                                                        name="picture"
+                                                        ref={register}
+                                                    />
+                                                </Grid>
+                                                <Grid item xs={8}>
+                                                    <Grid container spacing={2}>
+                                                        <Grid item xs={12}>
+                                                            <CustomTextField
+                                                                placeholder="Description"
+                                                                field="description"
+                                                                required
+                                                                register={register}
+                                                                errorsField={errors.description}
+                                                                errorsMessageField={
+                                                                    errors.description && errors.description.message
+                                                                }
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs={6}>
+                                                            <CustomSelect
+                                                                label="Categoria"
+                                                                selectionMessage="Seleccione"
+                                                                field="t_categories_id"
+                                                                required
+                                                                register={register}
+                                                                errorsMessageField={
+                                                                    errors.t_categories_id && errors.t_categories_id.message
+                                                                }
+                                                            >
+                                                                {categoryList.length > 0 && categoryList.map((item: any) => (
+                                                                    <option key={item.id} value={item.id}>
+                                                                        {item.description}
+                                                                    </option>
+                                                                ))}
+                                                            </CustomSelect>
+                                                        </Grid>
+                                                        <Grid item xs={6}>
+                                                            <CustomSelect
+                                                                label="Tipo Regla"
+                                                                selectionMessage="Seleccione"
+                                                                field="t_rule_type_id"
+                                                                required
+                                                                register={register}
+                                                                errorsMessageField={
+                                                                    errors.t_rule_type_id && errors.t_rule_type_id.message
+                                                                }
+                                                            >
+                                                                {tRuleTypeList.length > 0 && tRuleTypeList.map((item: any) => (
+                                                                    <option key={item.id} value={item.id}>
+                                                                        {item.description}
+                                                                    </option>
+                                                                ))}
+                                                            </CustomSelect>
+                                                        </Grid>
+                                                        <Grid item xs={6}>
+                                                            <CustomTextField
+                                                                placeholder="Fecha desde"
+                                                                field="date_from"
+                                                                required
+                                                                register={register}
+                                                                errorsField={errors.date_from}
+                                                                errorsMessageField={errors.date_from && errors.date_from.message}
+                                                                type="datetime-local"
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs={6}>
+                                                            <CustomTextField
+                                                                placeholder="Fecha hasta"
+                                                                field="date_to"
+                                                                required
+                                                                register={register}
+                                                                errorsField={errors.date_to}
+                                                                errorsMessageField={errors.date_to && errors.date_to.message}
+                                                                type="datetime-local"
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs={6}>
+                                                            <CustomTextField
+                                                                placeholder="Registro desde"
+                                                                field="date_register_from"
+                                                                required
+                                                                register={register}
+                                                                errorsField={errors.date_register_from}
+                                                                errorsMessageField={errors.date_register_from && errors.date_register_from.message}
+                                                                type="datetime-local"
+                                                            />
+                                                        </Grid>
+                                                        <Grid item xs={6}>
+                                                            <CustomTextField
+                                                                placeholder="Registro hasta"
+                                                                field="date_register_to"
+                                                                required
+                                                                register={register}
+                                                                errorsField={errors.date_register_to}
+                                                                errorsMessageField={errors.date_register_to && errors.date_register_to.message}
+                                                                type="datetime-local"
+                                                            />
+                                                        </Grid>
+                                                    </Grid>
+                                                </Grid>
+                                            </Grid>
                                         </Grid>
-                                        <Grid item xs={3}>
+
+                                        <Grid item xs={4}>
                                             <CustomTextField
                                                 placeholder="Maximo Participantes"
                                                 field="max_participants"
@@ -364,7 +525,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                                 type="number"
                                             />
                                         </Grid>
-                                        <Grid item xs={3}>
+                                        <Grid item xs={4}>
                                             <CustomSelect
                                                 label="Tipo Participantes"
                                                 selectionMessage="Seleccione"
@@ -379,55 +540,21 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                                 <option value={3}> Ambos </option>
                                             </CustomSelect>
                                         </Grid>
-                                        <Grid item xs={3}>
+                                        <Grid item xs={4}>
                                             <CustomSelect
-                                                label="Tipo Regla"
+                                                label="Status"
                                                 selectionMessage="Seleccione"
-                                                field="t_rule_type_id"
-                                                required
+                                                field="status"
                                                 register={register}
                                                 errorsMessageField={
-                                                    errors.t_rule_type_id && errors.t_rule_type_id.message
+                                                    errors.status && errors.status.message
                                                 }
                                             >
-                                                {tRuleTypeList.length > 0 && tRuleTypeList.map((item: any) => (
-                                                    <option key={item.id} value={item.id}>
-                                                        {item.description}
-                                                    </option>
-                                                ))}
+                                                <option value={1}> Activo </option>
+                                                <option value={0}> Inactivo </option>
                                             </CustomSelect>
                                         </Grid>
-                                        <Grid item xs={3}>
-                                            <CustomTextField
-                                                placeholder="Descripcion Precio"
-                                                field="description_price"
-                                                required
-                                                register={register}
-                                                errorsField={errors.description_price}
-                                                errorsMessageField={
-                                                    errors.description_price && errors.description_price.message
-                                                }
-                                            />
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <CustomSelect
-                                                label="Categoria"
-                                                selectionMessage="Seleccione"
-                                                field="t_categories_id"
-                                                required
-                                                register={register}
-                                                errorsMessageField={
-                                                    errors.t_categories_id && errors.t_categories_id.message
-                                                }
-                                            >
-                                                {categoryList.length > 0 && categoryList.map((item: any) => (
-                                                    <option key={item.id} value={item.id}>
-                                                        {item.description}
-                                                    </option>
-                                                ))}
-                                            </CustomSelect>
-                                        </Grid>
-                                        <Grid item xs={3}>
+                                        <Grid item xs={4}>
                                             <CustomSelect
                                                 label="Moneda"
                                                 selectionMessage="Seleccione"
@@ -445,201 +572,131 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                                 ))}
                                             </CustomSelect>
                                         </Grid>
-                                        <Grid item xs={3}>
+                                        <Grid item xs={4}>
                                             <CustomTextField
-                                                placeholder="Registro desde"
-                                                field="date_register_from"
+                                                placeholder="Monto"
+                                                field="amount"
                                                 required
                                                 register={register}
-                                                errorsField={errors.date_register_from}
-                                                errorsMessageField={errors.date_register_from && errors.date_register_from.message}
-                                                type="datetime-local"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <CustomTextField
-                                                placeholder="Registro hasta"
-                                                field="date_register_to"
-                                                required
-                                                register={register}
-                                                errorsField={errors.date_register_to}
-                                                errorsMessageField={errors.date_register_to && errors.date_register_to.message}
-                                                type="datetime-local"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <CustomTextField
-                                                placeholder="Fecha desde"
-                                                field="date_from"
-                                                required
-                                                register={register}
-                                                errorsField={errors.date_from}
-                                                errorsMessageField={errors.date_from && errors.date_from.message}
-                                                type="datetime-local"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <CustomTextField
-                                                placeholder="Fecha hasta"
-                                                field="date_to"
-                                                required
-                                                register={register}
-                                                errorsField={errors.date_to}
-                                                errorsMessageField={errors.date_to && errors.date_to.message}
-                                                type="datetime-local"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={3}>
-                                            <CustomSelect
-                                                label="Status"
-                                                selectionMessage="Seleccione"
-                                                field="status"
-                                                register={register}
+                                                errorsField={errors.amount}
                                                 errorsMessageField={
-                                                    errors.status && errors.status.message
+                                                    errors.amount && errors.amount.message
                                                 }
-                                            >
-                                                <option value={1}> Activo </option>
-                                                <option value={0}> Inactivo </option>
-                                            </CustomSelect>
+                                            />
                                         </Grid>
-                                        <Grid item xs={3}>
-                                            <CustomSelect
-                                                label="Status"
-                                                selectionMessage="Seleccione"
-                                                field="status"
+                                        <Grid item xs={12}>
+                                            <CustomTextField
+                                                placeholder="Descripcion premiacion"
+                                                field="description_details"
+                                                required
                                                 register={register}
-                                                errorsMessageField={
-                                                    errors.status && errors.status.message
-                                                }
-                                            >
-                                                <option value={1}> Activo </option>
-                                                <option value={0}> Inactivo </option>
-                                            </CustomSelect>
+                                                errorsField={errors.description_details}
+                                                errorsMessageField={errors.description_details && errors.description_details.message}
+                                                type="datetime-local"
+                                                multiline
+                                            />
                                         </Grid>
-                                        <Grid xs={3}>
-                                            <Grid container spacing={3}>
-                                                <Grid item xs={12}>Plantilla Bienvenida</Grid>
-                                                <Grid item xs={12}>
-                                                    <Button
-                                                        startIcon={<CloudUploadIcon />}
-                                                        variant="contained"
-                                                        color="primary"
-                                                        size="small"
-                                                        component="span"
-                                                    >
-                                                        Archivo
-                                            </Button>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                        <Grid xs={3}>
-                                            <Grid container spacing={3}>
-                                                <Grid item xs={12}>Plantilla de Confirmacion</Grid>
-                                                <Grid item xs={12}>
-                                                    <Button
-                                                        startIcon={<CloudUploadIcon />}
-                                                        variant="contained"
-                                                        color="primary"
-                                                        size="small"
-                                                        component="span"
-                                                    >
-                                                        Archivo
-                                            </Button>
-                                                </Grid>
-                                            </Grid>
-                                        </Grid>
-                                  
-                                    <Grid item xs={12}>
+
+                                        <Grid xs={12}>
                                         <CustomTextField
-                                            placeholder="Descripcion premiacion"
-                                            field="description_price"
-                                            required
-                                            register={register}
-                                            errorsField={errors.description_price}
-                                            errorsMessageField={errors.description_price && errors.description_price.message}
-                                            type="datetime-local"
-                                            multiline
-                                        />
-                                    </Grid>
+                                                placeholder="Plantilla de Bienvenida"
+                                                field="template_welcome_mail"
+                                                required
+                                                register={register}
+                                                errorsField={errors.template_welcome_mail}
+                                                errorsMessageField={errors.template_welcome_mail && errors.template_welcome_mail.message}
+                                                multiline
+                                            />
+                                        </Grid>
+                                        <Grid xs={12}>
+                                        <CustomTextField
+                                                placeholder="Plantilla Confirmacion"
+                                                field="template_confirmation_mail"
+                                                required
+                                                register={register}
+                                                errorsField={errors.template_confirmation_mail}
+                                                errorsMessageField={errors.template_confirmation_mail && errors.template_confirmation_mail.message}
+                                                multiline
+                                            />
+                                        </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
-                    </Grid>
+                        </Grid>
 
-                    <Grid xs={12}>
-                        <ExpansionPanel
-                            expanded={expanded === "panel-guest"}
-                            onChange={handleExpandedPanel("panel-guest")}
-                        >
-                            <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel-guest-content"
-                                id="panel-guest-header"
+                        <Grid xs={12}>
+                            <ExpansionPanel
+                                expanded={expanded === "panel-guest"}
+                                onChange={handleExpandedPanel("panel-guest")}
                             >
-                                <Typography className={classes.heading}>Metodos de Pago</Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                        {paymentMethodList.length > 0 && (
-                                            <TransferList
-                                                data={paymentMethodList}
-                                                selectedData={selectedData}
-                                                leftTitle="Metodos de Pago"
-                                                onSelectedList={onPaymentMethodChange}
-                                            />
-                                        )}
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel-guest-content"
+                                    id="panel-guest-header"
+                                >
+                                    <Typography className={classes.heading}>Metodos de Pago</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={12}>
+                                            {paymentMethodList.length > 0 && (
+                                                <TransferList
+                                                    data={paymentMethodList}
+                                                    selectedData={selectedData}
+                                                    leftTitle="Metodos de Pago"
+                                                    onSelectedList={onPaymentMethodChange}
+                                                />
+                                            )}
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
-                    </Grid>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        </Grid>
 
-                    <Grid xs={12}>
-                        <ExpansionPanel
-                            expanded={expanded === "panel-groups"}
-                            onChange={handleExpandedPanel("panel-groups")}
-                        >
-                            <ExpansionPanelSummary
-                                expandIcon={<ExpandMoreIcon />}
-                                aria-controls="panel-groups-content"
-                                id="panel-groups-header"
+                        <Grid xs={12}>
+                            <ExpansionPanel
+                                expanded={expanded === "panel-groups"}
+                                onChange={handleExpandedPanel("panel-groups")}
                             >
-                                <Typography className={classes.heading}>Grupos</Typography>
-                            </ExpansionPanelSummary>
-                            <ExpansionPanelDetails>
-                                <Grid container spacing={3}>
-                                    <Grid item xs={12}>
-                                        {categoriesGroupList.length > 0 && (
-                                            <TransferList
-                                                data={categoriesGroupList}
-                                                selectedData={selectedGroupsData}
-                                                leftTitle="Grupos"
-                                                onSelectedList={onCategoryGroupsChange}
-                                            />
-                                        )}
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel-groups-content"
+                                    id="panel-groups-header"
+                                >
+                                    <Typography className={classes.heading}>Grupos</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Grid container spacing={3}>
+                                        <Grid item xs={12}>
+                                            {categoriesGroupList.length > 0 && (
+                                                <TransferList
+                                                    data={categoriesGroupList}
+                                                    selectedData={selectedGroupsData}
+                                                    leftTitle="Grupos"
+                                                    onSelectedList={onCategoryGroupsChange}
+                                                />
+                                            )}
+                                        </Grid>
                                     </Grid>
-                                </Grid>
-                            </ExpansionPanelDetails>
-                        </ExpansionPanel>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        </Grid>
                     </Grid>
-                    </Grid>
-                <div className={classes.wrapper}>
-                    <Button
-                        type="submit"
-                        fullWidth
-                        variant="contained"
-                        color="primary"
-                        disabled={loading}
-                        className={classes.submit}
-                    >
-                        {id ? "Actualizar" : "Crear"}
-                    </Button>
-                    {loading && (
-                        <CircularProgress size={24} className={classes.buttonProgress} />
-                    )}
-                </div>
+                    <div className={classes.wrapper}>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            color="primary"
+                            disabled={loading}
+                            className={classes.submit}
+                        >
+                            {id ? "Actualizar" : "Crear"}
+                        </Button>
+                        {loading && (
+                            <CircularProgress size={24} className={classes.buttonProgress} />
+                        )}
+                    </div>
                 </form>
             </div>
         </Container >

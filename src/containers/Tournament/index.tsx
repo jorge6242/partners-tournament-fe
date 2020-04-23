@@ -71,7 +71,7 @@ export default function Tournament() {
         payload: {
           status: true,
           element: <TournamentForm id={id} />,
-          customSize: 'large'
+          customSize: 'medium'
         }
       })
     );
@@ -83,7 +83,7 @@ export default function Tournament() {
         payload: {
           status: true,
           element: <TournamentForm />,
-          customSize: 'large'
+          customSize: 'medium'
         }
       })
     );

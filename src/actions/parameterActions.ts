@@ -88,6 +88,41 @@ export const getList = () => async (dispatch: Function) => {
   }
 };
 
+export const GetLogo = () => async (dispatch: Function) => {
+  dispatch(updateModal({
+    payload: {
+      isLoader: true,
+    }
+  }));
+  try {
+    const { data: { data }, status } = await API.getLogo();
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch(updateModal({
+        payload: {
+          isLoader: false,
+        }
+      }));
+    }
+    return response;
+  } catch (error) {
+    dispatch(updateModal({
+      payload: {
+        isLoader: false,
+      }
+    }));
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
 export const search = (term: string, perPage: number = 8) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,

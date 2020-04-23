@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     transferListroot: {
       margin: "auto",
-      justifyContent: 'flex-start',
+      justifyContent: 'center',
     },
     cardHeader: {
       padding: theme.spacing(1, 2),
@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     list: {
       height: 150,
-      width: 200,
+      width: 250,
       backgroundColor: theme.palette.background.paper,
       overflow: "auto"
     },

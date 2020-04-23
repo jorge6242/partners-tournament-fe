@@ -1,4 +1,7 @@
 import API from "../api/Tournament";
+import Axios from "../config/Axios";
+import Prefix from "../config/ApiPrefix";
+import headers from "../helpers/headers";
 import snackBarUpdate from "./snackBarActions";
 import { updateModal } from "./modalActions";
 import { ACTIONS } from '../interfaces/actionTypes/toournamentTypes';
@@ -88,6 +91,45 @@ export const getList = () => async (dispatch: Function) => {
   }
 };
 
+export const getByCategory = (id: any) => async (dispatch: Function) => {
+  dispatch(updateModal({
+    payload: {
+      isLoader: true,
+    }
+  }));
+  try {
+    const { data , status } = await API.getByCategory(id);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_TOURNAMENTS_BY_CATEGORY,
+        payload: response
+      });
+      dispatch(updateModal({
+        payload: {
+          isLoader: false,
+        }
+      }));
+    }
+    return response;
+  } catch (error) {
+    dispatch(updateModal({
+      payload: {
+        isLoader: false,
+      }
+    }));
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
 export const search = (term: string, perPage: number = 8) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
@@ -148,7 +190,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Category Created!",
+          message: "Torneo Creado!",
           type: "success",
           status: true
         }
@@ -189,6 +231,53 @@ export const create = (body: object) => async (dispatch: Function) => {
   }
 };
 
+export const createParticipant = (body: object) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_PARTICIPANT_LOADING,
+    payload: true
+  });
+  try {
+    const response = await API.createParticipant(body);
+    const { status } = response;
+    let createresponse: any = [];
+    if (status === 200 || status === 201) {
+      createresponse = response;
+      dispatch(getAll());
+      dispatch(
+        updateModal({
+          payload: {
+            status: false,
+            element: null
+          }
+        })
+      );
+      dispatch({
+        type: ACTIONS.SET_PARTICIPANT_LOADING,
+        payload: false
+      });
+    }
+    return createresponse;
+  } catch (error) {
+    let message = 'General Error';
+    if (error && error.response) {
+      const { data: { message: msg } } = error.response; 
+      message = msg
+    }
+    snackBarUpdate({
+      payload: {
+        message,
+        type: "error",
+        status: true
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_PARTICIPANT_LOADING,
+      payload: false
+    });
+    throw error;
+  }
+};
+
 export const get = (id: number) => async (dispatch: Function) => {
   try {
     const { data: { data }, status } = await API.get(id);
@@ -224,7 +313,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Category Updated!",
+          message: "Torneo actualizado!",
           type: "success",
           status: true
         }
@@ -276,7 +365,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Category Removed!",
+          message: "Torneo  Eliminado!",
           type: "success",
           status: true
         }
@@ -292,6 +381,200 @@ export const remove = (id: number) => async (dispatch: Function) => {
         status: true
       }
     })(dispatch);
+    return error;
+  }
+};
+
+export const getInscriptions = (page: number = 1, perPage: number = 8, query: object = {}) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.GET_INSCRIPTIONS_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await API.getInscriptions(page, perPage, query);
+    let response = [];
+    if (status === 200) {
+      const pagination = {
+        total: data.total,
+        perPage: data.per_page,
+        prevPageUrl: data.prev_page_url,
+        currentPage: data.current_page,
+      }
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_INSCRIPTIONS,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_PAGINATION,
+        payload: pagination
+      });
+      dispatch({
+        type: ACTIONS.GET_INSCRIPTIONS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.GET_INSCRIPTIONS_LOADING,
+      payload: false
+    });
+    return error;
+  }  
+};
+
+export const getInscriptionsReport = (page: number = 1, perPage: number = 8, query: object = {}) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.GET_INSCRIPTIONS_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await API.getInscriptionsReport(page, perPage, query);
+    let response = [];
+    if (status === 200) {
+      const pagination = {
+        total: data.total,
+        perPage: data.per_page,
+        prevPageUrl: data.prev_page_url,
+        currentPage: data.current_page,
+      }
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_INSCRIPTIONS,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_PAGINATION,
+        payload: pagination
+      });
+      dispatch({
+        type: ACTIONS.GET_INSCRIPTIONS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.GET_INSCRIPTIONS_LOADING,
+      payload: false
+    });
+    return error;
+  }  
+};
+
+export const getInscripcionsReportPDF = (body: object) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_REPORT_LOADING,
+    payload: true
+  })
+  Axios({
+    url: `${Prefix.api}/tournament-inscriptions-report-pdf`,
+    method: "GET",
+    responseType: "blob", // important
+    params: { ...body },
+    headers: headers()
+  }).then(response => {
+    const url = window.URL.createObjectURL(new Blob([response.data]));
+    const link = document.createElement("a");
+    link.href = url;
+    link.setAttribute("download", "accessControlReport.pdf");
+    document.body.appendChild(link);
+    link.click();
+    dispatch({
+      type: ACTIONS.SET_REPORT_LOADING,
+      payload: false
+    });
+  });
+};
+
+export const getParticipant = (id: number) => async (dispatch: Function) => {
+  try {
+    const { data, status } = await API.getParticipant(id);
+    let response = [];
+    if (status === 200) {
+      response = data;
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        type: "error",
+        status: true
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
+export const updateParticipant = (body: object) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.SET_PARTICIPANT_LOADING,
+    payload: true
+  });
+  try {
+    const { data, status } = await API.updateParticipant(body);
+    let response: any = [];
+    if (status === 200) {
+      response = {
+        data,
+        status
+      };
+      snackBarUpdate({
+        payload: {
+          message: "Comentario Actualizado!",
+          type: "success",
+          status: true
+        }
+      })(dispatch);
+
+      dispatch(
+        updateModal({
+          payload: {
+            status: false,
+            element: null
+          }
+        })
+      );
+      dispatch(getInscriptions());
+      dispatch({
+        type: ACTIONS.SET_PARTICIPANT_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    let message = 'General Error';
+    if (error && error.response) {
+      const { data: { message: msg } } = error.response; 
+      message = msg
+    }
+    snackBarUpdate({
+      payload: {
+        message,
+        type: "error",
+        status: true
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_PARTICIPANT_LOADING,
+      payload: false
+    });
     return error;
   }
 };

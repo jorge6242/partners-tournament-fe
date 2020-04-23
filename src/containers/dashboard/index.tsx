@@ -47,6 +47,7 @@ import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import _ from 'lodash';
 import CommentIcon from '@material-ui/icons/Comment';
 import queryString from "query-string";
+import { Grid } from "@material-ui/core";
 
 import { logout, setForcedLogin, checkLogin, setupInterceptors } from "../../actions/loginActions";
 import AccessControlForm from "../../components/AccessControlForm";
@@ -60,10 +61,13 @@ import { getAll as getPaymentMethods } from "../../actions/paymentMethodActions"
 import { getAll as getSports } from "../../actions/sportActions";
 import { getList as getLockerLocationList } from "../../actions/lockerLocationsActions";
 import { getList as getMenuList, getWidgetList } from "../../actions/menuActions";
+import { getList as getParameterList } from "../../actions/parameterActions";
 import Loader from "../../components/common/Loader";
 import { getClient } from "../../actions/personActions";
 import { getBalance } from "../../actions/webServiceActions";
 import icons from "../../helpers/collectionIcons";
+import Helper from '../../helpers/utilities';
+import Logo from '../../components/Logo'
 
 const drawerWidth = 240;
 
@@ -136,6 +140,10 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
   const { listData: menuList } = useSelector((state: any) => state.menuReducer);
 
+  const {
+    parameterReducer: { listData: parameterList }
+  } = useSelector((state: any) => state);
+
   const [open1, setOpen1] = React.useState(false);
   const [open2, setOpen2] = React.useState(false);
   const [open3, setOpen3] = React.useState(false);
@@ -162,6 +170,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       dispatch(getMenuList());
       dispatch(getGenderAll());
       dispatch(getCountries());
+      dispatch(getParameterList());
     }
     run();
   }, [dispatch])
@@ -173,11 +182,6 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       history.push('/dashboard/main');
     }
   }, [history, location]);
-
-
-
-
-
 
   function handleClick(value: number) {
     switch (value) {
@@ -354,13 +358,16 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     }
     return (
       <div>
-        <div className={classes.toolbar} />
+        <Logo />
+        {/* <div className={classes.toolbar} /> */}
         <Divider />
         <List dense >
           {!_.isEmpty(menuList) && buildMenu(menuList.items)}
            {renderFirstMenu(SettingsIcon, "Categoria", "/dashboard/category")}
            {renderFirstMenu(SettingsIcon, "Tipo Categoria", "/dashboard/category-type")}
            {renderFirstMenu(SettingsIcon, "Torneo", "/dashboard/tournament")}
+           {renderFirstMenu(SettingsIcon, "Inscripciones de Torneos", "/dashboard/inscriptions")}
+           {renderFirstMenu(SettingsIcon, "Reporte Inscripcion de Torneos", "/dashboard/tournament-report")}
            {renderFirstMenu(SettingsIcon, "Grupos", "/dashboard/group")}
           <ListItem button onClick={() => handleClick(3)}>
           <ListItemIcon >
@@ -404,7 +411,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     )
   };
   const nameRole: any = !_.isEmpty(user) ? _.first(user.roles) : '';
-
+  const client =Helper.getParameter(parameterList, 'CLIENT_NAME')
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -420,8 +427,11 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             <MenuIcon />
           </IconButton>
           <div className={classes.header}>
-            <Typography variant="h6" noWrap>
-              Portal de Torneos
+          <Typography variant="h6" noWrap>
+              <Grid container spacing={1}>
+                <Grid item xs={12}>Portal de Torneos</Grid>
+              </Grid>
+                  <Grid item xs={12} style={{ fontSize: 14, fontStyle: 'italic' }}>{client.value}</Grid>
             </Typography>
             <Typography variant="h6" noWrap>
               <div>

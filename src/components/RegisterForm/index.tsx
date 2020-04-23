@@ -54,6 +54,7 @@ const useStyles = makeStyles(theme => ({
 // [gender_id] [bigint] NULL,    CLAVE FORANEA 
 
 type FormData = {
+  username: string;
   name: string;
   last_name: string;
   doc_id: string;
@@ -94,7 +95,7 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
   }, [reset]);
 
   const handleForm = async (form: object) => {
-    await dispatch(create(form));
+    await dispatch(create({...form, isParticipant: true, password: '123456'}));
     reset();
   };
 
@@ -112,6 +113,18 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
         >
           <Grid container spacing={3}>
             <Grid xs={12} className={classes.registerTitle} > Registro de Participante </Grid>
+            <Grid item xs={6}>
+              <CustomTextField
+                placeholder="Usuario"
+                field="username"
+                required
+                register={register}
+                errorsField={errors.username}
+                errorsMessageField={
+                  errors.username && errors.username.message
+                }
+              />
+            </Grid>
             <Grid item xs={6}>
               <CustomTextField
                 placeholder="Nombre"
@@ -133,6 +146,18 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
                 errorsField={errors.last_name}
                 errorsMessageField={
                   errors.last_name && errors.last_name.message
+                }
+              />
+            </Grid>
+            <Grid item xs={6}>
+              <CustomTextField
+                placeholder="Cedula"
+                field="doc_id"
+                required
+                register={register}
+                errorsField={errors.doc_id}
+                errorsMessageField={
+                  errors.doc_id && errors.doc_id.message
                 }
               />
             </Grid>
@@ -168,6 +193,7 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
               <CustomTextField
                 placeholder="Correo"
                 field="email"
+                required
                 register={register}
                 errorsField={errors.email}
                 errorsMessageField={
@@ -181,6 +207,7 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
                 placeholder="Telefono"
                 field="phone_number"
                 register={register}
+                required
                 errorsField={errors.phone_number}
                 errorsMessageField={
                   errors.phone_number && errors.phone_number.message

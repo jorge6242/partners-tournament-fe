@@ -5,7 +5,7 @@
   position: fixed
   left: 0
   top: 0
-  z-index: 1400
+  z-index: 1300
   pointer-events: unset
   opacity: 1
   display: none
@@ -29,16 +29,16 @@
     pointer-events: auto
     cursor: auto
     box-shadow: 0 3px 7px rgba(0, 0, 0, 0.6)
-    position: absolute
+    position: relative
     top: 0
     bottom: 0
     left: 0
     right: 0
-    height: fit-content
     margin: auto
     border-radius: 8px
-    flex-direction: column
-    overflow: hidden
+    overflow: auto
+    width: calc(100% - 64px)
+    max-height: calc(100% - 0px)
     .second-modal-main__loader
       position: absolute
       width: 100%
@@ -64,7 +64,7 @@
   .second-modal-main__content.second-modal-main__content--medium
     max-width: 900px
   .second-modal-main__content.second-modal-main__content--large
-    max-width: 1200px
+    max-width: 1920px
   @keyframes show
     0%
       opacity: 0
