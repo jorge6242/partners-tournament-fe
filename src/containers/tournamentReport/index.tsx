@@ -272,7 +272,12 @@ export default function TournamentReport() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12}>Reporte de Inscripcion de Torneos</Grid>
+      <Grid item xs={6}>Reporte de Inscripcion de Torneos</Grid>
+      <Grid item xs={6} style={{ textAlign: 'right' }}>
+        <Fab size="small" type="button" color="primary" aria-label="report" onClick={() => handleReport()}>
+          <PrintIcon />
+        </Fab>
+      </Grid>
       <Grid item xs={2}>
         <div className="custom-select-container">
           <select
@@ -330,11 +335,6 @@ export default function TournamentReport() {
         >
           Buscar
         </Button>
-      </Grid>
-      <Grid item xs={2}>
-        <Fab size="small" type="button" color="primary" aria-label="report" onClick={() => handleReport()}>
-          <PrintIcon />
-        </Fab>
       </Grid>
       <Grid item xs={12}>
         <DataTable4

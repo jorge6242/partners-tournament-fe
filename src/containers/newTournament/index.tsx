@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import { makeStyles, Theme, createStyles, withStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -18,6 +18,10 @@ import Paper from "@material-ui/core/Paper";
 import Icon from '@material-ui/core/Icon';
 import CheckCircleIcon from '@material-ui/icons/CheckCircle';
 import { green } from '@material-ui/core/colors';
+import ExpansionPanel from "@material-ui/core/ExpansionPanel";
+import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
+import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import { getList as getTCategoryList } from '../../actions/tCategoryActions';
 import { getList as getTournamentList, createParticipant, getByCategory } from '../../actions/tournamentActions';
@@ -26,6 +30,13 @@ import CustomSelect from '../../components/FormElements/CustomSelect';
 import Upload from '../../components/FormElements/Upload';
 import snackBarUpdate from '../../actions/snackBarActions';
 import CustomEditor from '../../components/Editor';
+
+
+const ExpansionPanelSummary = withStyles({
+    root: {
+        backgroundColor: "rgba(0, 0, 0, .03)"
+    }
+})(MuiExpansionPanelSummary);
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -76,7 +87,17 @@ const useStyles = makeStyles((theme: Theme) =>
             textAlign: 'left'
         },
         itemField: {
-            padding: '2px !important'
+            padding: '2px !important',
+            wordBreak: 'break-all',
+            wordWrap: 'break-word',
+        },
+        heading: {
+            fontSize: theme.typography.pxToRem(15),
+            fontWeight: theme.typography.fontWeightRegular
+        },
+        detailsContainer: {
+            border: '2px solid #2980b9',
+            borderRadius: '10px'
         }
     }),
 );
@@ -88,6 +109,7 @@ type FormData = {
 
 export default function NewTournament() {
     const classes = useStyles();
+    const [expanded, setExpanded] = React.useState<string | false>("");
     const [activeStep, setActiveStep] = React.useState(0);
     const [skipped, setSkipped] = React.useState(new Set<number>());
     const [selectedCategory, setSelectedCategory] = useState<any>(null);
@@ -199,12 +221,12 @@ export default function NewTournament() {
                 user_id: user.id,
                 attachFile: selectedFile,
                 status: 0,
-                user_notes: userContent, 
+                user_notes: userContent,
             }
             try {
                 const res: any = await dispatch(createParticipant(data));
                 setLocator(res.data.locator);
-                setActiveStep(() => 3);   
+                setActiveStep(() => 3);
             } catch (error) {
                 return error;
             }
@@ -223,6 +245,13 @@ export default function NewTournament() {
 
     const handleBack = () => {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+
+    const handleExpandedPanel = (panel: string) => (
+        event: React.ChangeEvent<{}>,
+        isExpanded: boolean
+    ) => {
+        setExpanded(isExpanded ? panel : false);
     };
 
     const handleReset = () => {
@@ -255,9 +284,9 @@ export default function NewTournament() {
     const renderTournaments = () => {
         return (
             <Grid container spacing={3} style={{ marginTop: 30 }}>
-                <Grid item xs={12} style={{ textAlign: 'center' }}>Torneos Activos</Grid>
+                <Grid item xs={12}><strong>Torneos Activos</strong></Grid>
                 <Grid item xs={12}>
-                    <Grid container spacing={3} justify="center">
+                    <Grid container spacing={3} justify="flex-start">
                         {
                             tournamentsByCategory.length > 0 && tournamentsByCategory.map((element: any, i: number) => {
                                 const active = selectedTournament && selectedTournament.id === element.id ? classes.activeCard : "";
@@ -293,7 +322,7 @@ export default function NewTournament() {
         const { name, last_name, phone_number, email } = user;
         return (
             <Grid container spacing={3} justify="center">
-                <Grid item xs={8}>
+                <Grid item xs={8} className={classes.detailsContainer} >
                     <Grid container spacing={3} justify="center">
                         <Grid item xs={6} className={classes.itemField} ><strong>Nombre:</strong> {name}</Grid>
                         <Grid item xs={6} className={classes.itemField} ><strong>Apellido:</strong>{last_name}</Grid>
@@ -301,9 +330,9 @@ export default function NewTournament() {
                         <Grid item xs={6} className={classes.itemField} ><strong>Correo:</strong>{email}</Grid>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} style={{ textAlign: 'center' }}>Seleccione una categoria adecuada</Grid>
+                <Grid item xs={12}><strong>Seleccione una categoria</strong></Grid>
                 <Grid item xs={12}>
-                    <Grid container spacing={3} justify="center">
+                    <Grid container spacing={3} justify="flex-start">
                         {
                             tCategoryList.map((element: any, i: number) => {
                                 const active = selectedCategory && selectedCategory.id === element.id ? classes.activeCard : "";
@@ -342,8 +371,65 @@ export default function NewTournament() {
 
                 <Grid item xs={10}>
                     <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Grid container spacing={1} className={classes.detailsContainer} >
+                                <Grid item xs={12} className={classes.itemField} >
+                                    <strong>Tus detalles personales</strong>
+                                </Grid>
+                                <Grid item xs={6} className={classes.itemField} ><strong>Nombre:</strong> {user.name} {user.last_name}</Grid>
+                                <Grid item xs={6} className={classes.itemField} ><strong>Correo:</strong> {user.email}</Grid>
+                                <Grid item xs={6} className={classes.itemField} ><strong>Correo:</strong> {user.email}</Grid>
+                                <Grid item xs={6} className={classes.itemField} ><strong>Telefono:</strong> {user.phone_number}</Grid>
+                            </Grid>
+                        </Grid>
                         <Grid item xs={12} className={classes.itemField} ><strong>Categoria:</strong> {selectedCategory.description}</Grid>
                         <Grid item xs={12} className={classes.itemField} ><strong>Nombre del Torneo:</strong> {selectedTournament.description}</Grid>
+                        <Grid item xs={12} className={classes.itemField}>
+                            <ExpansionPanel
+                                expanded={expanded === "panel1"}
+                                onChange={handleExpandedPanel("panel1")}
+                            >
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    <Typography className={classes.heading}>
+                                        Detalles del Torneo
+                            </Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Grid container spacing={1}>
+                                        <Grid item xs={12} className={classes.itemField} >
+                                            {selectedTournament.descripcion_details}
+                                        </Grid>
+                                    </Grid>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        </Grid>
+                        <Grid item xs={12} className={classes.itemField}>
+                            <ExpansionPanel
+                                expanded={expanded === "panel2"}
+                                onChange={handleExpandedPanel("panel2")}
+                            >
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel2a-content"
+                                    id="panel2a-header"
+                                >
+                                    <Typography className={classes.heading}>
+                                        Detalles Premiacion
+                            </Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Grid container spacing={1}>
+                                        <Grid item xs={12} className={classes.itemField} >
+                                            {selectedTournament.description_price}
+                                        </Grid>
+                                    </Grid>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        </Grid>
                         <Grid item xs={6} className={classes.itemField} ><strong>Fecha:</strong> {moment(selectedTournament.date_register_from).format("DD-MM-YY")}</Grid>
                         <Grid item xs={6} className={classes.itemField} ><strong>Fin Registro:</strong> {moment(selectedTournament.date_register_to).format("DD-MM-YY")}</Grid>
                         <Grid item xs={12} className={classes.itemField} ><strong>Tipo de Reglas:</strong> {selectedTournament.rules.description}</Grid>
@@ -378,16 +464,7 @@ export default function NewTournament() {
                         <Grid item xs={3} className={classes.itemField} style={{ textAlign: 'left' }}>
                             {selectedTournament.groups.map((e: any) => <div>{e.description}</div>)}
                         </Grid>
-                        <Grid item xs={12} className={classes.itemField}>
-                            <strong>Tus detalles personales</strong>
-                        </Grid>
-                        <Grid item xs={6} className={classes.itemField} ><strong>Nombre:</strong> {user.name} {user.last_name}</Grid>
-                        <Grid item xs={6} className={classes.itemField} ><strong>Correo:</strong> {user.email}</Grid>
-                        <Grid item xs={6} className={classes.itemField} ><strong>Correo:</strong> {user.email}</Grid>
-                        <Grid item xs={6} className={classes.itemField} ><strong>Telefono:</strong> {user.phone_number}</Grid>
-                        <Grid item xs={12} className={classes.itemField} >
-                            <strong>Descripcion:</strong> {selectedTournament.descripcion_details}
-                        </Grid>
+
                         <Grid item xs={12}>
                             Notas del Participante
                         </Grid>
@@ -406,8 +483,65 @@ export default function NewTournament() {
             <Grid container spacing={3} justify="center">
                 <Grid item xs={10}>
                     <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                            <Grid container spacing={1} className={classes.detailsContainer} >
+                                <Grid item xs={12} className={classes.itemField} >
+                                    <strong>Tus detalles personales</strong>
+                                </Grid>
+                                <Grid item xs={6} className={classes.itemField} ><strong>Nombre:</strong> {user.name} {user.last_name}</Grid>
+                                <Grid item xs={6} className={classes.itemField} ><strong>Correo:</strong> {user.email}</Grid>
+                                <Grid item xs={6} className={classes.itemField} ><strong>Correo:</strong> {user.email}</Grid>
+                                <Grid item xs={6} className={classes.itemField} ><strong>Telefono:</strong> {user.phone_number}</Grid>
+                            </Grid>
+                        </Grid>
                         <Grid item xs={12} className={classes.itemField} ><strong>Categoria:</strong> {selectedCategory.description}</Grid>
                         <Grid item xs={12} className={classes.itemField} ><strong>Nombre del Torneo:</strong> {selectedTournament.description}</Grid>
+                        <Grid item xs={12} className={classes.itemField}>
+                            <ExpansionPanel
+                                expanded={expanded === "panel1"}
+                                onChange={handleExpandedPanel("panel1")}
+                            >
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel1a-content"
+                                    id="panel1a-header"
+                                >
+                                    <Typography className={classes.heading}>
+                                        Detalles del Torneo
+                            </Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Grid container spacing={1}>
+                                        <Grid item xs={12} className={classes.itemField} >
+                                            {selectedTournament.descripcion_details}
+                                        </Grid>
+                                    </Grid>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        </Grid>
+                        <Grid item xs={12} className={classes.itemField}>
+                            <ExpansionPanel
+                                expanded={expanded === "panel2"}
+                                onChange={handleExpandedPanel("panel2")}
+                            >
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel2a-content"
+                                    id="panel2a-header"
+                                >
+                                    <Typography className={classes.heading}>
+                                        Detalles Premiacion
+                            </Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Grid container spacing={1}>
+                                        <Grid item xs={12} className={classes.itemField} >
+                                            {selectedTournament.description_price}
+                                        </Grid>
+                                    </Grid>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        </Grid>
                         <Grid item xs={6} className={classes.itemField} ><strong>Fecha:</strong> {moment(selectedTournament.date_register_from).format("DD-MM-YY")}</Grid>
                         <Grid item xs={6} className={classes.itemField} ><strong>Fin Registro:</strong> {moment(selectedTournament.date_register_to).format("DD-MM-YY")}</Grid>
                         <Grid item xs={12} className={classes.itemField} ><strong>Tipo de Reglas:</strong> {selectedTournament.rules.description}</Grid>
@@ -418,16 +552,6 @@ export default function NewTournament() {
                         <Grid item xs={3} className={classes.itemField} ><strong>Grupos:</strong></Grid>
                         <Grid item xs={3} className={classes.itemField} style={{ textAlign: 'left' }}>
                             {selectedTournament.groups.map((e: any) => <div>{e.description}</div>)}
-                        </Grid>
-                        <Grid item xs={12} className={classes.itemField} >
-                            <strong>Tus detalles personales</strong>
-                        </Grid>
-                        <Grid item xs={6} className={classes.itemField} ><strong>Nombre:</strong> {user.name} {user.last_name}</Grid>
-                        <Grid item xs={6} className={classes.itemField} ><strong>Correo:</strong> {user.email}</Grid>
-                        <Grid item xs={6} className={classes.itemField} ><strong>Correo:</strong> {user.email}</Grid>
-                        <Grid item xs={6} className={classes.itemField} ><strong>Telefono:</strong> {user.phone_number}</Grid>
-                        <Grid item xs={12} className={classes.itemField} >
-                            <strong>Descripcion:</strong> {selectedTournament.descripcion_details}
                         </Grid>
                     </Grid>
                 </Grid>
