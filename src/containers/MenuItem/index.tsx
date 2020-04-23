@@ -3,6 +3,7 @@ import Fab from "@material-ui/core/Fab";
 import AddIcon from "@material-ui/icons/Add";
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, withStyles } from "@material-ui/core/styles";
+import SettingsIcon from '@material-ui/icons/Settings';
 
 import { getAll, remove, search } from "../../actions/menuItemActions";
 import { updateModal } from "../../actions/customModalActions";
@@ -10,6 +11,7 @@ import MenuItemForm from "../../components/MenuItemForm";
 import DataTable4 from '../../components/DataTable4'
 import Columns from '../../interfaces/MenuItemColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
+import icons from "../../helpers/collectionIcons";
 
 const columns: Columns[] = [
   { 
@@ -24,6 +26,22 @@ const columns: Columns[] = [
   minWidth: 30,
   align: "right",
   component: (value: any) => <span>{value.value ? value.value.description : '-'}</span>
+},
+{
+  id: "icons",
+  label: "Icono",
+  minWidth: 10,
+  align: "right",
+  component: (value: any) => {
+    let Icon = SettingsIcon;
+    if (value.value) {
+      let currenMenutIcon = icons.find((e: any) => e.slug === value.value.slug);
+      if (currenMenutIcon) {
+        Icon = currenMenutIcon.name;
+      }
+    }
+    return <span>{value.value ? <Icon /> : <div />}</span>
+  }
 },
 {
   id: "main",
