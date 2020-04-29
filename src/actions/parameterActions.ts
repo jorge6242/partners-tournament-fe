@@ -56,13 +56,21 @@ export const getList = () => async (dispatch: Function) => {
     }
   }));
   try {
-    const { data: { data }, status } = await API.getList();
+    const { data: { data, db, dbHost }, status } = await API.getList();
     let response = [];
     if (status === 200) {
       response = data;
       dispatch({
         type: ACTIONS.GET_LIST,
         payload: response
+      });
+      dispatch({
+        type: ACTIONS.GET_DB_PARAMETER,
+        payload: db
+      });
+      dispatch({
+        type: ACTIONS.GET_DB_HOST,
+        payload: dbHost
       });
       dispatch(updateModal({
         payload: {
