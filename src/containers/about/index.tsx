@@ -8,7 +8,7 @@ import Helper from '../../helpers/utilities';
 export default function About(){
     const dispatch = useDispatch();
     const { 
-        parameterReducer: { listData: parameterList, dbParameter, dbHost } 
+        parameterReducer: { listData: parameterList, dbParameter, dbHost, api } 
     } = useSelector((state: any) => state);
 
     useEffect(() => {
@@ -32,7 +32,10 @@ export default function About(){
             {renderParameter("DB_VERSION")}
             {renderParameter("FRONTEND_VERSION")}
             {renderParameter("BACKEND_VERSION")}
-            {renderParameter("ENDPOINT_API_URL")}
+            <Grid container>
+                <Grid item xs={3}><strong>Endpoint Api URL:</strong></Grid>
+                <Grid item xs={9} style={{ textAlign: 'left' }}>{api}</Grid>
+            </Grid>
             <Grid container>
                 <Grid item xs={3}><strong>Host Base de datos:</strong></Grid>
                 <Grid item xs={9} style={{ textAlign: 'left' }}>{dbHost}</Grid>

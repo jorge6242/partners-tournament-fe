@@ -7,6 +7,7 @@ type InitState = {
   listData: any;
   dbParameter: string;
   dbHost: string;
+  api: string;
 };
 
 const initialState: InitState = {
@@ -21,6 +22,7 @@ const initialState: InitState = {
   listData: [],
   dbParameter: "",
   dbHost: "",
+  api: "",
 };
 
 const parameterReducer = (state = initialState, action: ActionTypes) => {
@@ -35,6 +37,11 @@ const parameterReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         listData: action.payload,
       };
+      case ACTIONS.GET_API:
+        return {
+          ...state,
+          api: action.payload,
+        };
     case ACTIONS.GET_DB_PARAMETER:
       return {
         ...state,

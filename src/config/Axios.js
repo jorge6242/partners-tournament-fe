@@ -2,8 +2,10 @@ import axios from 'axios';
 
 //'http://tournament.api.com
 
+const baseURL = window.BASE_URL;
+
 const AXIOS = axios.create({
-  baseURL: 'http://tournament.api.com',
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
     'Partners-Application': 'portal'
