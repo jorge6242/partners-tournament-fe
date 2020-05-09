@@ -88,7 +88,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Country Created!",
+          message: "Country ha sido Registrado!",
           type: "success",
           status: true
         }
@@ -164,7 +164,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Country Updated!",
+          message: "Country ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -211,7 +211,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Country Removed!",
+          message: "Country ha sido Elmininado!",
           type: "success",
           status: true
         }

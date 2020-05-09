@@ -88,7 +88,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Bank Created!",
+          message: "Bank ha sido Registrado!",
           type: "success",
           status: true
         }
@@ -164,7 +164,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Bank Updated!",
+          message: "Bank ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -211,7 +211,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Bank Removed!",
+          message: "Bank ha sido Elmininado!",
           type: "success",
           status: true
         }

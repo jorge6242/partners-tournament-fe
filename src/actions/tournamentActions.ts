@@ -279,14 +279,29 @@ export const createParticipant = (body: object) => async (dispatch: Function) =>
 };
 
 export const get = (id: number) => async (dispatch: Function) => {
+  dispatch(updateModal({
+    payload: {
+      isLoader: true,
+    }
+  }));
   try {
     const { data: { data }, status } = await API.get(id);
     let response = [];
     if (status === 200) {
       response = data;
     }
+    dispatch(updateModal({
+      payload: {
+        isLoader: false,
+      }
+    }));
     return response;
   } catch (error) {
+    dispatch(updateModal({
+      payload: {
+        isLoader: false,
+      }
+    }));
     snackBarUpdate({
       payload: {
         message: error.message,

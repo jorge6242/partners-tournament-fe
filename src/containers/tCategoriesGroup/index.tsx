@@ -4,13 +4,12 @@ import AddIcon from "@material-ui/icons/Add";
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 
-import { getAll, remove, search } from "../../actions/tournamentActions";
+import { getAll, remove, search } from "../../actions/tCategoriesGroupActions";
 import { updateModal } from "../../actions/modalActions";
-import TournamentForm from "../../components/TournamentForm";
+import TCategoriesGroupForm from "../../components/TCategoriesGroupForm";
 import DataTable4 from '../../components/DataTable4'
-import Columns from '../../interfaces/TournamentColumns';
+import Columns from '../../interfaces/tCategoriesGroupColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
-import moment from "moment";
 
 const useStyles = makeStyles(() => ({
   headerContainer: {
@@ -25,10 +24,10 @@ const useStyles = makeStyles(() => ({
   }
 }));
 
-export default function Tournament() {
+export default function TCategoriesGroup() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { list, loading, pagination } = useSelector((state: any) => state.tournamentReducer);
+  const { list, loading, pagination } = useSelector((state: any) => state.tCategoriesGroupReducer);
   useEffect(() => {
     async function fetchData() {
       dispatch(getAll());
@@ -36,21 +35,22 @@ export default function Tournament() {
     fetchData();
   }, [dispatch]);
 
-  const renderDate = (id: any) => {
+  const renderAge = (id: any) => {
     const row = list.find((e: any) => e.id === id);
     if(row){
-      return `${moment(row.date_from).format("YYYY-MM-DD")} - ${moment(row.date_to).format("YYYY-MM-DD")}`;
+      return `${row.age_from} - ${row.age_to}`;
     }
     return '';
   }
 
-  const renderRegisterDate = (id: any) => {
+  const renderHandicap = (id: any) => {
     const row = list.find((e: any) => e.id === id);
     if(row){
-      return `${moment(row.date_register_from).format("YYYY-MM-DD")} - ${moment(row.date_register_to).format("YYYY-MM-DD")}`;
+      return `${row.golf_handicap_from} - ${row.golf_handicap_to}`;
     }
     return '';
   }
+
 
   const columns: Columns[] = [
     { 
@@ -58,13 +58,6 @@ export default function Tournament() {
       label: "Id", 
       minWidth: 10,
       component: (value: any) => <span>{value.value}</span>
-    },
-      {
-      id: "category",
-      label: "Categoria",
-      minWidth: 10,
-      align: "right",
-      component: (value: any) => <span>{value.value && value.value.description}</span>
     },
     {
       id: "description",
@@ -75,51 +68,31 @@ export default function Tournament() {
     },
     {
       id: "id",
-      label: "Fecha",
+      label: "Edad",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{renderDate(value.value)}</span>
+      component: (value: any) => <span>{renderAge(value.value)}</span>
     },
     {
       id: "id",
-      label: "Registro",
+      label: "Handicap",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{renderRegisterDate(value.value)}</span>
+      component: (value: any) => <span>{renderHandicap(value.value)}</span>
     },
     {
-      id: "participant_type",
-      label: "Tipo",
-      minWidth: 10,
-      align: "right",
-      component: (value: any) => {
-        let participant = "";
-        if(value.value === "1") participant = "Socios/Familiares";
-        if(value.value === "2") participant = "Invitados";
-        if(value.value === "3") participant = "Ambos";
-        return <span>{participant}</span>
-      }
-    },
-    {
-      id: "currency",
-      label: "Moneda",
+      id: "category",
+      label: "Categoria",
       minWidth: 10,
       align: "right",
       component: (value: any) => <span>{value.value && value.value.description}</span>
     },
-    {
-      id: "amount",
-      label: "Monto",
+      {
+      id: "gender",
+      label: "Sexo",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{value.value}</span>
-    },
-    {
-      id: "status",
-      label: "Status",
-      minWidth: 10,
-      align: "right",
-      component: (value: any) => <span>{value.value === "1" ? 'Activo' : 'Inactivo'}</span>
+      component: (value: any) => <span>{value.value && value.value.description}</span>
     },
   ];
 
@@ -128,8 +101,7 @@ export default function Tournament() {
       updateModal({
         payload: {
           status: true,
-          element: <TournamentForm id={id} />,
-          customSize: 'medium'
+          element: <TCategoriesGroupForm id={id} />
         }
       })
     );
@@ -140,8 +112,7 @@ export default function Tournament() {
       updateModal({
         payload: {
           status: true,
-          element: <TournamentForm />,
-          customSize: 'medium'
+          element: <TCategoriesGroupForm />
         }
       })
     );
@@ -171,7 +142,7 @@ export default function Tournament() {
   return (
     <div>
       <div className={classes.headerContainer}>
-        <div className={classes.headerTitle}>Torneos</div>
+        <div className={classes.headerTitle}>Grupos</div>
         <div onClick={() => handleCreate()}>
           <Fab size="small" color="primary" aria-label="add">
             <AddIcon />

@@ -148,7 +148,7 @@ const LockerForm: FunctionComponent<ComponentProps> = ({
                             disabled={loading}
                             className={classes.submit}
                         >
-                            {id ? "Update" : "Create"}
+                            {id ? "Actualizar" : "Crear"}
                         </Button>
                         {loading && (
                             <CircularProgress size={24} className={classes.buttonProgress} />

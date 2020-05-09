@@ -28,18 +28,20 @@ const useStyles = makeStyles(theme => ({
     },
     wrapper: {
         margin: theme.spacing(1),
-        position: "relative"
-    },
-    buttonProgress: {
+        position: "relative",
+        textAlign: 'center',
+      },
+      buttonProgress: {
         position: "absolute",
         top: "50%",
         left: "50%",
         marginTop: -9,
         marginLeft: -9
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2)
-    },
+      },
+      submit: {
+        margin: theme.spacing(3, 0, 2),
+        width: '30%'
+      },
     select: {
         padding: "10px 0px 10px 0px",
         width: " 100%",
@@ -232,7 +234,7 @@ const TCategoryForm: FunctionComponent<ComponentProps> = ({
                             disabled={loading}
                             className={classes.submit}
                         >
-                            {id ? "Update" : "Create"}
+                            {id ? "Actualizar" : "Crear"}
                         </Button>
                         {loading && (
                             <CircularProgress size={24} className={classes.buttonProgress} />

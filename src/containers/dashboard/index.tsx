@@ -62,6 +62,11 @@ import { getAll as getSports } from "../../actions/sportActions";
 import { getList as getLockerLocationList } from "../../actions/lockerLocationsActions";
 import { getList as getMenuList, getWidgetList } from "../../actions/menuActions";
 import { getList as getParameterList } from "../../actions/parameterActions";
+import { getList as getCategoryList } from "../../actions/tCategoryActions";
+import { getList as getCurrencyList } from "../../actions/currencyActions";
+import { getList as getRuleTypeList } from "../../actions/tRuleCategoryActions";
+import { getList as getPaymentMethodList } from "../../actions/tPaymentMethodActions";
+import { getList as getCategoriesGroupList } from "../../actions/tCategoriesGroupActions";
 import Loader from "../../components/common/Loader";
 import { getClient } from "../../actions/personActions";
 import { getBalance } from "../../actions/webServiceActions";
@@ -171,6 +176,11 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       dispatch(getGenderAll());
       dispatch(getCountries());
       dispatch(getParameterList());
+      dispatch(getCategoryList());
+      dispatch(getCurrencyList());
+      dispatch(getRuleTypeList());
+      dispatch(getPaymentMethodList());
+      dispatch(getCategoriesGroupList());
     }
     run();
   }, [dispatch])

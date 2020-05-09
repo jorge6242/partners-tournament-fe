@@ -120,7 +120,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       );
       snackBarUpdate({
         payload: {
-          message: "Share Created!",
+          message: "Share ha sido Registrado!",
           type: "success",
           status: true
         }
@@ -217,7 +217,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Share Updated!",
+          message: "Share ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -269,7 +269,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Share Removed!",
+          message: "Share ha sido Elmininado!",
           type: "success",
           status: true
         }

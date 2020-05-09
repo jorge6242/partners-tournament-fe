@@ -172,8 +172,8 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             />
                           </TableCell>
                         )}
-                        {handleView && (
-                          <TableCell align="right" style={{ minWidth: 5 }}>
+                        <TableCell align="right" style={{ minWidth: 5 }}>
+                          {handleView && (
                             <IconButton
                               aria-label="delete"
                               size="small"
@@ -182,10 +182,8 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             >
                               <VisibilityIcon fontSize="inherit" />
                             </IconButton>
-                          </TableCell>
-                        )}
-                        {handleEdit && (
-                          <TableCell align="right" style={{ minWidth: 5 }}>
+                          )}
+                          {handleEdit && (
                             <IconButton
                               aria-label="delete"
                               size="small"
@@ -194,10 +192,8 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             >
                               <EditIcon fontSize="inherit" />
                             </IconButton>
-                          </TableCell>
-                        )}
-                        {handleDelete && (
-                          <TableCell align="right" style={{ minWidth: 5 }}>
+                          )}
+                          {handleDelete && (
                             <IconButton
                               aria-label="delete"
                               size="small"
@@ -206,9 +202,8 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                             >
                               <DeleteIcon fontSize="inherit" />
                             </IconButton>
-                          </TableCell>
-                        )}
-
+                          )}
+                        </TableCell>
                       </TableRow>
                       {row.share_movements && row.share_movements.length > 0 && renderSubRow && selectedRow === row.id &&
                         <TableRow><TableCell colSpan={10}>{renderSubRow(row.share_movements)}</TableCell></TableRow>

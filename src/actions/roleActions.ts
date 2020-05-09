@@ -88,7 +88,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       response = apiResponse;
       snackBarUpdate({
         payload: {
-          message: "Role Created!",
+          message: "Role ha sido Registrado!",
           type: "success",
           status: true
         }
@@ -164,7 +164,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Role Updated!",
+          message: "Role ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -211,7 +211,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Role Removed!",
+          message: "Role ha sido Elmininado!",
           type: "success",
           status: true
         }

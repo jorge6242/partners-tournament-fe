@@ -70,6 +70,7 @@ import Stepper from "../containers/newTournament";
 import About from "../containers/about";
 import Inscriptions from "../containers/inscriptions";
 import TournamentReport from "../containers/tournamentReport";
+import TCategoriesGroup from "../containers/tCategoriesGroup";
 
 export default function Routes() { 
   return (
@@ -104,7 +105,7 @@ export default function Routes() {
                       <Route path="/dashboard/category" exact component={TCategory} />
                       <Route path="/dashboard/category-type" exact component={TCategoryType} />
                       <Route path="/dashboard/tournament" exact component={Tournament} />
-                      <Route path="/dashboard/group" exact component={Group} />
+                      <Route path="/dashboard/group" exact component={TCategoriesGroup} />
                       <Route path="/dashboard/parameter" exact component={Parameter} />
                       <Route path="/dashboard/tournament-new" exact component={Stepper} />
                       <Route path="/dashboard/about" exact component={About} />

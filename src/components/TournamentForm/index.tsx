@@ -18,15 +18,11 @@ import CardMedia from "@material-ui/core/CardMedia";
 
 import CustomTextField from "../FormElements/CustomTextField";
 import { update, create, get } from "../../actions/tournamentActions";
-import { getList as getCategoryList } from "../../actions/tCategoryActions";
-import { getList as getCurrencyList } from "../../actions/currencyActions";
-import { getList as getRuleTypeList } from "../../actions/tRuleCategoryActions";
-import { getList as getPaymentMethodList } from "../../actions/tPaymentMethodActions";
-import { getList as getCategoriesGroupList } from "../../actions/tCategoriesGroupActions";
 import CustomSelect from "../FormElements/CustomSelect";
 import { Grid } from "@material-ui/core";
 import TransferList from "../TransferList";
 import moment from "moment";
+import CustomEditor from "../Editor";
 
 const ExpansionPanelSummary = withStyles({
     root: {
@@ -127,6 +123,9 @@ const initialGroupsSelectedItems = {
 const TournamentForm: FunctionComponent<ComponentProps> = ({
     id
 }) => {
+    const [descriptionDetailsContent, setDescriptionDetailsContent] = useState<string>("");
+    const [templateWelcomeMailContent, setTemplateWelcomeMailContent] = useState<string>("");
+    const [templateConfirmationMailContent, setTemplateConfirmationMailContent] = useState<string>("");
     const [image, setImage] = useState({ preview: "", raw: "" });
     const [imageField, setImageField] = useState();
     const [selectedData, setSelectedData] = useState<any>([]);
@@ -161,11 +160,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
         selected.itemsToAdd.length = 0;
         selected.itemsToRemove.length = 0;
         setSelectedCategoryGroupItems(selectedGroups);
-        dispatch(getCategoryList());
-        dispatch(getCurrencyList());
-        dispatch(getRuleTypeList());
-        dispatch(getPaymentMethodList());
-        dispatch(getCategoriesGroupList());
+
         async function fetch() {
             if (id) {
                 const response: any = await dispatch(get(id));
@@ -206,7 +201,11 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                 setValue("currency_id", currency_id);
                 setValue("t_categories_id", t_categories_id);
                 setValue("t_category_type_id", t_category_type_id);
+                setValue("picture", picture);
                 setImage({ ...image, preview: picture });
+                setDescriptionDetailsContent(description_details);
+                setTemplateWelcomeMailContent(template_welcome_mail);
+                setTemplateConfirmationMailContent(template_confirmation_mail);
                 if (payments && payments.length > 0) {
                     setSelectedData(payments);
                     payments.forEach((element: any) => {
@@ -254,6 +253,8 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
             date_to: parseDate(date_to),
             payments: selectedItems,
             groups: selectedCategoryGroupItems,
+            template_welcome_mail: templateWelcomeMailContent,
+            template_confirmation_mail: templateConfirmationMailContent
         }
         if (id) {
             dispatch(update({ id, ...body }));
@@ -364,7 +365,17 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
 
     };
 
+    const handleChangeDescriptionDetail = (content: any) => {
+        setDescriptionDetailsContent(content);
+    }
 
+    const handleChangeTemplateWelcomeEmail = (content: any) => {
+        setTemplateWelcomeMailContent(content);
+    }
+
+    const handleChangeTemplateConfirmationEmail = (content: any) => {
+        setTemplateConfirmationMailContent(content);
+    }
     return (
         <Container component="main">
             <div className={classes.paper}>
@@ -377,7 +388,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                     noValidate
                 >
                     <Grid container spacing={3}>
-                        <Grid xs={12} style={{ textAlign: 'center' }}>
+                        <Grid item xs={12} style={{ textAlign: 'center' }}>
                             <ExpansionPanel
                                 expanded={expanded === "panel-register"}
                                 onChange={handleExpandedPanel("panel-register")}
@@ -584,21 +595,50 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                                 }
                                             />
                                         </Grid>
-                                        <Grid item xs={12}>
-                                            <CustomTextField
+                                    </Grid>
+                                </ExpansionPanelDetails>
+                            </ExpansionPanel>
+                        </Grid>
+                        <Grid item xs={12}>
+                       <ExpansionPanel
+                                expanded={expanded === "panel-templates"}
+                                onChange={handleExpandedPanel("panel-templates")}
+                            >
+                                <ExpansionPanelSummary
+                                    expandIcon={<ExpandMoreIcon />}
+                                    aria-controls="panel-templates-content"
+                                    id="panel-templates-header"
+                                >
+                                    <Typography className={classes.heading}>Plantillas</Typography>
+                                </ExpansionPanelSummary>
+                                <ExpansionPanelDetails>
+                                    <Grid container spacing={3} className={classes.dataContainer} >
+                                    <Grid item xs={12}>
+                                            <Grid container spacing={3}>
+                                                <Grid item xs={12}>Descripcion premiacion</Grid>
+                                                <Grid item xs={12}>
+                                                    <CustomEditor onChange={handleChangeDescriptionDetail} content={descriptionDetailsContent} />
+                                                </Grid>
+                                            </Grid>
+                                            {/* <CustomTextField
                                                 placeholder="Descripcion premiacion"
                                                 field="description_details"
                                                 required
                                                 register={register}
                                                 errorsField={errors.description_details}
                                                 errorsMessageField={errors.description_details && errors.description_details.message}
-                                                type="datetime-local"
                                                 multiline
-                                            />
+                                            /> */}
                                         </Grid>
 
                                         <Grid xs={12}>
-                                        <CustomTextField
+                                            <Grid container spacing={3}>
+                                                <Grid item xs={12}>Plantilla de Bienvenida</Grid>
+                                                <Grid item xs={12}>
+                                                    <CustomEditor onChange={handleChangeTemplateWelcomeEmail} content={templateWelcomeMailContent} />
+                                                </Grid>
+                                            </Grid>
+                                            {/* <CustomTextField
                                                 placeholder="Plantilla de Bienvenida"
                                                 field="template_welcome_mail"
                                                 required
@@ -606,10 +646,16 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                                 errorsField={errors.template_welcome_mail}
                                                 errorsMessageField={errors.template_welcome_mail && errors.template_welcome_mail.message}
                                                 multiline
-                                            />
+                                            /> */}
                                         </Grid>
                                         <Grid xs={12}>
-                                        <CustomTextField
+                                            <Grid container spacing={3}>
+                                                <Grid item xs={12}>Plantilla Confirmacion</Grid>
+                                                <Grid item xs={12}>
+                                                    <CustomEditor onChange={handleChangeTemplateConfirmationEmail} content={templateConfirmationMailContent} />
+                                                </Grid>
+                                            </Grid>
+                                            {/* <CustomTextField
                                                 placeholder="Plantilla Confirmacion"
                                                 field="template_confirmation_mail"
                                                 required
@@ -617,14 +663,13 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                                 errorsField={errors.template_confirmation_mail}
                                                 errorsMessageField={errors.template_confirmation_mail && errors.template_confirmation_mail.message}
                                                 multiline
-                                            />
+                                            /> */}
                                         </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
-                        </Grid>
-
-                        <Grid xs={12}>
+                       </Grid>
+                        <Grid item xs={12}>
                             <ExpansionPanel
                                 expanded={expanded === "panel-guest"}
                                 onChange={handleExpandedPanel("panel-guest")}
@@ -653,7 +698,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                             </ExpansionPanel>
                         </Grid>
 
-                        <Grid xs={12}>
+                        <Grid item xs={12}>
                             <ExpansionPanel
                                 expanded={expanded === "panel-groups"}
                                 onChange={handleExpandedPanel("panel-groups")}

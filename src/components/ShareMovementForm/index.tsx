@@ -336,7 +336,7 @@ const ShareMovementForm: FunctionComponent<ShareMovementFormProps> = ({
                     disabled={loading}
                     className={classes.submit}
                   >
-                    {id ? "Update" : "Create"}
+                    {id ? "Actualizar" : "Crear"}
                   </Button>
                   {loading && (
                     <CircularProgress

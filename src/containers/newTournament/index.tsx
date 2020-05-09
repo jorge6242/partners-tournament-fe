@@ -97,7 +97,11 @@ const useStyles = makeStyles((theme: Theme) =>
         },
         detailsContainer: {
             border: '2px solid #2980b9',
-            borderRadius: '10px'
+            borderRadius: '10px',
+            padding: 10,
+        },
+        participant: {
+            padding: 10
         }
     }),
 );
@@ -323,7 +327,7 @@ export default function NewTournament() {
         return (
             <Grid container spacing={3} justify="center">
                 <Grid item xs={8} className={classes.detailsContainer} >
-                    <Grid container spacing={3} justify="center">
+                    <Grid container spacing={3} justify="center" className={classes.participant} >
                         <Grid item xs={6} className={classes.itemField} ><strong>Nombre:</strong> {name}</Grid>
                         <Grid item xs={6} className={classes.itemField} ><strong>Apellido:</strong>{last_name}</Grid>
                         <Grid item xs={6} className={classes.itemField}  ><strong>Telefono:</strong>{phone_number}</Grid>

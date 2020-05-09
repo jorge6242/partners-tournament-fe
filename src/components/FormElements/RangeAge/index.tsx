@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Grid from "@material-ui/core/Grid";
 
 const numbers = {
-    value : new RegExp('^[0-9]+$'),
+    value : new RegExp('^[0-9.,]+$'),
     message: "Solo numeros"
   }
 
@@ -59,7 +59,7 @@ const RangeAge: FunctionComponent<ComponentProps> = ({
         let start = watch(startField);
         let end = watch(endField);
         if (parseInt(start) > parseInt(end)) {
-            return "Edad inicio debe ser menor";
+            return `${label} inicio debe ser menor`;
         }
         return true;
       }
@@ -72,24 +72,38 @@ const RangeAge: FunctionComponent<ComponentProps> = ({
                     label="Desde"
                     name={startField}
                     fullWidth
+                    size="small"
+                    margin="dense"
+                    autoFocus
                     inputRef={register({
+                        required: required ? "Requerido" : false,
                         validate,
                         pattern: numbers,
                       })}
                     className={classes.field}
                     error={startMsgErr ? true : false }
+                    InputLabelProps={{
+                        shrink: true,
+                      }}
                 />
             </Grid>
             <Grid item xs={6} className={classes.fieldContainer}>
                 <TextField
                     label="Hasta"
+                    margin="dense"
+                    size="small"
+                    autoFocus
                     name={endField}
                     fullWidth
                     className={classes.field}
                     inputRef={register({
                         pattern: numbers,
+                        required: required ? "Requerido" : false,
                         validate
                       })}
+                      InputLabelProps={{
+                        shrink: true,
+                      }}
                 />
             </Grid>
                     <div className={classes.error}>{startMsgErr || endMsgErr}</div>

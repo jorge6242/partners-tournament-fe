@@ -148,7 +148,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Rule Created!",
+          message: "Rule ha sido Registrado!",
           type: "success",
           status: true
         }
@@ -224,7 +224,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Rule Updated!",
+          message: "Rule ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -276,7 +276,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Rule Removed!",
+          message: "Rule ha sido Elmininado!",
           type: "success",
           status: true
         }

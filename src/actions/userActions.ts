@@ -177,7 +177,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "User Updated!",
+          message: "User ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -224,7 +224,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "User Removed!",
+          message: "User ha sido Elmininado!",
           type: "success",
           status: true
         }

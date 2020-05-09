@@ -19,6 +19,13 @@ const columns: Columns[] = [
     component: (value: any) => <span>{value.value}</span>
   },
   {
+    id: "type",
+    label: "Tipo Categoria",
+    minWidth: 30,
+    align: "right",
+    component: (value: any) => <span>{value.value && value.value.description}</span>
+  },
+  {
     id: "description",
     label: "Description",
     minWidth: 30,
@@ -30,7 +37,7 @@ const columns: Columns[] = [
     label: "Status",
     minWidth: 30,
     align: "right",
-    component: (value: any) => <span>{value.value == 1 ? 'SI' : 'NO' }</span>
+    component: (value: any) => <span>{value.value === "1" ? 'Activo' : 'Inactivo' }</span>
   },
 ];
 

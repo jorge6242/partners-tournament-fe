@@ -242,7 +242,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Access control Updated!",
+          message: "Access control ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -296,7 +296,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Access control Removed!",
+          message: "Access control ha sido Elmininado!",
           type: "success",
           status: true
         }

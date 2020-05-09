@@ -30,18 +30,20 @@ const useStyles = makeStyles(theme => ({
     },
     wrapper: {
         margin: theme.spacing(1),
-        position: "relative"
-    },
-    buttonProgress: {
+        position: "relative",
+        textAlign: 'center',
+      },
+      buttonProgress: {
         position: "absolute",
         top: "50%",
         left: "50%",
         marginTop: -9,
         marginLeft: -9
-    },
-    submit: {
-        margin: theme.spacing(3, 0, 2)
-    },
+      },
+      submit: {
+        margin: theme.spacing(3, 0, 2),
+        width: '30%'
+      },
     select: {
         padding: "10px 0px 10px 0px",
         width: " 100%",
@@ -109,13 +111,14 @@ const MenuItemForm: FunctionComponent<ComponentProps> = ({
         async function fetch() {
             if (id) {
                 const response: any = await dispatch(get(id));
-                const { name, slug, description, route, menu_id, parent , menu_item_icon_id, roles } = response;
+                const { name, slug, description, route, menu_id, parent , menu_item_icon_id, roles, order } = response;
                 setValue("name", name);
                 setValue("slug", slug);
                 setValue("description", description);
                 setValue("route", route);
                 setValue("parent", parent);
                 setValue("menu_id", menu_id);
+                setValue("order", order);
                 setValue("menu_item_icon_id", menu_item_icon_id);
                 if (roles && roles.length > 0) {
                     setSelectedData(roles);
@@ -328,7 +331,7 @@ const MenuItemForm: FunctionComponent<ComponentProps> = ({
                             disabled={loading}
                             className={classes.submit}
                         >
-                            {id ? "Update" : "Create"}
+                            {id ? "Actualizar" : "Crear"}
                         </Button>
                         {loading && (
                             <CircularProgress size={24} className={classes.buttonProgress} />
