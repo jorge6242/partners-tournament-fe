@@ -7,6 +7,7 @@ type InitState = {
   list: Array<string | number>;
   tournamentsByCategory: Array<string | number>;
   inscriptions: Array< string | number>
+  inscriptionsReport: Array< string | number>
   loading: boolean;
   setParticipantLoading: boolean;
   getInscriptionsLoading: boolean;
@@ -27,7 +28,8 @@ const initialState: InitState = {
   listData: [],
   setParticipantLoading: false,
   inscriptions: [],
-  getInscriptionsLoading: false
+  getInscriptionsLoading: false,
+  inscriptionsReport: [],
 };
 
 const tournamentReducer = (state = initialState, action: ActionTypes) => {
@@ -42,6 +44,11 @@ const tournamentReducer = (state = initialState, action: ActionTypes) => {
         ...state,
         inscriptions: action.payload,
       };
+      case ACTIONS.GET_INSCRIPTIONS_REPORT:
+        return {
+          ...state,
+          inscriptionsReport: action.payload,
+        };
     case ACTIONS.GET_TOURNAMENTS_BY_CATEGORY:
       return {
         ...state,

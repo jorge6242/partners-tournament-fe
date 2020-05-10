@@ -463,7 +463,7 @@ export const getInscriptionsReport = (page: number = 1, perPage: number = 8, que
       }
       response = data;
       dispatch({
-        type: ACTIONS.GET_INSCRIPTIONS,
+        type: ACTIONS.GET_INSCRIPTIONS_REPORT,
         payload: response
       });
       dispatch({

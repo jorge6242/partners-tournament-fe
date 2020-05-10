@@ -1,6 +1,7 @@
 export const ACTIONS = {
   GET_ALL: "tournament/get_all",
   GET_INSCRIPTIONS: "tournament/get_inscriptions",
+  GET_INSCRIPTIONS_REPORT: "tournament/get_inscriptions_report",
   GET: "tournament/get",
   GET_LIST: "tournament/get_list",
   GET_TOURNAMENTS_BY_CATEGORY: "tournament/get_tournaments_by_category",
@@ -13,6 +14,11 @@ export const ACTIONS = {
 
 interface Get {
   type: typeof ACTIONS.GET;
+  payload: Array<string | number>;
+}
+
+interface GetInsscriptionsReport {
+  type: typeof ACTIONS.GET_INSCRIPTIONS_REPORT;
   payload: Array<string | number>;
 }
 
@@ -71,4 +77,5 @@ export type ActionTypes =
   | GetInscriptionsLoading
   | GetInscriptions
   | SetParticipantLoading
-  | SetReportLoading;
+  | SetReportLoading
+  | GetInsscriptionsReport;

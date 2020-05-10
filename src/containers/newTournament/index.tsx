@@ -22,6 +22,7 @@ import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Parser from 'react-html-parser';
 
 import { getList as getTCategoryList } from '../../actions/tCategoryActions';
 import { getList as getTournamentList, createParticipant, getByCategory } from '../../actions/tournamentActions';
@@ -405,7 +406,7 @@ export default function NewTournament() {
                                 <ExpansionPanelDetails>
                                     <Grid container spacing={1}>
                                         <Grid item xs={12} className={classes.itemField} >
-                                            {selectedTournament.descripcion_details}
+                                            {Parser(selectedTournament.description_details)}
                                         </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>
@@ -428,7 +429,7 @@ export default function NewTournament() {
                                 <ExpansionPanelDetails>
                                     <Grid container spacing={1}>
                                         <Grid item xs={12} className={classes.itemField} >
-                                            {selectedTournament.description_price}
+                                            {Parser(selectedTournament.description_details)}
                                         </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>

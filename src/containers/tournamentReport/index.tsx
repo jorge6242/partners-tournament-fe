@@ -22,6 +22,7 @@ import CustomSearch from '../../components/FormElements/CustomSearch';
 import TournamentUserCommentForm from '../../components/TournamentUserCommentForm';
 import { Grid } from "@material-ui/core";
 import moment from "moment";
+import snackBarUpdate from "../../actions/snackBarActions";
 
 const useStyles = makeStyles(() => ({
   headerContainer: {
@@ -47,35 +48,13 @@ export default function TournamentReport() {
   const dispatch = useDispatch();
   const {
     tournamentReducer: {
-      inscriptions: list,
+      inscriptionsReport: list,
       getInscriptionsLoading: loading,
       pagination,
-      listData: tournamentList,
       tournamentsByCategory
     },
     tCategoryReducer: { listData: tCategoryList },
   } = useSelector((state: any) => state);
-
-  const getStatusComment = (row: any) => {
-    const value = list.find((e: any) => e.id == row);
-    return value.comments;
-  }
-
-  const getStatusUserNote = (row: any) => {
-    const value = list.find((e: any) => e.id == row);
-    return value.user_notes;
-  }
-
-  const handleComment = (row: any) => {
-    dispatch(
-      updateModal({
-        payload: {
-          status: true,
-          element: <TournamentUserCommentForm id={row} />
-        }
-      })
-    );
-  }
 
   const columns: Columns[] = [
     {
@@ -193,18 +172,24 @@ export default function TournamentReport() {
       label: "Status",
       minWidth: 10,
       align: "center",
-      component: (value: any) => (
-        <Chip
-          label={value.value === "1" ? "Verificado" : "Pendiente"}
-          style={{
-            backgroundColor: value.value === "1" ? "#2ecc71" : "#e74c3c",
-            color: "white",
-            fontWeight: "bold",
-            fontSize: "10px"
-          }}
-          size="small"
-        />
-      )
+      component: (value: any) => {
+        let status = '';
+        if(value.value === "0") status = 'Pendiente';
+        if(value.value === "1") status = 'Verificado';
+        if(value.value === "-1") status = 'Rechazado';
+        return (
+          <Chip
+            label={status}
+            style={{
+              backgroundColor: value.value === "1" ? "#2ecc71" : "#e74c3c",
+              color: "white",
+              fontWeight: "bold",
+              fontSize: "10px"
+            }}
+            size="small"
+          />
+        )
+      }
     },
   ];
 
@@ -235,7 +220,6 @@ export default function TournamentReport() {
   };
 
   const handleCategory = (event: any) => {
-    console.log('event', event.target.value);
     setSelectedCategory(0);
     setSelectedTournament(0);
     dispatch(getByCategory(event.target.value))
@@ -257,7 +241,18 @@ export default function TournamentReport() {
       tournament: selectedTournament,
       status: selectedStatus,
     }
-    dispatch(getAll(currentPage, perPage, query));
+    if(selectedCategory > 0 && selectedTournament > 0) {
+      dispatch(getAll(currentPage, perPage, query));
+    } else {
+      dispatch(snackBarUpdate({
+        payload: {
+          message: 'Seleccionar Categoria y Torneo',
+          status: true,
+          type: "error"
+        }
+      }))
+    }
+    
   }
 
   const handleReport = () => {
@@ -319,7 +314,7 @@ export default function TournamentReport() {
           >
             <option value="">Seleccione Status</option>
             <option value={0}>Pendiente</option>
-            <option value={1}>Confirmado</option>
+            <option value={1}>Verificado</option>
             <option value={-1}>Rechazado</option>
           </select>
         </div>

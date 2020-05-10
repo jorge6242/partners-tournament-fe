@@ -141,12 +141,11 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const history = useHistory();
   const location = useLocation();
   const dispatch = useDispatch();
-  const { user, loading } = useSelector((state: any) => state.loginReducer);
-
-  const { listData: menuList } = useSelector((state: any) => state.menuReducer);
 
   const {
-    parameterReducer: { listData: parameterList }
+    menuReducer: { listData: menuList },
+    loginReducer: { user, loading },
+    parameterReducer: { listData: parameterList },
   } = useSelector((state: any) => state);
 
   const [open1, setOpen1] = React.useState(false);
@@ -168,19 +167,20 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       //   )
       //   await dispatch(setForcedLogin(values.socio, values.token));
       // }
+      
       await dispatch(checkLogin());
       if(location.pathname !== '/') {
         dispatch(setupInterceptors());
       }
-      dispatch(getMenuList());
-      dispatch(getGenderAll());
-      dispatch(getCountries());
-      dispatch(getParameterList());
-      dispatch(getCategoryList());
-      dispatch(getCurrencyList());
-      dispatch(getRuleTypeList());
-      dispatch(getPaymentMethodList());
-      dispatch(getCategoriesGroupList());
+        dispatch(getMenuList());
+        dispatch(getGenderAll());
+        dispatch(getCountries());
+        dispatch(getParameterList());
+        dispatch(getCategoryList());
+        dispatch(getCurrencyList());
+        dispatch(getRuleTypeList());
+        dispatch(getPaymentMethodList());
+        dispatch(getCategoriesGroupList());
     }
     run();
   }, [dispatch])

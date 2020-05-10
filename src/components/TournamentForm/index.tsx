@@ -253,6 +253,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
             date_to: parseDate(date_to),
             payments: selectedItems,
             groups: selectedCategoryGroupItems,
+            description_details: descriptionDetailsContent,
             template_welcome_mail: templateWelcomeMailContent,
             template_confirmation_mail: templateConfirmationMailContent
         }
