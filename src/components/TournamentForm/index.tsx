@@ -429,6 +429,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                                     <Grid container spacing={2}>
                                                         <Grid item xs={12}>
                                                             <CustomTextField
+                                                                autoFocus
                                                                 placeholder="Description"
                                                                 field="description"
                                                                 required

@@ -74,7 +74,6 @@ const RangeAge: FunctionComponent<ComponentProps> = ({
                     fullWidth
                     size="small"
                     margin="dense"
-                    autoFocus
                     inputRef={register({
                         required: required ? "Requerido" : false,
                         validate,
@@ -92,7 +91,6 @@ const RangeAge: FunctionComponent<ComponentProps> = ({
                     label="Hasta"
                     margin="dense"
                     size="small"
-                    autoFocus
                     name={endField}
                     fullWidth
                     className={classes.field}

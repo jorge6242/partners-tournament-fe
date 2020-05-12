@@ -60,6 +60,13 @@ export default function TCategoriesGroup() {
       component: (value: any) => <span>{value.value}</span>
     },
     {
+      id: "category",
+      label: "Categoria",
+      minWidth: 10,
+      align: "right",
+      component: (value: any) => <span>{value.value && value.value.description}</span>
+    },
+    {
       id: "description",
       label: "Description",
       minWidth: 10,
@@ -79,13 +86,6 @@ export default function TCategoriesGroup() {
       minWidth: 10,
       align: "right",
       component: (value: any) => <span>{renderHandicap(value.value)}</span>
-    },
-    {
-      id: "category",
-      label: "Categoria",
-      minWidth: 10,
-      align: "right",
-      component: (value: any) => <span>{value.value && value.value.description}</span>
     },
       {
       id: "gender",

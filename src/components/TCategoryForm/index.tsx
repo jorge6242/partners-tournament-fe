@@ -151,7 +151,7 @@ const TCategoryForm: FunctionComponent<ComponentProps> = ({
                     noValidate
                 >
                     <Grid container spacing={3}>
-                        <Grid xs={6}>
+                        <Grid xs={4}>
                             <Card className={classes.pictureContainer}>
                                 <CardActionArea onClick={() => handleImage()}>
                                     <CardMedia className={classes.media} image={image.preview} />
@@ -171,10 +171,11 @@ const TCategoryForm: FunctionComponent<ComponentProps> = ({
                                 ref={register}
                             />
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={8}>
                             <Grid container spacing={3}>
                                 <Grid item xs={6}>
                                     <CustomTextField
+                                        autoFocus
                                         placeholder="Description"
                                         field="description"
                                         required
@@ -210,7 +211,7 @@ const TCategoryForm: FunctionComponent<ComponentProps> = ({
                                         errorsMessageField={
                                             errors.status && errors.status.message
                                         }
-                                        optionValueSelected={0}
+                                        required
                                     >
                                         <option value={1}> Activo </option>
                                         <option value={0}> Inactivo </option>

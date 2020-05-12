@@ -127,6 +127,7 @@ const TCategoriesGroupForm: FunctionComponent<TCategoriesGroupFormProps> = ({
               <CustomTextField
                 placeholder="Description"
                 field="description"
+                autoFocus
                 required
                 register={register}
                 errorsField={errors.description}
