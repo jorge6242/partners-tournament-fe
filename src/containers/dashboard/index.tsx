@@ -373,7 +373,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         <Divider />
         <List dense >
           {!_.isEmpty(menuList) && buildMenu(menuList.items)}
-           {renderFirstMenu(SettingsIcon, "Categoria", "/dashboard/category")}
+           {/* {renderFirstMenu(SettingsIcon, "Categoria", "/dashboard/category")}
            {renderFirstMenu(SettingsIcon, "Tipo Categoria", "/dashboard/category-type")}
            {renderFirstMenu(SettingsIcon, "Torneo", "/dashboard/tournament")}
            {renderFirstMenu(SettingsIcon, "Inscripcion de Torneo", "/dashboard/tournament-new")}
@@ -397,7 +397,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             {renderFirstMenu(DoubleArrowIcon, "Menu", "/dashboard/menu")}
             {renderFirstMenu(DoubleArrowIcon, "Menu Item", "/dashboard/menu-item")}
           </List>
-        </Collapse>
+        </Collapse> */}
         {/* {!_.isEmpty(user) && getRole('admin') && (
               <React.Fragment>
                 {renderFirstMenu(DashboardIcon, "Inicio", "/dashboard/main")}
