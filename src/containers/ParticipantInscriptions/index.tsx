@@ -16,6 +16,7 @@ import Columns from '../../interfaces/InscriptionColumns';
 import TournamentUserCommentForm from '../../components/TournamentUserCommentForm';
 import { Grid } from "@material-ui/core";
 import moment from "moment";
+import { useHistory } from "react-router-dom";
 
 const columns: Columns[] = [
   {
@@ -29,7 +30,7 @@ const columns: Columns[] = [
     label: "Fecha/Hora Inscripcion",
     minWidth: 10,
     align: "right",
-    component: (value: any) => <span>{value.value && moment(value.value).format('YYYY-MM-DD hh:mm:ss A') }</span>
+    component: (value: any) => <span>{value.value && moment(value.value).format('YYYY-MM-DD hh:mm:ss A')}</span>
   },
   {
     id: "tournament",
@@ -162,6 +163,7 @@ const useStyles = makeStyles(() => ({
 export default function ParticipantInscriptions() {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const history = useHistory();
   const {
     tournamentReducer: {
       inscriptions: list,
@@ -172,7 +174,7 @@ export default function ParticipantInscriptions() {
 
   useEffect(() => {
     dispatch(getAll());
-  },[dispatch]);
+  }, [dispatch]);
 
   const handleChangePage = (newPage: number) => {
     const page = pagination.currentPage === 1 ? 2 : newPage;
@@ -183,9 +185,22 @@ export default function ParticipantInscriptions() {
     dispatch(getAll(page, perPage));
   }
 
+  const handleInscription = () => {
+    history.push('/dashboard/tournament-new');
+  }
+
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} style={{ fontSize: 16, fontWeight: 'bold' }}>Mis Torneos</Grid>
+      <Grid item xs={12} style={{ marginBottom: 20 }}>
+        <Grid container spacing={1}>
+          <Grid item xs={6} style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'left' }} >Mis Torneos</Grid>
+          <Grid item xs={6} style={{ textAlign: 'right' }} onClick={() => handleInscription()} >
+            <Fab size="small" color="primary" aria-label="add">
+              <AddIcon />
+            </Fab>
+          </Grid>
+        </Grid>
+      </Grid>
       <Grid item xs={12}>
         <DataTable4
           rows={list}

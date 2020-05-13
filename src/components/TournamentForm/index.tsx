@@ -206,10 +206,10 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                 setValue("t_category_type_id", t_category_type_id);
                 setValue("picture", picture);
                 setImage({ ...image, preview: picture });
-                setDescriptionDetailsContent(description_details);
-                setDescriptionPriceContent(description_price);
-                setTemplateWelcomeMailContent(template_welcome_mail);
-                setTemplateConfirmationMailContent(template_confirmation_mail);
+                description_details && setDescriptionDetailsContent(description_details);
+                description_price && setDescriptionPriceContent(description_price);
+                template_welcome_mail && setTemplateWelcomeMailContent(template_welcome_mail);
+                template_confirmation_mail && setTemplateConfirmationMailContent(template_confirmation_mail);
                 if (payments && payments.length > 0) {
                     setSelectedData(payments);
                     payments.forEach((element: any) => {
