@@ -47,34 +47,6 @@ const columns: Columns[] = [
     component: (value: any) => <span>{value.value && value.value.description}</span>
   },
   {
-    id: "user",
-    label: "Rif/CI",
-    minWidth: 10,
-    align: "right",
-    component: (value: any) => <span>{value.value.doc_id}</span>
-  },
-  {
-    id: "user",
-    label: "Nombre",
-    minWidth: 10,
-    align: "right",
-    component: (value: any) => <span>{value.value.name}</span>
-  },
-  {
-    id: "user",
-    label: "Correo",
-    minWidth: 10,
-    align: "right",
-    component: (value: any) => <span>{value.value.email}</span>
-  },
-  {
-    id: "user",
-    label: "Telefono",
-    minWidth: 10,
-    align: "right",
-    component: (value: any) => <span>{value.value.phone_number}</span>
-  },
-  {
     id: "payment",
     label: "Forma de Pago",
     minWidth: 10,
