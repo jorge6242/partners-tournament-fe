@@ -242,7 +242,13 @@ export const createParticipant = (body: object) => async (dispatch: Function) =>
     let createresponse: any = [];
     if (status === 200 || status === 201) {
       createresponse = response;
-      dispatch(getAll());
+      snackBarUpdate({
+        payload: {
+          message: "Su solicitud de inscripcion ha sido recibida exitosamente!",
+          type: "success",
+          status: true
+        }
+      })(dispatch);
       dispatch(
         updateModal({
           payload: {
@@ -407,6 +413,52 @@ export const getInscriptions = (page: number = 1, perPage: number = 8, query: ob
   });
   try {
     const { data: { data }, status } = await API.getInscriptions(page, perPage, query);
+    let response = [];
+    if (status === 200) {
+      const pagination = {
+        total: data.total,
+        perPage: data.per_page,
+        prevPageUrl: data.prev_page_url,
+        currentPage: data.current_page,
+      }
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_INSCRIPTIONS,
+        payload: response
+      });
+      dispatch({
+        type: ACTIONS.SET_PAGINATION,
+        payload: pagination
+      });
+      dispatch({
+        type: ACTIONS.GET_INSCRIPTIONS_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.GET_INSCRIPTIONS_LOADING,
+      payload: false
+    });
+    return error;
+  }  
+};
+
+export const getInscriptionsByParticipant = (page: number = 1, perPage: number = 8, query: object = {}) => async (dispatch: Function) => {
+  dispatch({
+    type: ACTIONS.GET_INSCRIPTIONS_LOADING,
+    payload: true
+  });
+  try {
+    const { data: { data }, status } = await API.getInscriptionsByParticipant(page, perPage, query);
     let response = [];
     if (status === 200) {
       const pagination = {

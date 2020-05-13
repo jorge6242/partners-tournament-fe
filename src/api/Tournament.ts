@@ -33,6 +33,17 @@ const API = {
       headers: headers(),
     });
   },
+  getInscriptionsByParticipant(data: number, perPage: number, query: object) {
+    const page = data ? data : 1;
+    return AXIOS.get(`${Prefix.api}/tournament-inscriptions-participant`, {
+      params: {
+        page,
+        perPage,
+        ...query,
+      },
+      headers: headers(),
+    });
+  },
   getInscriptionsReport(data: number, perPage: number, query: object) {
     const page = data ? data : 1;
     return AXIOS.get(`${Prefix.api}/tournament-inscriptions-report`, {

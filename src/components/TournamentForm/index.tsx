@@ -85,6 +85,7 @@ type FormData = {
     description: string;
     max_participants: string;
     description_details: string;
+    description_price: string;
     template_welcome_mail: string;
     template_confirmation_mail: string;
     amount: number;
@@ -124,6 +125,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
     id
 }) => {
     const [descriptionDetailsContent, setDescriptionDetailsContent] = useState<string>("");
+    const [descriptionPriceContent, setDescriptionPriceContent] = useState<string>("");
     const [templateWelcomeMailContent, setTemplateWelcomeMailContent] = useState<string>("");
     const [templateConfirmationMailContent, setTemplateConfirmationMailContent] = useState<string>("");
     const [image, setImage] = useState({ preview: "", raw: "" });
@@ -168,6 +170,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                     description,
                     max_participants,
                     description_details,
+                    description_price,
                     template_welcome_mail,
                     template_confirmation_mail,
                     amount,
@@ -204,6 +207,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                 setValue("picture", picture);
                 setImage({ ...image, preview: picture });
                 setDescriptionDetailsContent(description_details);
+                setDescriptionPriceContent(description_price);
                 setTemplateWelcomeMailContent(template_welcome_mail);
                 setTemplateConfirmationMailContent(template_confirmation_mail);
                 if (payments && payments.length > 0) {
@@ -254,6 +258,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
             payments: selectedItems,
             groups: selectedCategoryGroupItems,
             description_details: descriptionDetailsContent,
+            description_price: descriptionPriceContent,
             template_welcome_mail: templateWelcomeMailContent,
             template_confirmation_mail: templateConfirmationMailContent
         }
@@ -368,6 +373,10 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
 
     const handleChangeDescriptionDetail = (content: any) => {
         setDescriptionDetailsContent(content);
+    }
+
+        const handleChangeDescriptioPrice = (content: any) => {
+        setDescriptionPriceContent(content);
     }
 
     const handleChangeTemplateWelcomeEmail = (content: any) => {
@@ -617,9 +626,17 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                     <Grid container spacing={3} className={classes.dataContainer} >
                                     <Grid item xs={12}>
                                             <Grid container spacing={3}>
-                                                <Grid item xs={12}>Descripcion premiacion</Grid>
+                                                <Grid item xs={12}>Detalles del Torneo</Grid>
                                                 <Grid item xs={12}>
                                                     <CustomEditor onChange={handleChangeDescriptionDetail} content={descriptionDetailsContent} />
+                                                </Grid>
+                                            </Grid>
+                                            </Grid>
+                                    <Grid item xs={12}>
+                                            <Grid container spacing={3}>
+                                                <Grid item xs={12}>Descripcion premiacion</Grid>
+                                                <Grid item xs={12}>
+                                                    <CustomEditor onChange={handleChangeDescriptioPrice} content={descriptionPriceContent} />
                                                 </Grid>
                                             </Grid>
                                             {/* <CustomTextField

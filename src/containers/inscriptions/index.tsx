@@ -20,6 +20,7 @@ import Columns from '../../interfaces/InscriptionColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 import TournamentUserCommentForm from '../../components/TournamentUserCommentForm';
 import { Grid } from "@material-ui/core";
+import snackBarUpdate from "../../actions/snackBarActions";
 
 const useStyles = makeStyles(() => ({
   headerContainer: {
@@ -278,7 +279,18 @@ export default function Inscriptions() {
       category: selectedCategory,
       tournament: selectedTournament
     }
-    dispatch(getAll(currentPage, perPage, query ));
+    if(selectedCategory > 0 && selectedTournament > 0){
+      dispatch(getAll(currentPage, perPage, query ));
+    } else {
+      dispatch(snackBarUpdate({
+        payload: {
+          message: 'Seleccionar Categoria y Torneo',
+          status: true,
+          type: "error"
+        }
+      }))
+    }
+    
   }
 
   return (
