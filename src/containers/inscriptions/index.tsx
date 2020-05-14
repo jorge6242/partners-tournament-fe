@@ -193,18 +193,34 @@ export default function Inscriptions() {
       label: "Status",
       minWidth: 10,
       align: "center",
-      component: (value: any) => (
-        <Chip
-          label={value.value === "1" ? "Verificado" : "Pendiente"}
-          style={{
-            backgroundColor: value.value === "1" ? "#2ecc71" : "#e74c3c",
-            color: "white",
-            fontWeight: "bold",
-            fontSize: "10px"
-          }}
-          size="small"
-        />
-      )
+      component: (value: any) => {
+        let status = '';
+        let backgroundColor = '';
+        if(value.value === "0") {
+          status = "Pendiente";
+          backgroundColor = '#2980b9';
+        }
+        if(value.value === "1") {
+          status = "Aceptado";
+          backgroundColor = '#2ecc71';
+        }
+        if(value.value === "-1") {
+          status = "Rechazado";
+          backgroundColor = '#e74c3c';
+        }
+        return (
+          <Chip
+            label={status}
+            style={{
+              backgroundColor,
+              color: "white",
+              fontWeight: "bold",
+              fontSize: "10px"
+            }}
+            size="small"
+          />
+        )
+      }
     },
   ];
 
@@ -253,7 +269,14 @@ export default function Inscriptions() {
   }
 
   const handleSwitchStatus = async (id: number, relationStatus: string) => {
-    const status = relationStatus === "1" ? 0 : 1;
+    let status = '';
+    if(relationStatus === '0') {
+      status = '1';
+    } else {
+      status = relationStatus === "1" ? '-1' : '1';
+    }
+    
+    
     const data = {
       id,
       status
@@ -262,7 +285,6 @@ export default function Inscriptions() {
   };
 
   const handleCategory =(event: any) => {
-    console.log('event', event.target.value);
     setSelectedCategory(0);
     setSelectedTournament(0);
     dispatch(getByCategory(event.target.value))
@@ -348,6 +370,7 @@ export default function Inscriptions() {
           onChangePage={handleChangePage}
           onChangePerPage={handlePerPage}
           handleSwitch={handleSwitchStatus}
+          isInscription
         />
       </Grid>
     </Grid>

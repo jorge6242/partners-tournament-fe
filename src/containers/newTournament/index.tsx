@@ -222,12 +222,12 @@ export default function NewTournament() {
             }))
         } else if (currentStep === steps.length) {
             const data: any = {
-                register_date: moment().format('YYYY-MM-DD h:mm:ss'),
+                register_date: moment().format('YYYY-MM-DD h:mm:ss A'),
                 t_payment_methods_id: selectedPayment,
                 tournament_id: selectedTournament.id,
                 user_id: user.id,
                 attachFile: selectedFile,
-                status: 1,
+                status: 0,
             }
             if(userContent !== '') {
                 data.user_notes = userContent;

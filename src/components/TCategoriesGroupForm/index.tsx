@@ -164,7 +164,6 @@ const TCategoriesGroupForm: FunctionComponent<TCategoriesGroupFormProps> = ({
               <CustomSelect
                 label="Sexo"
                 field="gender_id"
-                required
                 register={register}
                 errorsMessageField={errors.gender_id && errors.gender_id.message}
                 selectionMessage="Seleccione"

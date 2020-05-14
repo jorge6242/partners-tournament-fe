@@ -245,7 +245,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
         };
     }, [reset]);
 
-    const parseDate = (date: any) => moment(date).format('YYYY-MM-DD h:mm:ss');
+    const parseDate = (date: any) => moment(date).format('YYYY-MM-DD h:mm:ss A');
 
     const handleForm = (form: any) => {
         const { date_register_from, date_register_to, date_from, date_to } = form;

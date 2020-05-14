@@ -5,3 +5,6 @@
 // QA http://192.168.0.252:9003
 
 var BASE_URL = "http://tournament.api.com";
+
+// Numero de intentos para la excepcion del enpoint.
+var attempts = 5;

@@ -69,6 +69,7 @@ interface DataTableProps {
   aditionalColumn?: string;
   aditionalColumnLabel?: string;
   handleSwitch?: Function;
+  isInscription?: boolean;
 }
 
 const DataTable4: FunctionComponent<DataTableProps> = ({
@@ -88,6 +89,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
   aditionalColumn,
   aditionalColumnLabel,
   handleSwitch,
+  isInscription = false,
 }) => {
   const classes = useStyles();
   const [selectedRow, setSelectedRow] = useState(0);
@@ -108,6 +110,20 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
     } else {
       setSelectedRow(id);
     }
+  }
+
+  const handleConditionSwitch = (row: any) => {
+    if(row.status === "0") return false;
+    if(row.status === "1") return true;
+    if(row.status === "-1") return false;
+  }
+
+  const renderLabelColors = (row: any) => {
+    if(isInscription) {
+      if(row.status === "0") return 'blue';
+      if(row.status === "-1") return '#27ae60';
+    }
+    return '#27ae60';
   }
 
   return (
@@ -167,7 +183,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                         {handleSwitch && (
                           <TableCell style={{ minWidth: 5, fontSize }}>
                             <GreenSwitch
-                              checked={row.status == "1" ? true : false}
+                              checked={handleConditionSwitch(row)}
                               onChange={() => handleSwitch(row.id, row.status)}
                             />
                           </TableCell>

@@ -589,7 +589,7 @@ export const getParticipant = (id: number) => async (dispatch: Function) => {
   }
 };
 
-export const updateParticipant = (body: object) => async (dispatch: Function) => {
+export const updateParticipant = (body: object, comment = false) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_PARTICIPANT_LOADING,
     payload: true
@@ -604,7 +604,7 @@ export const updateParticipant = (body: object) => async (dispatch: Function) =>
       };
       snackBarUpdate({
         payload: {
-          message: "Comentario Actualizado!",
+          message: comment ? "Comentario Actualizado!" : "Inscripcion Actualizada",
           type: "success",
           status: true
         }

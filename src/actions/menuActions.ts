@@ -3,6 +3,8 @@ import snackBarUpdate from "../actions/snackBarActions";
 import { updateModal } from "../actions/modalActions";
 import { ACTIONS } from '../interfaces/actionTypes/menuTypes';
 
+const attempts = window.attempts;
+
 export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
@@ -49,7 +51,16 @@ export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch
   }
 }
 
-export const getList = () => async (dispatch: Function) => {
+const checkAuthRoutes = (items: Array<string | number>, location: string) => {
+  const route = location === '/dashboard' ? '/dashboard/main' : location;
+  const isValid = items.find((e: any) => e.route === route);
+  if(!isValid) {
+    window.location.href = "/#/dashboard/main";
+  }
+}
+
+
+export const getList = (location: string, count: number = 0) => async (dispatch: Function) => {
   dispatch(updateModal({
     payload: {
       isLoader: true,
@@ -60,6 +71,7 @@ export const getList = () => async (dispatch: Function) => {
     let response = [];
     if (status === 200) {
       response = data;
+      checkAuthRoutes(data.items, location);
       dispatch({
         type: ACTIONS.GET_LIST,
         payload: response
@@ -72,18 +84,23 @@ export const getList = () => async (dispatch: Function) => {
     }
     return response;
   } catch (error) {
+    if(count <= attempts) {
+      let counter = count + 1;
+      dispatch(getList(location, counter));
+    } else {
+      snackBarUpdate({
+        payload: {
+          message: error.message,
+          status: true,
+          type: "error",
+        },
+      })(dispatch);
+    }
     dispatch(updateModal({
       payload: {
         isLoader: false,
       }
     }));
-    snackBarUpdate({
-      payload: {
-        message: error.message,
-        status: true,
-        type: "error"
-      }
-    })(dispatch);
     return error;
   }
 };

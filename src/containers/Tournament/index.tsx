@@ -39,7 +39,7 @@ export default function Tournament() {
   const renderDate = (id: any) => {
     const row = list.find((e: any) => e.id === id);
     if(row){
-      return `${moment(row.date_from).format("YYYY-MM-DD")} - ${moment(row.date_to).format("YYYY-MM-DD")}`;
+      return `${moment(row.date_from).format("YYYY-MM-DD hh:mm:ss A")} - ${moment(row.date_to).format("YYYY-MM-DD hh:mm:ss A")}`;
     }
     return '';
   }
@@ -47,7 +47,7 @@ export default function Tournament() {
   const renderRegisterDate = (id: any) => {
     const row = list.find((e: any) => e.id === id);
     if(row){
-      return `${moment(row.date_register_from).format("YYYY-MM-DD")} - ${moment(row.date_register_to).format("YYYY-MM-DD")}`;
+      return `${moment(row.date_register_from).format("YYYY-MM-DD hh:mm:ss A")} - ${moment(row.date_register_to).format("YYYY-MM-DD hh:mm:ss A")}`;
     }
     return '';
   }

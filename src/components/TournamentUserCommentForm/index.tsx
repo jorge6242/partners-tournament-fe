@@ -114,7 +114,7 @@ const TournamentUserCommentForm: FunctionComponent<ComponentProps> = ({ id }) =>
   }, [reset]);
 
   const handleForm = (form: object) => {
-      dispatch(updateParticipant({ id, comments }));
+      dispatch(updateParticipant({ id, comments }, true));
   };
 
   const handleChangeEditor = (value: any) => {

@@ -101,14 +101,14 @@ export default function TournamentReport() {
     },
     {
       id: "date_confirmed",
-      label: "Fecha Confirmado",
+      label: "Confirmado",
       minWidth: 10,
       align: "center",
       component: (value: any) => <span>{value.value ? moment(value.value).format("DD-MM-YYYY h:mm:ss") : '-'}</span>
     },
     {
       id: "date_verified",
-      label: "Fecha Vericicado",
+      label: "Verificado",
       minWidth: 10,
       align: "center",
       component: (value: any) => <span>{value.value ? moment(value.value).format("DD-MM-YYYY h:mm:ss") : '-'}</span>
@@ -174,14 +174,24 @@ export default function TournamentReport() {
       align: "center",
       component: (value: any) => {
         let status = '';
-        if(value.value === "0") status = 'Pendiente';
-        if(value.value === "1") status = 'Verificado';
-        if(value.value === "-1") status = 'Rechazado';
+        let backgroundColor = '';
+        if(value.value === "0") {
+          status = "Pendiente";
+          backgroundColor = '#2980b9';
+        }
+        if(value.value === "1") {
+          status = "Aceptado";
+          backgroundColor = '#2ecc71';
+        }
+        if(value.value === "-1") {
+          status = "Rechazado";
+          backgroundColor = '#e74c3c';
+        }
         return (
           <Chip
             label={status}
             style={{
-              backgroundColor: value.value === "1" ? "#2ecc71" : "#e74c3c",
+              backgroundColor,
               color: "white",
               fontWeight: "bold",
               fontSize: "10px"
