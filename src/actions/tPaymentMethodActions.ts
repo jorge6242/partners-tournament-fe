@@ -1,15 +1,15 @@
 import API from "../api/TPaymentMethod";
 import snackBarUpdate from "./snackBarActions";
 import { updateModal } from "./modalActions";
-import { ACTIONS } from '../interfaces/actionTypes/tPaymentMethodTypes';
+import { ACTIONS } from '../interfaces/actionTypes/tPaymentMethodTypes'; // nombre de las acciones a usar
 
-export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
-  dispatch({
+export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch: Function) => { // cada funcion es asyncrona para poder consumir el enpoint
+  dispatch({ // le metodo dispatch es el que cambia los valores que esten en el reducer
     type: ACTIONS.SET_LOADING,
     payload: true
   });
   try {
-    const { data: { data }, status } = await API.getAll(page, perPage);
+    const { data: { data }, status } = await API.getAll(page, perPage); //consuumo del enpoint
     let response = [];
     if (status === 200) {
       const pagination = {

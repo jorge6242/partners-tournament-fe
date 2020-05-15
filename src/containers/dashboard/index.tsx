@@ -167,33 +167,29 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     });
   }, [menuList])
 
+
+
   useEffect(() => {
-    async function run() {
-      // const values = queryString.parse(location.search);
-      // if (!_.isEmpty(values) && values.socio && values.token) {
-      //   if (
-      //     location.pathname === "/dashboard/status-account" ||
-      //     location.pathname === "/dashboard/actualizacion-datos"
-      //   )
-      //   await dispatch(setForcedLogin(values.socio, values.token));
-      // }
-      
-      await dispatch(checkLogin());
+
+    const checkLoginPromise = new Promise(function(resolve, reject) {
+      resolve(dispatch(checkLogin()));
+    });
+
+    checkLoginPromise.then(function() {
       if(location.pathname !== '/') {
         dispatch(setupInterceptors());
       }
-        dispatch(getMenuList(location.pathname));
-        dispatch(getGenderAll());
-        dispatch(getCountries());
-        dispatch(getParameterList());
-        dispatch(getCategoryList());
-        dispatch(getCurrencyList());
-        dispatch(getRuleTypeList());
-        dispatch(getPaymentMethodList());
-        dispatch(getCategoriesGroupList());
-    }
-    run();
-  }, [dispatch])
+      dispatch(getMenuList(location.pathname));
+      dispatch(getGenderAll());
+      dispatch(getCountries());
+      dispatch(getParameterList());
+      dispatch(getCategoryList());
+      dispatch(getCurrencyList());
+      dispatch(getRuleTypeList());
+      dispatch(getPaymentMethodList());
+      dispatch(getCategoriesGroupList());
+    });
+  }, [dispatch]);
 
 
 

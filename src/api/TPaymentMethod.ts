@@ -1,16 +1,18 @@
 import AXIOS from "../config/Axios";
 import headers from "../helpers/headers";
-import Prefix from "../config/ApiPrefix";
+import Prefix from "../config/ApiPrefix"; // ruta baseURL de el backend
+
+//Rutas del frontend
 
 const API = {
-  getAll(data: number, perPage: number) {
+  getAll(data: number, perPage: number) {// cada function esta tipada
     const page = data ? data : 1;
-    return AXIOS.get(`${Prefix.api}/tpayment-method`, {
+    return AXIOS.get(`${Prefix.api}/tpayment-method`, { // cada ruta tiene su verbo
       params: {
         page,
         perPage
       },
-      headers: headers()
+      headers: headers() // en esta function se invocan los headers para el consumo del enpoint como el token
     });
   },
   getList() {

@@ -1,5 +1,7 @@
 import {  ACTIONS, ActionTypes } from '../interfaces/actionTypes/tPaymentMethodTypes';
 
+
+// se le da tipado a los estados
 type InitState = {
     list: Array<string | number>;
     loading: boolean;
@@ -7,6 +9,7 @@ type InitState = {
     listData: any;
 }
 
+//  se inicializan los valores del estado
 const initialState: InitState = {
     list: [],
     loading: false,
@@ -18,6 +21,8 @@ const initialState: InitState = {
     },
     listData: [],
 };
+
+//cada case hace un cambio a estado
 
 const tPaymentMethodReducer = (state = initialState, action: ActionTypes) => {
     switch (action.type) {
