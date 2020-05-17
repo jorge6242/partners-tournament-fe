@@ -3,6 +3,8 @@ import snackBarUpdate from "../actions/snackBarActions";
 import { updateModal } from "../actions/modalActions";
 import { ACTIONS } from '../interfaces/actionTypes/genderTypes';
 
+const attempts = window.attempts;
+
 export const getAll = () => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
@@ -39,7 +41,7 @@ export const getAll = () => async (dispatch: Function) => {
   }
 };
 
-export const getList = () => async (dispatch: Function) => {
+export const getList = (count: number = 0) => async (dispatch: Function) => {
   dispatch(updateModal({
     payload: {
       isLoader: true,
@@ -62,18 +64,23 @@ export const getList = () => async (dispatch: Function) => {
     }
     return response;
   } catch (error) {
+    if(count <= attempts) {
+      let counter = count + 1;
+      dispatch(getList(counter));
+    } else {
+      snackBarUpdate({
+        payload: {
+          message: error.message,
+          status: true,
+          type: "error",
+        },
+      })(dispatch);
+    }
     dispatch(updateModal({
       payload: {
         isLoader: false,
       }
     }));
-    snackBarUpdate({
-      payload: {
-        message: error.message,
-        status: true,
-        type: "error"
-      }
-    })(dispatch);
     return error;
   }
 };

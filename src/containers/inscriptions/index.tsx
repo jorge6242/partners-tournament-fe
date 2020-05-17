@@ -10,6 +10,7 @@ import FeedbackIcon from '@material-ui/icons/Feedback';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Chip from "@material-ui/core/Chip";
 import Button from '@material-ui/core/Button';
+import TextField from "@material-ui/core/TextField";
 
 import { getList as getTCategoryList } from '../../actions/tCategoryActions';
 import { getInscriptions as getAll, remove, search, updateParticipant, getList as getTournamentList, getByCategory } from "../../actions/tournamentActions";
@@ -36,11 +37,23 @@ const useStyles = makeStyles(() => ({
   margin: {
 
   },
+  select: {
+    padding: "28px 0px 10px 0px",
+    width: " 100%",
+    backgroundColor: "transparent",
+    border: 0,
+    borderBottom: "1px solid grey",
+    fontSize: "16px",
+    "&:focus": {
+      outline: 0
+    }
+  },
 }));
 
 export default function Inscriptions() {
   const [selectedCategory, setSelectedCategory] = useState<any>(0);
   const [selectedTournament, setSelectedTournament] = useState<any>(0);
+  const [selectedSearch, setSelectedSearch] = useState<any>("");
   const classes = useStyles();
   const dispatch = useDispatch();
   const {
@@ -299,7 +312,8 @@ export default function Inscriptions() {
     const { currentPage, perPage } = pagination;
     const query = {
       category: selectedCategory,
-      tournament: selectedTournament
+      tournament: selectedTournament,
+      term: selectedSearch
     }
     if(selectedCategory > 0 && selectedTournament > 0){
       dispatch(getAll(currentPage, perPage, query ));
@@ -315,12 +329,26 @@ export default function Inscriptions() {
     
   }
 
+  const setInputSearch = (e: any) => setSelectedSearch(e.target.value);
+
   return (
     <Grid container spacing={2}>
       <Grid item xs={12}>Inscripciones de Torneos</Grid>
       <Grid item xs={2}>
-        <div className="custom-select-container">
+      <TextField
+            margin="dense"
+            name="term"
+            label="Buscar"
+            type="term"
+            id="term"
+            size="small"
+            onChange={setInputSearch}
+          />
+      </Grid>
+      <Grid item xs={2}>
+        <div>
           <select
+            className={classes.select}
             name="relation"
             onChange={handleCategory}
             style={{ fontSize: "13px" }}
@@ -335,8 +363,9 @@ export default function Inscriptions() {
       {
         tournamentsByCategory.length > 0 && (
           <Grid item xs={2}>
-            <div className="custom-select-container">
+            <div>
               <select
+                className={classes.select}
                 name="relation"
                 onChange={handleTournament}
                 style={{ fontSize: "13px" }}
@@ -350,7 +379,7 @@ export default function Inscriptions() {
           </Grid>
         )
       }
-      <Grid item xs={3}>
+      <Grid item xs={3} style={{ marginTop: 20 }}>
         <Button 
           size="small" 
           color="primary" 

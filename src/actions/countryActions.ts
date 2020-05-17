@@ -3,7 +3,9 @@ import snackBarUpdate from "../actions/snackBarActions";
 import { updateModal } from "../actions/modalActions";
 import { ACTIONS } from '../interfaces/actionTypes/countryTypes';
 
-export const getAll = () => async (dispatch: Function) => {
+const attempts = window.attempts;
+
+export const getAll = (count: number = 0) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
     payload: true
@@ -24,13 +26,18 @@ export const getAll = () => async (dispatch: Function) => {
     }
     return response;
   } catch (error) {
-    snackBarUpdate({
-      payload: {
-        message: error.message,
-        status: true,
-        type: "error"
-      }
-    })(dispatch);
+    if(count <= attempts) {
+      let counter = count + 1;
+      dispatch(getAll(counter));
+    } else {
+      snackBarUpdate({
+        payload: {
+          message: error.message,
+          status: true,
+          type: "error",
+        },
+      })(dispatch);
+    }
     dispatch({
       type: ACTIONS.SET_LOADING,
       payload: false

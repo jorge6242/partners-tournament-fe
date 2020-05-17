@@ -3,6 +3,8 @@ import snackBarUpdate from "../actions/snackBarActions";
 import { updateModal } from "../actions/modalActions";
 import { ACTIONS } from '../interfaces/actionTypes/currencyTypes';
 
+const attempts = window.attempts;
+
 export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
@@ -49,7 +51,7 @@ export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch
   }
 };
 
-export const getList = () => async (dispatch: Function) => {
+export const getList = (count: number = 0) => async (dispatch: Function) => {
     dispatch({
       type: ACTIONS.SET_LOADING,
       payload: true
@@ -71,13 +73,18 @@ export const getList = () => async (dispatch: Function) => {
       }
       return response;
     } catch (error) {
-      snackBarUpdate({
-        payload: {
-          message: error.message,
-          status: true,
-          type: "error"
-        }
-      })(dispatch);
+      if(count <= attempts) {
+        let counter = count + 1;
+        dispatch(getList(counter));
+      } else {
+        snackBarUpdate({
+          payload: {
+            message: error.message,
+            status: true,
+            type: "error",
+          },
+        })(dispatch);
+      }
       dispatch({
         type: ACTIONS.SET_LOADING,
         payload: false

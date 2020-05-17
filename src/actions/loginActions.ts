@@ -8,6 +8,8 @@ import { ACTIONS } from "../interfaces/actionTypes/loginTypes";
 import { mainStatusLoading } from '../actions/loadingMainActions';
 // import history from '../config/History';
 
+const attempts = window.attempts;
+
 export const login = (body: object) => async (dispatch: Function) => {
   dispatch({ type: ACTIONS.SET_LOADING, payload: true });
   try {
@@ -56,7 +58,7 @@ export const logout = () => (dispatch: Function) => {
   dispatch({ type: ACTIONS.LOGOUT });
 };
 
-export const checkLogin = () => async (dispatch: Function) => {
+export const checkLogin = (count: number = 0) => async (dispatch: Function) => {
   dispatch(mainStatusLoading(true));
   try {
     const { data, status } = await Auth.checkLogin();
@@ -71,6 +73,18 @@ export const checkLogin = () => async (dispatch: Function) => {
     }
     return checkLoginResponse;
   } catch (error) {
+    if(count <= attempts) {
+      let counter = count + 1;
+      dispatch(checkLogin(counter));
+    } else {
+      snackBarUpdate({
+        payload: {
+          message: error.message,
+          status: true,
+          type: "error",
+        },
+      })(dispatch);
+    }
      dispatch(mainStatusLoading(false));
     return error;
   }

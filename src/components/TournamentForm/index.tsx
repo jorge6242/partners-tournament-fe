@@ -232,11 +232,8 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
     const getParseDateTime = (date: string) => {
         //"2017-05-24T10:30"
         //"2020-01-01T2:01
-        const newDate = moment(date).format("YYYY-MM-DD");
-        const time = moment(date).format("hh:mm");
-        const parse = `${newDate}T${time}`;
-        console.log('parse ', parse);
-        return parse;
+        let newDate = moment(date).format("YYYY-MM-DD hh:mm A");
+        return date.replace(" ","T");
     }
 
     useEffect(() => {

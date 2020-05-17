@@ -11,6 +11,7 @@ import DataTable4 from '../../components/DataTable4'
 import Columns from '../../interfaces/TournamentColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 import moment from "moment";
+import Parse from 'react-html-parser';
 
 const useStyles = makeStyles(() => ({
   headerContainer: {
@@ -39,7 +40,7 @@ export default function Tournament() {
   const renderDate = (id: any) => {
     const row = list.find((e: any) => e.id === id);
     if(row){
-      return `${moment(row.date_from).format("YYYY-MM-DD hh:mm:ss A")} - ${moment(row.date_to).format("YYYY-MM-DD hh:mm:ss A")}`;
+    return <div>{moment(row.date_from).format("YYYY-MM-DD hh:mm:ss A")} <br /> {moment(row.date_to).format("YYYY-MM-DD hh:mm:ss A")} </div>
     }
     return '';
   }
@@ -47,7 +48,7 @@ export default function Tournament() {
   const renderRegisterDate = (id: any) => {
     const row = list.find((e: any) => e.id === id);
     if(row){
-      return `${moment(row.date_register_from).format("YYYY-MM-DD hh:mm:ss A")} - ${moment(row.date_register_to).format("YYYY-MM-DD hh:mm:ss A")}`;
+      return <div>{moment(row.date_register_from).format("YYYY-MM-DD hh:mm:ss A")} <br /> {moment(row.date_register_to).format("YYYY-MM-DD hh:mm:ss A")} </div>
     }
     return '';
   }

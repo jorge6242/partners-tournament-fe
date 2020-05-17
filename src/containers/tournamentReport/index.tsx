@@ -175,15 +175,15 @@ export default function TournamentReport() {
       component: (value: any) => {
         let status = '';
         let backgroundColor = '';
-        if(value.value === "0") {
+        if (value.value === "0") {
           status = "Pendiente";
           backgroundColor = '#2980b9';
         }
-        if(value.value === "1") {
+        if (value.value === "1") {
           status = "Aceptado";
           backgroundColor = '#2ecc71';
         }
-        if(value.value === "-1") {
+        if (value.value === "-1") {
           status = "Rechazado";
           backgroundColor = '#e74c3c';
         }
@@ -251,7 +251,7 @@ export default function TournamentReport() {
       tournament: selectedTournament,
       status: selectedStatus,
     }
-    if(selectedCategory > 0 && selectedTournament > 0) {
+    if (selectedCategory > 0 && selectedTournament > 0) {
       dispatch(getAll(currentPage, perPage, query));
     } else {
       dispatch(snackBarUpdate({
@@ -262,17 +262,27 @@ export default function TournamentReport() {
         }
       }))
     }
-    
+
   }
 
   const handleReport = () => {
-    const { currentPage, perPage } = pagination;
     const query = {
       category: selectedCategory,
       tournament: selectedTournament,
       status: selectedStatus,
     }
+    if (selectedCategory > 0 && selectedTournament > 0) {
       dispatch(getInscripcionsReportPDF(query));
+    } else {
+      dispatch(snackBarUpdate({
+        payload: {
+          message: 'Seleccionar Categoria y Torneo',
+          status: true,
+          type: "error"
+        }
+      }))
+    }
+
   }
 
   return (
