@@ -63,7 +63,8 @@ const TPaymentMethodForm: FunctionComponent<ComponentProps> = ({
     const classes = useStyles();
     const { handleSubmit, register, errors, reset, setValue } = useForm<FormData>();
     const {
-        tPaymentMethodReducer: { loading, listData: currencyList },
+        tPaymentMethodReducer: { loading },
+        currencyReducer: { listData: currencyList },
     } = useSelector((state: any) => state);
     const dispatch = useDispatch();
 

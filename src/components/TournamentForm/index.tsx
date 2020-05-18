@@ -78,6 +78,9 @@ const useStyles = makeStyles(theme => ({
     media: {
         height: 280,
         backgroundSize: 'contain',
+    },
+    templateButton: {
+        textAlign: 'right',
     }
 }));
 
@@ -111,19 +114,18 @@ interface SelectedItems {
     itemsToRemove: Array<string | number>;
 }
 
-const initialSelectedItems = {
-    itemsToAdd: [],
-    itemsToRemove: []
-};
-
-const initialGroupsSelectedItems = {
-    itemsToAdd: [],
-    itemsToRemove: []
-};
-
 const TournamentForm: FunctionComponent<ComponentProps> = ({
     id
 }) => {
+    const initialSelectedItems = {
+        itemsToAdd: [],
+        itemsToRemove: []
+    };
+
+    const initialGroupsSelectedItems = {
+        itemsToAdd: [],
+        itemsToRemove: []
+    };
     const [descriptionDetailsContent, setDescriptionDetailsContent] = useState<string>("");
     const [descriptionPriceContent, setDescriptionPriceContent] = useState<string>("");
     const [templateWelcomeMailContent, setTemplateWelcomeMailContent] = useState<string>("");
@@ -159,10 +161,9 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
         selected.itemsToRemove.length = 0;
         setSelectedItems(selected);
         const selectedGroups = selectedCategoryGroupItems;
-        selected.itemsToAdd.length = 0;
-        selected.itemsToRemove.length = 0;
+        selectedGroups.itemsToAdd.length = 0;
+        selectedGroups.itemsToRemove.length = 0;
         setSelectedCategoryGroupItems(selectedGroups);
-
         async function fetch() {
             if (id) {
                 const response: any = await dispatch(get(id));
@@ -221,26 +222,34 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                     setSelectedGroupsData(groups);
                     groups.forEach((element: any) => {
                         selectedCategoryGroupItems.itemsToAdd.push(element);
-                        setSelectedItems(selectedCategoryGroupItems);
+                        setSelectedCategoryGroupItems(selectedCategoryGroupItems);
                     });
                 }
             }
         }
         fetch();
-    }, [id, dispatch, setValue]);
+    }, [id, dispatch, setValue, selectedItems, selectedCategoryGroupItems]);
 
     const getParseDateTime = (date: string) => {
         //"2017-05-24T10:30"
         //"2020-01-01T2:01
         let newDate = moment(date).format("YYYY-MM-DD hh:mm A");
-        return date.replace(" ","T");
+        return date.replace(" ", "T");
     }
 
     useEffect(() => {
         return () => {
+            const selected = selectedItems;
+            selected.itemsToAdd.length = 0;
+            selected.itemsToRemove.length = 0;
+            setSelectedItems(selected);
+            const selectedGroups = selectedCategoryGroupItems;
+            selectedGroups.itemsToAdd.length = 0;
+            selectedGroups.itemsToRemove.length = 0;
+            setSelectedCategoryGroupItems(selectedGroups);
             reset();
         };
-    }, [reset]);
+    }, [reset, setSelectedItems, setSelectedCategoryGroupItems]);
 
     const parseDate = (date: any) => moment(date).format('YYYY-MM-DD h:mm:ss A');
 
@@ -281,10 +290,10 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                     (e: any) => e.id === element.id
                 );
                 if (_.isEmpty(exist)) {
-                    const exist = currentList.itemsToAdd.find(
+                    const removeExist = currentList.itemsToRemove.find(
                         (e: any) => e.id === element.id
                     );
-                    if (!_.isEmpty(exist)) {
+                    if (!_.isEmpty(removeExist)) {
                         currentList.itemsToRemove.splice(currentList.itemsToRemove.findIndex((i: any) => i.id === element.id), 1);
                     }
                     currentList.itemsToAdd.push(element);
@@ -298,12 +307,13 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                 );
                 if (_.isEmpty(exist)) {
                     const currentIndex = currentList.itemsToAdd.indexOf(element);
-                    currentList.itemsToAdd.splice(currentIndex, 1);
+                    if (currentIndex >= 0) {
+                        currentList.itemsToAdd.splice(currentIndex, 1);
+                    }
                     currentList.itemsToRemove.push(element);
                 }
             });
         }
-
         setSelectedItems(currentList);
     };
 
@@ -315,10 +325,10 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                     (e: any) => e.id === element.id
                 );
                 if (_.isEmpty(exist)) {
-                    const exist = currentList.itemsToAdd.find(
+                    const removeExist = currentList.itemsToRemove.find(
                         (e: any) => e.id === element.id
                     );
-                    if (!_.isEmpty(exist)) {
+                    if (!_.isEmpty(removeExist)) {
                         currentList.itemsToRemove.splice(currentList.itemsToRemove.findIndex((i: any) => i.id === element.id), 1);
                     }
                     currentList.itemsToAdd.push(element);
@@ -332,9 +342,12 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                 );
                 if (_.isEmpty(exist)) {
                     const currentIndex = currentList.itemsToAdd.indexOf(element);
-                    currentList.itemsToAdd.splice(currentIndex, 1);
-                    currentList.itemsToRemove.push(element);
+                    if (currentIndex >= 0) {
+                        console.log('add remove, currentIndex ', currentIndex);
+                        currentList.itemsToAdd.splice(currentIndex, 1);
+                    }
                 }
+                currentList.itemsToRemove.push(element);
             });
         }
 
@@ -368,11 +381,30 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
 
     };
 
+    const handleUpdateHtml = (type: string) => {
+        switch (type) {
+            case 'descriptionDetail':
+                setDescriptionDetailsContent(window.TEMPLATE_DESC_TORNEO);
+                break;
+            case 'descriptionPrice':
+                handleChangeDescriptioPrice(window.TEMPLATE_DESC_PREMIACION);
+                break;
+            case 'descriptionWelcome':
+                handleChangeTemplateWelcomeEmail(window.TEMPLATE_WELCOME);
+                break;
+            case 'descriptionConfirmation':
+                handleChangeTemplateConfirmationEmail(window.TEMPLATE_CONFIRM);
+                break;
+            default:
+                break;
+        }
+    }
+
     const handleChangeDescriptionDetail = (content: any) => {
         setDescriptionDetailsContent(content);
     }
 
-        const handleChangeDescriptioPrice = (content: any) => {
+    const handleChangeDescriptioPrice = (content: any) => {
         setDescriptionPriceContent(content);
     }
 
@@ -383,12 +415,31 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
     const handleChangeTemplateConfirmationEmail = (content: any) => {
         setTemplateConfirmationMailContent(content);
     }
+
+
+    const renderTemplateButton = (type: string) => {
+        return <Button
+            type="button"
+            size="small"
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={loading}
+            style={{ 
+                width: '50%'
+             }}
+            onClick={() => handleUpdateHtml(type)}
+        >
+            Actualizaz Plantilla
+        </Button>
+    }
+
     return (
         <Container component="main">
             <div className={classes.paper}>
                 <Typography component="h1" variant="h5">
                     Torneo
-        </Typography>
+                 </Typography>
                 <form
                     className={classes.form}
                     onSubmit={handleSubmit(handleForm)}
@@ -608,7 +659,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                             </ExpansionPanel>
                         </Grid>
                         <Grid item xs={12}>
-                       <ExpansionPanel
+                            <ExpansionPanel
                                 expanded={expanded === "panel-templates"}
                                 onChange={handleExpandedPanel("panel-templates")}
                             >
@@ -621,17 +672,19 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                 </ExpansionPanelSummary>
                                 <ExpansionPanelDetails>
                                     <Grid container spacing={3} className={classes.dataContainer} >
-                                    <Grid item xs={12}>
+                                        <Grid item xs={12}>
                                             <Grid container spacing={3}>
-                                                <Grid item xs={12}>Detalles del Torneo</Grid>
+                                                <Grid item xs={6}>Detalles del Torneo:</Grid>
+                                                <Grid item xs={6} className={classes.templateButton} >{renderTemplateButton("descriptionDetail")}</Grid>
                                                 <Grid item xs={12}>
                                                     <CustomEditor onChange={handleChangeDescriptionDetail} content={descriptionDetailsContent} />
                                                 </Grid>
                                             </Grid>
-                                            </Grid>
-                                    <Grid item xs={12}>
+                                        </Grid>
+                                        <Grid item xs={12}>
                                             <Grid container spacing={3}>
-                                                <Grid item xs={12}>Descripcion premiacion</Grid>
+                                                <Grid item xs={6}>Descripcion premiacion</Grid>
+                                                <Grid item xs={6} className={classes.templateButton}>{renderTemplateButton("descriptionPrice")}</Grid>
                                                 <Grid item xs={12}>
                                                     <CustomEditor onChange={handleChangeDescriptioPrice} content={descriptionPriceContent} />
                                                 </Grid>
@@ -647,9 +700,10 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                             /> */}
                                         </Grid>
 
-                                        <Grid xs={12}>
+                                        <Grid item xs={12}>
                                             <Grid container spacing={3}>
-                                                <Grid item xs={12}>Plantilla de Bienvenida</Grid>
+                                                <Grid item xs={6}>Plantilla de Bienvenida</Grid>
+                                                <Grid item xs={6} className={classes.templateButton} >{renderTemplateButton("descriptionWelcome")}</Grid>
                                                 <Grid item xs={12}>
                                                     <CustomEditor onChange={handleChangeTemplateWelcomeEmail} content={templateWelcomeMailContent} />
                                                 </Grid>
@@ -664,9 +718,10 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                                 multiline
                                             /> */}
                                         </Grid>
-                                        <Grid xs={12}>
+                                        <Grid item xs={12}>
                                             <Grid container spacing={3}>
-                                                <Grid item xs={12}>Plantilla Confirmacion</Grid>
+                                                <Grid item xs={6}>Plantilla Confirmacion</Grid>
+                                                <Grid item xs={6} className={classes.templateButton} >{renderTemplateButton("descriptionConfirmation")}</Grid>
                                                 <Grid item xs={12}>
                                                     <CustomEditor onChange={handleChangeTemplateConfirmationEmail} content={templateConfirmationMailContent} />
                                                 </Grid>
@@ -684,7 +739,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                     </Grid>
                                 </ExpansionPanelDetails>
                             </ExpansionPanel>
-                       </Grid>
+                        </Grid>
                         <Grid item xs={12}>
                             <ExpansionPanel
                                 expanded={expanded === "panel-guest"}

@@ -11,6 +11,10 @@ import { setupInterceptors } from './actions/loginActions';
 declare global {
     interface Window {
       attempts:any;
+      TEMPLATE_DESC_TORNEO: any;
+      TEMPLATE_DESC_PREMIACION: any;
+      TEMPLATE_WELCOME: any;
+      TEMPLATE_CONFIRM: any;
     }
   }
 

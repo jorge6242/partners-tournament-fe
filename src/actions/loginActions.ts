@@ -76,14 +76,6 @@ export const checkLogin = (count: number = 0) => async (dispatch: Function) => {
     if(count <= attempts) {
       let counter = count + 1;
       dispatch(checkLogin(counter));
-    } else {
-      snackBarUpdate({
-        payload: {
-          message: error.message,
-          status: true,
-          type: "error",
-        },
-      })(dispatch);
     }
      dispatch(mainStatusLoading(false));
     return error;

@@ -26,8 +26,8 @@ export default function MainLayout(props) {
   const location = useLocation();
   useEffect(() => {
     async function run() {
-      await dispatch(checkLogin());
       if(location.pathname !== '/') {
+        await dispatch(checkLogin());
         dispatch(setupInterceptors());
       }
     }
