@@ -34,12 +34,13 @@ import {
   getList as getTournamentList,
   createParticipant,
   getAvailableTournamentsByCategory,
+  getAvailableTournament,
 } from "../../actions/tournamentActions";
 import { useDispatch, useSelector } from "react-redux";
 import CustomSelect from "../../components/FormElements/CustomSelect";
 import Upload from "../../components/FormElements/Upload";
 import snackBarUpdate from "../../actions/snackBarActions";
-import CustomEditor from "../../components/Editor";
+import CustomEditor from "../../components/Editor2";
 import { useHistory } from "react-router-dom";
 
 const ExpansionPanelSummary = withStyles({
@@ -221,6 +222,8 @@ export default function NewTournament() {
   const handleNext = async () => {
     let newSkipped = skipped;
     const currentStep = activeStep + 1;
+    const isAvailable = selectedTournament ? await dispatch(getAvailableTournament(selectedTournament.id)) : false;
+
     if (activeStep === 0 && (!selectedCategory || !selectedTournament)) {
       dispatch(
         snackBarUpdate({
@@ -231,7 +234,18 @@ export default function NewTournament() {
           },
         })
       );
-    } else if (activeStep === 1 && selectedPayment === "") {
+    } else if (activeStep === 0 && !isAvailable) {
+      dispatch(
+        snackBarUpdate({
+          payload: {
+            message: "Torneo no se encuentra disponible",
+            type: "error",
+            status: true,
+          },
+        })
+      );
+    }
+     else if (activeStep === 1 && selectedPayment === "") {
       dispatch(
         snackBarUpdate({
           payload: {

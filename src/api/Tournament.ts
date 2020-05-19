@@ -28,6 +28,12 @@ const API = {
       headers: headers(),
     });
   },
+  getAvailableTournament(id: any) {
+    return AXIOS.get(`${Prefix.api}/tournament-available`, {
+      params: { id },
+      headers: headers(),
+    });
+  },
   getInscriptions(data: number, perPage: number, query: object) {
     const page = data ? data : 1;
     return AXIOS.get(`${Prefix.api}/tournament-inscriptions`, {
