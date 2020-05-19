@@ -22,7 +22,7 @@ import CustomSelect from "../FormElements/CustomSelect";
 import { Grid } from "@material-ui/core";
 import TransferList from "../TransferList";
 import moment from "moment";
-import CustomEditor from "../Editor";
+import CustomEditor from "../Editor2";
 
 const ExpansionPanelSummary = withStyles({
     root: {
@@ -409,6 +409,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
     }
 
     const handleChangeTemplateWelcomeEmail = (content: any) => {
+        console.log('content ', content);
         setTemplateWelcomeMailContent(content);
     }
 

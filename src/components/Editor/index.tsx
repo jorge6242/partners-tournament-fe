@@ -1,5 +1,7 @@
 import React, {useState, useRef, FunctionComponent} from 'react';
 import JoditEditor from "jodit-react";
+import Beautify from "./beautify.min.js";
+import Ace from "./ace.js";
 
 type ComponentProps = {
 	onChange: Function;
@@ -10,7 +12,10 @@ const CustomEditor: FunctionComponent<ComponentProps> = ({ onChange, content }) 
 	const editor = useRef(null)
 
 	const config = {
-		readonly: false // all options from https://xdsoft.net/jodit/doc/
+		readonly: false, // all options from https://xdsoft.net/jodit/doc/
+		beautifyHTMLCDNUrlsJS:  "./beautify.min.js",
+		sourceEditorCDNUrlsJS: "./ace.js",
+		disablePlugins: 'table,iframe'
 	}
 	return (
             <JoditEditor
