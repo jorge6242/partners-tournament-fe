@@ -22,6 +22,12 @@ const API = {
       headers: headers(),
     });
   },
+  getAvailableTournamentsByCategory(id: any) {
+    return AXIOS.get(`${Prefix.api}/available-tournaments-by-category`, {
+      params: { id },
+      headers: headers(),
+    });
+  },
   getInscriptions(data: number, perPage: number, query: object) {
     const page = data ? data : 1;
     return AXIOS.get(`${Prefix.api}/tournament-inscriptions`, {

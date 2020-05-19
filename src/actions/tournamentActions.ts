@@ -5,6 +5,7 @@ import headers from "../helpers/headers";
 import snackBarUpdate from "./snackBarActions";
 import { updateModal } from "./modalActions";
 import { ACTIONS } from '../interfaces/actionTypes/toournamentTypes';
+import Message from '../helpers/message';
 
 const attempts = window.attempts;
 
@@ -106,6 +107,45 @@ export const getByCategory = (id: any) => async (dispatch: Function) => {
   }));
   try {
     const { data , status } = await API.getByCategory(id);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch({
+        type: ACTIONS.GET_TOURNAMENTS_BY_CATEGORY,
+        payload: response
+      });
+      dispatch(updateModal({
+        payload: {
+          isLoader: false,
+        }
+      }));
+    }
+    return response;
+  } catch (error) {
+    dispatch(updateModal({
+      payload: {
+        isLoader: false,
+      }
+    }));
+    snackBarUpdate({
+      payload: {
+        message: error.message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
+export const getAvailableTournamentsByCategory = (id: any) => async (dispatch: Function) => {
+  dispatch(updateModal({
+    payload: {
+      isLoader: true,
+    }
+  }));
+  try {
+    const { data , status } = await API.getAvailableTournamentsByCategory(id);
     let response = [];
     if (status === 200) {
       response = data;
@@ -402,9 +442,10 @@ export const remove = (id: number) => async (dispatch: Function) => {
     }
     return response;
   } catch (error) {
+    const message = Message.exception(error);
     snackBarUpdate({
       payload: {
-        message: error.message,
+        message,
         type: "error",
         status: true
       }

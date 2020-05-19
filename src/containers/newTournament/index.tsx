@@ -33,7 +33,7 @@ import { getList as getTCategoryList } from "../../actions/tCategoryActions";
 import {
   getList as getTournamentList,
   createParticipant,
-  getByCategory,
+  getAvailableTournamentsByCategory,
 } from "../../actions/tournamentActions";
 import { useDispatch, useSelector } from "react-redux";
 import CustomSelect from "../../components/FormElements/CustomSelect";
@@ -173,7 +173,7 @@ export default function NewTournament() {
 
   const handleSelectCategory = async (row: any) => {
     setSelectedTournament(null);
-    await dispatch(getByCategory(row.id));
+    await dispatch(getAvailableTournamentsByCategory(row.id));
     setSelectedCategory(row);
   };
 
