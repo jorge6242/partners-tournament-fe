@@ -135,7 +135,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table" size="small" style={{ minWidth: "340px" }}>
+        <Table stickyHeader aria-label="sticky table" size="small">
           <TableHead>
             <TableRow>
               {columns.map((column: any) => (
