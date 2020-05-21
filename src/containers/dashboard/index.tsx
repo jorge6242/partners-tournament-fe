@@ -444,13 +444,13 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             <MenuIcon />
           </IconButton>
           <div className={classes.header}>
-          <Typography variant="h6" noWrap>
+          <Typography variant="h6" noWrap style={{ lineHeight: 1 }}>
               <Grid container spacing={1}>
                 <Grid item xs={12}>Portal de Torneos</Grid>
               </Grid>
                   <Grid item xs={12} style={{ fontSize: 14, fontStyle: 'italic' }}>{client.value}</Grid>
             </Typography>
-            <Typography variant="h6" noWrap>
+            <Typography variant="h6" noWrap style={{ lineHeight: 1 }}>
               <div>
                 <Button
                   startIcon={<AccountCircleIcon />}

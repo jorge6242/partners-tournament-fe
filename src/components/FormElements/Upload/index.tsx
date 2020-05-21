@@ -44,7 +44,9 @@ const Upload: FunctionComponent<UploadProps> = ({
     const loadDocument = (e: any) => {
         const current = e.target.files[0];
         if (e.target.files.length > 0) {
-            if (current.type === 'application/pdf' || current.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+            //current.type === 'image/png'
+            //current.type === 'image/jpeg'
+            if (current.type === 'image/png' || current.type === 'image/jpeg' || current.type === 'application/pdf' || current.type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
                 if (current.size <= 5000000) {
                     const reader: any = new FileReader();
                     reader.onload = () => {
@@ -77,7 +79,7 @@ const Upload: FunctionComponent<UploadProps> = ({
                 setName('');
                 dispatch(snackBarUpdate({
                     payload: {
-                        message: "Solo de Admiten los formatos: .pdf - .doc",
+                        message: "Solo de Admiten los formatos: .pdf - .doc - .png - .jpg",
                         type: "error",
                         status: true
                     }

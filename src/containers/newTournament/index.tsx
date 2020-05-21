@@ -63,7 +63,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     media: {
       height: 150,
-      width: 150,
     },
     stepContainer: {
       marginBottom: 50,
@@ -82,7 +81,6 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: "0px 0px 20px 0px #3F51B5",
     },
     rootTournamentCard: {
-      width: 150,
     },
     actionButtons: {
       textAlign: "right",
@@ -100,6 +98,9 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: "2px !important",
       wordBreak: "break-all",
       wordWrap: "break-word",
+      [theme.breakpoints.down('sm')]: {
+        fontSize: 14,
+      },
     },
     heading: {
       fontSize: theme.typography.pxToRem(15),
@@ -336,7 +337,7 @@ export default function NewTournament() {
                     ? classes.activeCard
                     : "";
                 return (
-                  <Grid item xs={3} key={i}>
+                  <Grid item xs={6} sm={6} md={3} key={i}>
                     <Card
                       className={`${classes.rootTournamentCard} ${active}`}
                       onClick={() => handleSelectTournament(element)}
@@ -369,7 +370,7 @@ export default function NewTournament() {
     const { name, last_name, phone_number, email } = user;
     return (
       <Grid container spacing={3} justify="center">
-        <Grid item xs={8} className={classes.detailsContainer}>
+        <Grid item xs={12} sm={12} md={8} className={classes.detailsContainer}>
           <Grid
             container
             spacing={3}
@@ -404,7 +405,7 @@ export default function NewTournament() {
                   ? classes.activeCard
                   : "";
               return (
-                <Grid item xs={3} key={i}>
+                <Grid item xs={6} sm={6} md={3} key={i}>
                   <Card
                     className={`${classes.rootTournamentCard} ${active}`}
                     onClick={() => handleSelectCategory(element)}
@@ -439,9 +440,9 @@ export default function NewTournament() {
   function TournamentDetails() {
     return (
       <Grid container spacing={3} justify="center">
-        <Grid item xs={10}>
+        <Grid item xs={12} sm={12} md={10} >
           <Grid container spacing={2}>
-            <Grid item xs={12} style={{ marginBottom: 20 }}>
+            <Grid item xs={12} style={{ marginBottom: 20 }} >
               <Grid container spacing={1} className={classes.detailsContainer}>
                 <Grid item xs={12} className={classes.itemField}>
                   <strong>Tus detalles personales</strong>
@@ -524,19 +525,19 @@ export default function NewTournament() {
               </ExpansionPanel>
             </Grid>
             <Grid item xs={6} className={classes.itemField}>
-              <strong>Fecha:</strong>
+              <strong>Fecha: </strong>
               {moment(selectedTournament.date_from).format(
                 "DD-MM-YY hh:mm:ss A"
               )}
             </Grid>
             <Grid item xs={6} className={classes.itemField}>
-              <strong>Hasta:</strong>
+              <strong>Hasta: </strong>
               {moment(selectedTournament.date_to).format(
                 "DD-MM-YY hh:mm:ss A"
               )}
             </Grid>
             <Grid item xs={12} className={classes.itemField}>
-              <strong>Fin Registro:</strong>
+              <strong>Fin Registro: </strong>
               {moment(selectedTournament.date_register_to).format(
                 "DD-MM-YY hh:mm:ss A"
               )}
@@ -618,9 +619,9 @@ export default function NewTournament() {
   function Sumary() {
     return (
       <Grid container spacing={3} justify="center">
-        <Grid item xs={10}>
+        <Grid item xs={12} sm={12} md={10}>
           <Grid container spacing={2}>
-            <Grid item xs={12} style={{ marginBottom: 20 }}>
+            <Grid xs={12} sm={12} md={8} style={{ marginBottom: 20 }}>
               <Grid container spacing={1} className={classes.detailsContainer}>
                 <Grid item xs={12} className={classes.itemField}>
                   <strong>Tus detalles personales</strong>
@@ -703,19 +704,19 @@ export default function NewTournament() {
               </ExpansionPanel>
             </Grid>
             <Grid item xs={6} className={classes.itemField}>
-              <strong>Fecha:</strong>
+              <strong>Fecha: </strong>
               {moment(selectedTournament.date_from).format(
                 "DD-MM-YY hh:mm:ss A"
               )}
             </Grid>
             <Grid item xs={6} className={classes.itemField}>
-              <strong>Hasta:</strong>
+              <strong>Hasta: </strong>
               {moment(selectedTournament.date_to).format(
                 "DD-MM-YY hh:mm:ss A"
               )}
             </Grid>
             <Grid item xs={12} className={classes.itemField}>
-              <strong>Fin Registro:</strong>
+              <strong>Fin Registro: </strong>
               {moment(selectedTournament.date_register_to).format(
                 "DD-MM-YY hh:mm:ss A"
               )}
@@ -797,7 +798,7 @@ export default function NewTournament() {
         >
           Registro de Participante
         </Grid>
-        <Grid item xs={8}>
+        <Grid item xs={12} sm={12} md={8} >
           <Paper style={{ padding: "0 20px 0 20px" }}>
             <Stepper activeStep={activeStep}>
               {steps.map((label, index) => {

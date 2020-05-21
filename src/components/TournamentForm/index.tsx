@@ -431,7 +431,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
              }}
             onClick={() => handleUpdateHtml(type)}
         >
-            Actualizaz Plantilla
+            Cargar Plantilla
         </Button>
     }
 

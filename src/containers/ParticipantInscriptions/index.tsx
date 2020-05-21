@@ -30,7 +30,7 @@ const columns: Columns[] = [
     label: "Fecha/Hora Inscripcion",
     minWidth: 10,
     align: "right",
-    component: (value: any) => <span>{value.value && moment(value.value).format('YYYY-MM-DD hh:mm:ss A')}</span>
+    component: (value: any) => <span>{value.value && `${moment(value.value).format('YYYY-MM-DD')} <br> ${moment(value.value).format('hh:mm:ss A')}`}</span>
   },
   {
     id: "tournament",
@@ -179,17 +179,17 @@ export default function ParticipantInscriptions() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12} style={{ marginBottom: 20 }}>
+      <Grid item xs={12} sm={12} md={12} style={{ marginBottom: 20 }}>
         <Grid container spacing={1}>
-          <Grid item xs={6} style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'left' }} >Mis Torneos</Grid>
-          <Grid item xs={6} style={{ textAlign: 'right' }} onClick={() => handleInscription()} >
+          <Grid item xs={6} sm={6} md={6} style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'left' }} >Mis Torneos</Grid>
+          <Grid item xs={6} sm={6} md={6} style={{ textAlign: 'right' }} onClick={() => handleInscription()} >
             <Fab size="small" color="primary" aria-label="add">
               <AddIcon />
             </Fab>
           </Grid>
         </Grid>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item xs={12} sm={12} md={12}>
         <DataTable4
           rows={list}
           pagination={pagination}
