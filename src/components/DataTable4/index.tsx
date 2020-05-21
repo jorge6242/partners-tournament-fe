@@ -1,5 +1,5 @@
 import React, { FunctionComponent, createElement, useState } from "react";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles,   Theme, createStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -30,27 +30,33 @@ const GreenSwitch = withStyles({
   track: {}
 })(Switch);
 
-const useStyles = makeStyles({
-  root: {
-    width: "100%"
-  },
-  container: {
-    maxHeight: 440
-  },
-  progress: {
-    display: "flex",
-    justifyContent: "left",
-    padding: 10
-  },
-  tableCellHeader: {
-    '&:first-child': {
-      paddingLeft: 10
+const useStyles = makeStyles( (theme: Theme) => createStyles(
+  {
+    root: {
+      overflowX: "auto",
+      [theme.breakpoints.down('xs')]: {
+        minWidth: window.innerWidth - 20,
+        width: window.innerWidth  - 20,
+      },
     },
-    '&:last-child': {
-      paddingRight: 10
-    }
-  },
-});
+    container: {
+      maxHeight: 440
+    },
+    progress: {
+      display: "flex",
+      justifyContent: "left",
+      padding: 10
+    },
+    tableCellHeader: {
+      '&:first-child': {
+        paddingLeft: 10
+      },
+      '&:last-child': {
+        paddingRight: 10
+      }
+    },
+  }
+));
 
 interface DataTableProps {
   rows: any;
@@ -129,7 +135,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
   return (
     <Paper className={classes.root}>
       <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table" size="small">
+        <Table stickyHeader aria-label="sticky table" size="small" style={{ minWidth: "340px" }}>
           <TableHead>
             <TableRow>
               {columns.map((column: any) => (
