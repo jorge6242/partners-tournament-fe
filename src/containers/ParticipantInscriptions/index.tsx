@@ -30,7 +30,7 @@ const columns: Columns[] = [
     label: "Fecha/Hora Inscripcion",
     minWidth: 10,
     align: "right",
-    component: (value: any) => <span>{value.value && `${moment(value.value).format('YYYY-MM-DD')} <br> ${moment(value.value).format('hh:mm:ss A')}`}</span>
+    component: (value: any) => <span>{value.value && moment(value.value).format('YYYY-MM-DD')} <br /> {moment(value.value).format('hh:mm:ss A')}</span>
   },
   {
     id: "tournament",
