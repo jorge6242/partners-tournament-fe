@@ -61,11 +61,10 @@ const checkAuthRoutes = (items: Array<string | number>, location: string) => {
 
 
 export const getList = (location: string, count: number = 0) => async (dispatch: Function) => {
-  dispatch(updateModal({
-    payload: {
-      isLoader: true,
-    }
-  }));
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true
+  });
   try {
     const { data: { data }, status } = await API.getList();
     let response = [];
@@ -76,11 +75,10 @@ export const getList = (location: string, count: number = 0) => async (dispatch:
         type: ACTIONS.GET_LIST,
         payload: response
       });
-      dispatch(updateModal({
-        payload: {
-          isLoader: false,
-        }
-      }));
+      dispatch({
+        type: ACTIONS.SET_LOADING,
+        payload: false
+      });
     }
     return response;
   } catch (error) {
@@ -96,11 +94,10 @@ export const getList = (location: string, count: number = 0) => async (dispatch:
         },
       })(dispatch);
     }
-    dispatch(updateModal({
-      payload: {
-        isLoader: false,
-      }
-    }));
+    dispatch({
+      type: ACTIONS.SET_LOADING,
+      payload: false
+    });
     return error;
   }
 };

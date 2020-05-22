@@ -1,11 +1,12 @@
 import React from "react";
-import Grid from "@material-ui/core/Grid";
+import CloseIcon from "@material-ui/icons/Close";
 import { useDispatch, useSelector } from "react-redux";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
 
 import "./index.sass";
-import { updateModal } from '../../actions/modalActions';
+import { updateModal } from "../../actions/modalActions";
+
 
 /**
  * Generic Modal
@@ -22,63 +23,48 @@ import { updateModal } from '../../actions/modalActions';
  */
 
 const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      justifyContent: 'center',
-      '& > * + *': {
-        marginLeft: theme.spacing(2),
-      },
-    },
-    progress: {
-      margin: theme.spacing(2),
-      position: 'relative',
-      top: '45%',
-    },
-  }),
+    createStyles({
+        progress: {
+            margin: theme.spacing(2),
+            position: 'relative',
+            top: '42%',
+        },
+    }),
 );
 
-export default function Modal() {
-  const classes = useStyles();
-  const dispatch = useDispatch();
-  const { status, element, isLoader, customSize, title } = useSelector(
-    (state: any) => state.modalReducer
-  );
-  return (
-    <div className={`modal-main ${status ? "modal-main--active" : ""} `}>
-      <div className="modal-main__backdrop">
-        <Grid
-          container
-          spacing={0}
-          className={`modal-main__content modal-main__content--${customSize}`}
-        >
-          <Grid container spacing={0} className="modal-main_header">
-            <Grid item xs={4} className="modal-main_title">
-              {title}
-            </Grid>
-            <Grid
-              item
-              xs={7}
-              className="modal-main_close"
-              onClick={() => dispatch(updateModal({ payload: { status: false, element: <div />, customSize: '' } }))}
-            >
-              X
-            </Grid>
-          </Grid>
-          <Grid
-            container
-            spacing={0}
-            className={`modal-main__loader ${
-              isLoader ? "modal-main__active" : ""
-              }`}
-          >
-              <CircularProgress className={classes.progress} color="primary" />
-          </Grid>
-          <Grid container spacing={0} className="modal-main__children">
-            {element}
-          </Grid>
-        </Grid>
-      </div>
-    </div>
-  )
+export default function ModalTest() {
+    const classes = useStyles();
+    const dispatch = useDispatch();
+    const { status, element, isLoader, customSize, title } = useSelector((state: any) => state.modalReducer);
+    return (
+        <div className={`modal-container ${status ? "modal-container--active" : ""}`}>
+            <div className="modal-backdrop">
+                <div className={`modal modal--${customSize}`}>
+                    <div className={`modal__loader ${isLoader ? "modal__loader--active" : ""} `}>
+                        <CircularProgress className={classes.progress} color="primary" />
+                    </div>
+                    <div className="modal__header">
+                        <div
+                            className="modal__header-close-icon"
+                            onClick={() =>
+                                dispatch(
+                                    updateModal({
+                                        payload: {
+                                            status: false,
+                                            element: <div />,
+                                            customSize: "",
+                                        },
+                                    })
+                                )
+                            }
+                        >
+                            <CloseIcon />
+                        </div>
+                    </div>
+                    <div className="modal__content">{element}</div>
+                    <div className="modal__footer"></div>
+                </div>
+            </div>
+        </div>
+    );
 }

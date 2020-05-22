@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, FunctionComponent, useCallback, useState } from "react";
 import AppBar from "@material-ui/core/AppBar";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
@@ -121,6 +121,69 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
+
+interface SubMenuProps {
+  menu: Array<string | number>;
+  item: any;
+}
+
+const SubMenu: FunctionComponent<SubMenuProps> = ({ menu, item }) => {
+  const [menuItem, setMenuItem] = useState(null);
+  const history = useHistory();
+  const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
+  let Icon = SettingsIcon;
+  if (item.icons) {
+    let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
+    if (currenMenutIcon) {
+      Icon = currenMenutIcon.name;
+    }
+  }
+
+  const handleRoute = (path: string) => {
+    history.push(path);
+  };
+
+  const handleSubMenu = (currentItem: any) => {
+    if (menuItem === currentItem) {
+      setMenuItem(null);
+    } else {
+      setMenuItem(currentItem);
+    }
+  }
+
+  const handleSubMenuOrRoute = useCallback(() => {
+    findChildrens.length > 0 ? handleSubMenu(item.id) : handleRoute(item.route ? item.route : '/dashboard/main')
+  },
+    [item, findChildrens],
+  );
+
+  return (
+    <React.Fragment key={item.id}>
+      <ListItem button onClick={handleSubMenuOrRoute}>
+        <ListItemIcon >
+          <Icon />
+        </ListItemIcon>
+        <ListItemText primary={item.name} />
+        {findChildrens.length > 0 && (
+          item.id === menuItem ? <IconExpandLess /> : <IconExpandMore />
+        )
+        }
+      </ListItem>
+      {findChildrens.length > 0 && (
+        <Collapse in={item.id === menuItem || false} timeout="auto" unmountOnExit>
+          <List dense>
+            {findChildrens.map((e: any, i:number) => <SubMenu key={i} menu={menu} item={e} />)}
+          </List>
+        </Collapse>
+      )
+
+      }
+    </React.Fragment>
+  )
+}
+
+
+
 interface ResponsiveDrawerProps {
   /**
    * Injected by the documentation to work in an iframe.
@@ -146,13 +209,14 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     menuReducer: { listData: menuList },
     loginReducer: { user, loading },
     parameterReducer: { listData: parameterList },
+    menuReducer: { loading: menuLoading },
   } = useSelector((state: any) => state);
 
-  const [open1, setOpen1] = React.useState(false);
-  const [open2, setOpen2] = React.useState(false);
-  const [open3, setOpen3] = React.useState(false);
-  const [open4, setOpen4] = React.useState(false);
-  const [open5, setOpen5] = React.useState(false);
+  // const [open1, setOpen1] = React.useState(false);
+  // const [open2, setOpen2] = React.useState(false);
+  // const [open3, setOpen3] = React.useState(false);
+  // const [open4, setOpen4] = React.useState(false);
+  // const [open5, setOpen5] = React.useState(false);
 
 
   useEffect(() => {
@@ -199,27 +263,27 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     }
   }, [history, location]);
 
-  function handleClick(value: number) {
-    switch (value) {
-      case 1:
-        setOpen1(!open1)
-        break;
-      case 2:
-        setOpen2(!open2)
-        break;
-      case 3:
-        setOpen3(!open3)
-        break;
-      case 4:
-        setOpen4(!open4)
-        break;
-      case 5:
-        setOpen5(!open5)
-        break;
-      default:
-        break;
-    }
-  }
+  // function handleClick(value: number) {
+  //   switch (value) {
+  //     case 1:
+  //       setOpen1(!open1)
+  //       break;
+  //     case 2:
+  //       setOpen2(!open2)
+  //       break;
+  //     case 3:
+  //       setOpen3(!open3)
+  //       break;
+  //     case 4:
+  //       setOpen4(!open4)
+  //       break;
+  //     case 5:
+  //       setOpen5(!open5)
+  //       break;
+  //     default:
+  //       break;
+  //   }
+  // }
 
   function setSubMenu(currentItem: any) {
     if (subMenuItem == currentItem) {
@@ -228,58 +292,6 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       setSubMenuItem(currentItem);
     }
   }
-
-  function setSecondSubMenu(currentItem: any) {
-    if (subMenuItem2 == currentItem) {
-      setSubMenuItem2(null);
-    } else {
-      setSubMenuItem2(currentItem);
-    }
-  }
-
-  const renderThirdMenu = (Icon: React.ReactType, title: string, route: string) => (
-    <ListItem button onClick={() => handeClick(route)}>
-      <ListItemIcon>
-        <Icon />
-      </ListItemIcon>
-      <ListItemText primary={title} />
-    </ListItem>
-  )
-
-  const renderSecondMenu = (CustomIcon: React.ReactType, title: string, route: string, menu: any, item: any) => {
-    const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
-    let Icon = SettingsIcon;
-    if(item.icons) {
-      let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
-      if(currenMenutIcon) {
-        Icon = currenMenutIcon.name;
-      }
-    }
-    return (
-      <React.Fragment>
-        <ListItem button onClick={() => findChildrens.length > 0 ? setSecondSubMenu(item.id) : handeClick(item.route ? item.route : '')}>
-          <ListItemIcon >
-          <SettingsIcon />
-          </ListItemIcon>
-          <ListItemText primary={item.name} />
-          {findChildrens.length > 0 && (
-            item.id === subMenuItem2 ? <IconExpandLess /> : <IconExpandMore />
-          )
-          }
-        </ListItem>
-        {findChildrens.length > 0 && (
-          <Collapse in={item.id === subMenuItem2 ? true : false} timeout="auto" unmountOnExit>
-            <List dense>
-              {findChildrens.map((e: any) => renderThirdMenu(DoubleArrowIcon, e.name, ""))}
-            </List>
-          </Collapse>
-        )
-
-        }
-      </React.Fragment>
-    )
-  }
-
 
   function build(menu: any) {
     return menu.map((item: any, i: number) => {
@@ -293,7 +305,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
           }
         }
         return (
-          <React.Fragment>
+          <React.Fragment  key={i} >
             <ListItem button onClick={() => findChildrens.length > 0 ? setSubMenu(item.id) : handeClick(item.route ? item.route : '')}>
               <ListItemIcon >
                 <Icon />
@@ -307,7 +319,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             {findChildrens.length > 0 && (
               <Collapse in={item.id === subMenuItem ? true : false} timeout="auto" unmountOnExit>
                 <List dense>
-                  {findChildrens.map((e: any) => renderSecondMenu(DoubleArrowIcon, e.name, "", menu, e))}
+                {findChildrens.map((e: any, i:number) => <SubMenu key={i} menu={menu} item={e} />)}
                 </List>
               </Collapse>
             )
@@ -369,8 +381,12 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
   const getRole = (role: string) => !_.isEmpty(user) ? user.roles.find((e: any) => e.slug === role) : '';
 
   const drawer = () => {
-    if (loading) {
-      return <Loader />;
+    if (menuLoading) {
+      return (
+        <div style={{ textAlign: 'center', marginTop: 20 }} >
+          <Loader />
+        </div>
+      )
     }
     return (
       <div>

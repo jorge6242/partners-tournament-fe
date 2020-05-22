@@ -184,7 +184,6 @@ const MenuItemForm: FunctionComponent<ComponentProps> = ({
 
         setSelectedRoles(roleList);
     };
-    console.log('menuList ', menuList);
     return (
         <Container component="main">
             <div className={classes.paper}>
@@ -278,7 +277,6 @@ const MenuItemForm: FunctionComponent<ComponentProps> = ({
                             <CustomTextField
                                 placeholder="Ruta"
                                 field="route"
-                                required
                                 register={register}
                                 errorsField={errors.route}
                                 errorsMessageField={
