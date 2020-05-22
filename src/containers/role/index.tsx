@@ -7,7 +7,7 @@ import './index.sass';
 import { getAll, remove, search } from "../../actions/roleActions";
 import { updateModal } from "../../actions/modalActions";
 import RoleForm from "../../components/RoleForm";
-import DataTable2 from '../../components/DataTable2'
+import DataTable4 from '../../components/DataTable4'
 import RoleColumns from '../../interfaces/RoleColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
@@ -101,11 +101,10 @@ export default function Role() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable2
-          data={list}
+        <DataTable4
+          rows={list}
           columns={columns}
           handleEdit={handleEdit}
-          isDelete
           handleDelete={handleDelete}
           loading={loading}
         />

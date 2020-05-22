@@ -7,7 +7,7 @@ import './index.sass';
 import { getAll, remove, search } from "../../actions/permissionActions";
 import { updateModal } from "../../actions/modalActions";
 import PermissionForm from "../../components/PermissionForm";
-import DataTable2 from '../../components/DataTable2'
+import DataTable4 from '../../components/DataTable4'
 import PermissionColumns from '../../interfaces/PermissionColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
@@ -22,14 +22,12 @@ const columns: PermissionColumns[] = [
     id: "name",
     label: "Clave",
     minWidth: 30,
-    align: "right",
     component: (value: any) => <span>{value.value}</span>,
   },
   {
     id: "description",
     label: "Descripción",
     minWidth: 30,
-    align: "right",
     component: (value: any) => <span>{value.value}</span>,
   },
 ];
@@ -92,11 +90,10 @@ export default function Permission() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable2
-          data={list}
+        <DataTable4
+          rows={list}
           columns={columns}
           handleEdit={handleEdit}
-          isDelete
           handleDelete={handleDelete}
           loading={loading}
         />

@@ -8,7 +8,7 @@ import './index.sass';
 import { getAll, remove, search } from "../../actions/userActions";
 import { updateModal } from "../../actions/customModalActions";
 import UserForm from "../../components/UserForm";
-import DataTable2 from '../../components/DataTable2'
+import DataTable4 from '../../components/DataTable4'
 import UserColumns from '../../interfaces/UserColumns';
 import CustomSearch from '../../components/FormElements/CustomSearch';
 
@@ -23,28 +23,24 @@ const columns: UserColumns[] = [
     id: "username",
     label: "Usuario",
     minWidth: 30,
-    align: "right",
     component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "name",
     label: "Nombre",
     minWidth: 30,
-    align: "right",
     component: (value: any) => <span>{value.value}</span>
   },
   {
     id: "email",
     label: "Correo",
     minWidth: 30,
-    align: "right",
     component: (value: any) => <span>{value.value}</span>
   },
     {
     id: "roles",
     label: "Roles",
     minWidth: 20,
-    align: "right",
     component: (value: any) => value.value.map((element: any) => (<Chip label={element.name} color="primary" size="small" />)),
   },
 ];
@@ -110,11 +106,10 @@ export default function User() {
         <CustomSearch handleSearch={handleSearch} />
       </div>
       <div>
-        <DataTable2
-          data={list}
+        <DataTable4
+          rows={list}
           columns={columns}
           handleEdit={handleEdit}
-          isDelete
           handleDelete={handleDelete}
           loading={loading}
         />
