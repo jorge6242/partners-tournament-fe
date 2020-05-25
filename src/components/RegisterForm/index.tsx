@@ -95,8 +95,11 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
   }, [reset]);
 
   const handleForm = async (form: object) => {
-    await dispatch(create({...form, isParticipant: true, password: '123456'}));
+    await dispatch(create({ ...form, isParticipant: true, password: null }));
     reset();
+    setTimeout(() => {
+      history.push('/');
+    }, 5000);
   };
 
   const handleLogin = () => {
@@ -112,7 +115,11 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
           noValidate
         >
           <Grid container spacing={3}>
-            <Grid xs={12} className={classes.registerTitle} > Registro de Participante </Grid>
+            <Grid xs={12} className={classes.registerTitle} >
+              <Typography component="h1" variant="h5">
+                Registro de Participante
+        </Typography>
+            </Grid>
             <Grid item xs={6}>
               <CustomTextField
                 placeholder="Usuario"
@@ -151,7 +158,9 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
             </Grid>
             <Grid item xs={6}>
               <CustomTextField
-                placeholder="Cedula"
+                placeholder="Ej: V10065168"
+                label="Cedula"
+                inputType="rif-ci"
                 field="doc_id"
                 required
                 register={register}
@@ -225,7 +234,7 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
                   disabled={loading}
                   className={classes.submit}
                 >
-                  Registrar
+                  Registrarse
             </Button>
                 {loading && (
                   <CircularProgress size={24} className={classes.buttonProgress} />
@@ -238,7 +247,6 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
                   type="button"
                   fullWidth
                   variant="contained"
-                  color="primary"
                   disabled={loading}
                   className={classes.submit}
                   onClick={() => handleLogin()}

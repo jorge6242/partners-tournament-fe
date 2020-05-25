@@ -89,7 +89,8 @@ export const create = (body: object) => async (dispatch: Function) => {
       response = apiResponse;
       snackBarUpdate({
         payload: {
-          message: "Participante Registrado! , Se ha enviado una confirmacion por correo",
+          message: `Participante registrado exitosamente. <br>
+          Recibira en su correo electronico un link para completar su registro`,
           type: "success",
           status: true
         }

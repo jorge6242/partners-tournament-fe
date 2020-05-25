@@ -8,16 +8,23 @@ const email = {
 }
 
 const numbers = {
-  value : new RegExp('^[0-9.]+$'),
+  value: new RegExp('^[0-9.]+$'),
   message: "Solo numeros"
 }
 
-function getPattern(type: string){
+const rifCi = {
+  value: new RegExp(/[ABCDFGHIJKLMNOPQRSTUVWXYZ][0-9]./),
+  message: "Formato: V10065168"
+}
+
+function getPattern(type: string) {
   switch (type) {
     case 'email':
       return email;
-      case 'number':
+    case 'number':
       return numbers;
+    case 'rif-ci':
+      return rifCi;
     default:
       return {};
   }
@@ -37,6 +44,7 @@ type CustomTextFieldProps = {
   Icon?: React.ReactType;
   multiline?: boolean;
   autoFocus?: boolean;
+  label?: string;
 };
 
 const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
@@ -53,41 +61,42 @@ const CustomTextField: FunctionComponent<CustomTextFieldProps> = ({
   Icon,
   multiline = false,
   autoFocus = false,
+  label
 }) => (
-  <TextField
-    rows={multiline ? "4" : ""}
-    multiline={multiline}
-    label={placeholder}
-    disabled={disable}
-    size="small"
-    margin="dense"
-    fullWidth
-    autoFocus={autoFocus}
-    placeholder={multiline ? '' : placeholder}
-    name={field}
-    type={type}
-    inputProps={{
-      maxLength
-    }}
-    inputRef={register({
-      required: required ? "Required" : false,
-      pattern: inputType ? getPattern(inputType) : null
-    })}
-    InputLabelProps={{
-      shrink: true,
-    }}
-    InputProps={{
-      startAdornment: Icon ? (
-        <InputAdornment position="start">
-          <Icon />
-        </InputAdornment>
-      ) : null 
-    }}
-    required={errorsField ? true : false}
-    error={errorsField ? true : false}
-    helperText={errorsField && errorsMessageField}
-  />
-);
+    <TextField
+      rows={multiline ? "4" : ""}
+      multiline={multiline}
+      label={label ? label : placeholder}
+      disabled={disable}
+      size="small"
+      margin="dense"
+      fullWidth
+      autoFocus={autoFocus}
+      placeholder={multiline ? '' : placeholder}
+      name={field}
+      type={type}
+      inputProps={{
+        maxLength
+      }}
+      inputRef={register({
+        required: required ? "Required" : false,
+        pattern: inputType ? getPattern(inputType) : null
+      })}
+      InputLabelProps={{
+        shrink: true,
+      }}
+      InputProps={{
+        startAdornment: Icon ? (
+          <InputAdornment position="start">
+            <Icon />
+          </InputAdornment>
+        ) : null
+      }}
+      required={errorsField ? true : false}
+      error={errorsField ? true : false}
+      helperText={errorsField && errorsMessageField}
+    />
+  );
 
 
 export default CustomTextField;

@@ -32,31 +32,36 @@ const CustomSelect: FunctionComponent<CustomSelectProps> = ({
   loading ? (
     <CircularProgress color="primary" size={40} />
   ) : (
-    <div className="custom-select-container">
-      {label && (
-        <div
-          className={`custom-select-container__label custom-select-container__label--${
-            disabled ? "disabled" : ""
-          }`}
+      <div className="custom-select-container">
+        {label && (
+          <div
+            className={`custom-select-container__label custom-select-container__label--${
+              disabled ? "disabled" : ""
+              }`}
+          >
+            {label}
+          </div>
+        )}
+        <select
+          ref={register({
+            required: required ? "Required" : false
+          })}
+          name={field}
+          onChange={onChange ? onChange : () => { }}
+          disabled={disabled}
         >
-          {label}
-        </div>
-      )}
-      <select
-        ref={register({
-          required: required ? "Required" : false
-        })}
-        name={field}
-        onChange={onChange ? onChange : () => {}}
-        disabled={disabled}
-      >
-        <option value={optionValueSelected}>{selectionMessage}</option>
-        {children}
-      </select>
-      <div className="custom-select-container__message">
-        {errorsMessageField}
+          <option value={optionValueSelected}>{selectionMessage}</option>
+          {children}
+        </select>
+        {
+          errorsMessageField && (
+            <div className="custom-select-container__message">
+              {errorsMessageField}
+            </div>
+          )
+        }
+
       </div>
-    </div>
-  );
+    );
 
 export default CustomSelect;
