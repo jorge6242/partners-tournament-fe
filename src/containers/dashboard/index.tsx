@@ -475,7 +475,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
                   onClick={handleMenu}
                   className={classes.profileButton}
                 >
-                  Usuario: {!loading && user.username}
+                  {!loading && user.username}
                 </Button>
                 <Menu
                   id="simple-menu"

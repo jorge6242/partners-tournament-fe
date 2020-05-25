@@ -542,7 +542,7 @@ export const getInscriptionsByParticipant = (page: number = 1, perPage: number =
     payload: true
   });
   try {
-    const { data: { data }, status } = await API.getInscriptionsByParticipant(page, perPage, query);
+    const { data, status } = await API.getInscriptionsByParticipant(page, perPage, query);
     let response = [];
     if (status === 200) {
       const pagination = {
@@ -551,7 +551,7 @@ export const getInscriptionsByParticipant = (page: number = 1, perPage: number =
         prevPageUrl: data.prev_page_url,
         currentPage: data.current_page,
       }
-      response = data;
+      response = data.data;
       dispatch({
         type: ACTIONS.GET_INSCRIPTIONS,
         payload: response

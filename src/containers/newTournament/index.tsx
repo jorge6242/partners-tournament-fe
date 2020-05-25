@@ -28,6 +28,7 @@ import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Parser from "react-html-parser";
+import MobileStepper from '@material-ui/core/MobileStepper';
 
 import { getList as getTCategoryList } from "../../actions/tCategoryActions";
 import {
@@ -194,7 +195,7 @@ export default function NewTournament() {
   };
 
   function getSteps() {
-    return ["Seleccione Torneo", "Registro de Torneo", "Confirmacion"];
+    return ["Torneo", "Registro", "Confirmacion"];
   }
 
   function getStepContent(step: number) {
@@ -377,18 +378,18 @@ export default function NewTournament() {
             justify="center"
             className={classes.participant}
           >
-            <Grid item xs={6} className={classes.itemField}>
+            <Grid item xs={12} sm={6} className={classes.itemField}>
               <strong>Nombre:</strong> {name}
             </Grid>
-            <Grid item xs={6} className={classes.itemField}>
+            <Grid item xs={12} sm={6} className={classes.itemField}>
               <strong>Apellido:</strong>
               {last_name}
             </Grid>
-            <Grid item xs={6} className={classes.itemField}>
+            <Grid item xs={12} sm={6} className={classes.itemField}>
               <strong>Telefono:</strong>
               {phone_number}
             </Grid>
-            <Grid item xs={6} className={classes.itemField}>
+            <Grid item xs={12} sm={6} className={classes.itemField}>
               <strong>Correo:</strong>
               {email}
             </Grid>
@@ -447,25 +448,25 @@ export default function NewTournament() {
                 <Grid item xs={12} className={classes.itemField}>
                   <strong>Tus detalles personales</strong>
                 </Grid>
-                <Grid item xs={6} className={classes.itemField}>
-                  <strong>Nombre:</strong> {user.name} {user.last_name}
+                <Grid item xs={12} sm={6} className={classes.itemField}>
+                  <strong>Nombre: </strong> {user.name} {user.last_name}
                 </Grid>
-                <Grid item xs={6} className={classes.itemField}>
-                  <strong>Correo:</strong> {user.email}
+                <Grid item xs={12} sm={6} className={classes.itemField}>
+                  <strong>Correo: </strong> {user.email}
                 </Grid>
-                <Grid item xs={6} className={classes.itemField}>
-                  <strong>Correo:</strong> {user.email}
+                <Grid item xs={12} sm={6} className={classes.itemField}>
+                  <strong>Correo: </strong> {user.email}
                 </Grid>
-                <Grid item xs={6} className={classes.itemField}>
-                  <strong>Telefono:</strong> {user.phone_number}
+                <Grid item xs={12} sm={6} className={classes.itemField}>
+                  <strong>Telefono: </strong> {user.phone_number}
                 </Grid>
               </Grid>
             </Grid>
             <Grid item xs={12} className={classes.itemField}>
-              <strong>Categoria:</strong> {selectedCategory.description}
+              <strong>Categoria: </strong> {selectedCategory.description}
             </Grid>
             <Grid item xs={12} className={classes.itemField}>
-              <strong>Nombre del Torneo:</strong>
+              <strong>Nombre del Torneo: </strong>
               {selectedTournament.description}
             </Grid>
             <Grid
@@ -524,13 +525,13 @@ export default function NewTournament() {
                 </ExpansionPanelDetails>
               </ExpansionPanel>
             </Grid>
-            <Grid item xs={6} className={classes.itemField}>
+            <Grid item xs={12} sm={6} className={classes.itemField}>
               <strong>Fecha: </strong>
               {moment(selectedTournament.date_from).format(
                 "DD-MM-YY hh:mm:ss A"
               )}
             </Grid>
-            <Grid item xs={6} className={classes.itemField}>
+            <Grid item xs={12} sm={6} className={classes.itemField}>
               <strong>Hasta: </strong>
               {moment(selectedTournament.date_to).format(
                 "DD-MM-YY hh:mm:ss A"
@@ -542,16 +543,16 @@ export default function NewTournament() {
                 "DD-MM-YY hh:mm:ss A"
               )}
             </Grid>
-            <Grid item xs={6} className={classes.itemField}>
-              <strong>Tipo de Reglas:</strong>
+            <Grid item xs={12} sm={6} className={classes.itemField}>
+              <strong>Tipo de Reglas: </strong>
               {selectedTournament.rules.description}
             </Grid>
-            <Grid item xs={6} className={classes.itemField}>
-              <strong>Tipo de Participantes:</strong>
+            <Grid item xs={12} sm={6} className={classes.itemField}>
+              <strong>Tipo de Participantes: </strong>
               {getParticipants(selectedTournament.participant_type)}
             </Grid>
             <Grid item xs={12} className={classes.itemField}>
-              <strong>Grupos:</strong>
+              <strong>Grupos: </strong>
             </Grid>
             <Grid
               item
@@ -563,19 +564,18 @@ export default function NewTournament() {
                 <div>{e.description}</div>
               ))}
             </Grid>
-            <Grid item xs={3} className={classes.itemField}>
-              <strong>Monto:</strong> {selectedTournament.currency.description}
-              {selectedTournament.amount}
+            <Grid item xs={12} sm={12} className={classes.itemField}>
+              <strong>Monto: </strong> {selectedTournament.currency.description} {selectedTournament.amount}
             </Grid>
             <Grid
               item
-              xs={4}
+              xs={6}
+              sm={4} 
               className={classes.itemField}
-              style={{ textAlign: "right" }}
             >
               <strong>Metodo de Pago</strong>
             </Grid>
-            <Grid item xs={3} className={classes.itemField}>
+            <Grid item xs={6} sm={4}  className={classes.itemField}>
               <div className="custom-select-container">
                 <select
                   name="relation"
@@ -626,32 +626,33 @@ export default function NewTournament() {
                 <Grid item xs={12} className={classes.itemField}>
                   <strong>Tus detalles personales</strong>
                 </Grid>
-                <Grid item xs={6} className={classes.itemField}>
-                  <strong>Nombre:</strong> {user.name} {user.last_name}
+                <Grid item xs={12} sm={6} className={classes.itemField}>
+                  <strong>Nombre: </strong> {user.name} {user.last_name}
                 </Grid>
-                <Grid item xs={6} className={classes.itemField}>
-                  <strong>Correo:</strong> {user.email}
+                <Grid item xs={12} sm={6} className={classes.itemField}>
+                  <strong>Correo: </strong> {user.email}
                 </Grid>
-                <Grid item xs={6} className={classes.itemField}>
-                  <strong>Correo:</strong> {user.email}
+                <Grid item xs={12} sm={6} className={classes.itemField}>
+                  <strong>Correo: </strong> {user.email}
                 </Grid>
-                <Grid item xs={6} className={classes.itemField}>
-                  <strong>Telefono:</strong> {user.phone_number}
+                <Grid item xs={12} sm={6} className={classes.itemField}>
+                  <strong>Telefono: </strong> {user.phone_number}
                 </Grid>
               </Grid>
             </Grid>
             <Grid item xs={12} className={classes.itemField}>
-              <strong>Categoria:</strong> {selectedCategory.description}
+              <strong>Categoria: </strong> {selectedCategory.description}
             </Grid>
             <Grid item xs={12} className={classes.itemField}>
-              <strong>Nombre del Torneo:</strong>
+              <strong>Nombre del Torneo: </strong>
               {selectedTournament.description}
             </Grid>
             <Grid
               item
               xs={12}
               className={classes.itemField}
-              style={{ marginTop: 10 }}
+              style={{ marginTop: 10, display: "none" }}
+              
             >
               <ExpansionPanel
                 expanded={expanded === "panel1"}
@@ -679,7 +680,7 @@ export default function NewTournament() {
               item
               xs={12}
               className={classes.itemField}
-              style={{ marginBottom: 10 }}
+              style={{ marginBottom: 10, display: "none" }}
             >
               <ExpansionPanel
                 expanded={expanded === "panel2"}
@@ -703,40 +704,40 @@ export default function NewTournament() {
                 </ExpansionPanelDetails>
               </ExpansionPanel>
             </Grid>
-            <Grid item xs={6} className={classes.itemField}>
+            <Grid item xs={6} className={classes.itemField} style={{ display: "none" }}>
               <strong>Fecha: </strong>
               {moment(selectedTournament.date_from).format(
                 "DD-MM-YY hh:mm:ss A"
               )}
             </Grid>
-            <Grid item xs={6} className={classes.itemField}>
+            <Grid item xs={6} className={classes.itemField} style={{ display: "none" }}>
               <strong>Hasta: </strong>
               {moment(selectedTournament.date_to).format(
                 "DD-MM-YY hh:mm:ss A"
               )}
             </Grid>
-            <Grid item xs={12} className={classes.itemField}>
+            <Grid item xs={12} className={classes.itemField} style={{ display: "none" }}>
               <strong>Fin Registro: </strong>
               {moment(selectedTournament.date_register_to).format(
                 "DD-MM-YY hh:mm:ss A"
               )}
             </Grid>
-            <Grid item xs={6} className={classes.itemField}>
-              <strong>Tipo de Reglas:</strong>
+            <Grid item xs={6} className={classes.itemField} style={{ display: "none" }}>
+              <strong>Tipo de Reglas: </strong>
               {selectedTournament.rules.description}
             </Grid>
-            <Grid item xs={6} className={classes.itemField}>
-              <strong>Tipo de Participantes:</strong>
+            <Grid item xs={6} className={classes.itemField} style={{ display: "none" }}>
+              <strong>Tipo de Participantes: </strong>
               {getParticipants(selectedTournament.participant_type)}
             </Grid>
-            <Grid item xs={12} className={classes.itemField}>
+            <Grid item xs={12} className={classes.itemField} style={{ display: "none" }}>
               <strong>Grupos:</strong>
             </Grid>
             <Grid
               item
               xs={12}
               className={classes.itemField}
-              style={{ textAlign: "left", marginBottom: 20 }}
+              style={{ textAlign: "left", marginBottom: 20, display: "none"  }}
             >
               {selectedTournament.groups.map((e: any) => (
                 <div>{e.description}</div>
@@ -752,8 +753,7 @@ export default function NewTournament() {
               {renderType(selectedTournament.payments, selectedPayment)}
             </Grid>
             <Grid item xs={12} className={classes.itemField}>
-              <strong>Monto:</strong> {selectedTournament.currency.description}
-              {selectedTournament.amount}
+              <strong>Monto: </strong> {selectedTournament.currency.description} {selectedTournament.amount}
             </Grid>
             <Grid item xs={12} className={classes.itemField}>
               <strong>
@@ -800,7 +800,7 @@ export default function NewTournament() {
         </Grid>
         <Grid item xs={12} sm={12} md={8} >
           <Paper style={{ padding: "0 20px 0 20px" }}>
-            <Stepper activeStep={activeStep}>
+            <Stepper alternativeLabel activeStep={activeStep}>
               {steps.map((label, index) => {
                 const stepProps: { completed?: boolean } = {};
                 const labelProps: { optional?: React.ReactNode } = {};
