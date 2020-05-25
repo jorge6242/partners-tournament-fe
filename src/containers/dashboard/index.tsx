@@ -47,7 +47,7 @@ import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
 import _ from 'lodash';
 import CommentIcon from '@material-ui/icons/Comment';
 import queryString from "query-string";
-import { Grid } from "@material-ui/core";
+import { Grid, Chip } from "@material-ui/core";
 
 import { logout, setForcedLogin, checkLogin, setupInterceptors } from "../../actions/loginActions";
 import AccessControlForm from "../../components/AccessControlForm";
@@ -207,7 +207,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
   const {
     menuReducer: { listData: menuList },
-    loginReducer: { user, loading },
+    loginReducer: { user, loading, roles },
     parameterReducer: { listData: parameterList },
     menuReducer: { loading: menuLoading },
   } = useSelector((state: any) => state);
@@ -460,36 +460,43 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             <MenuIcon />
           </IconButton>
           <div className={classes.header}>
-          <Typography variant="h6" noWrap style={{ lineHeight: 1 }}>
-              <Grid container spacing={1}>
-                <Grid item xs={12}>Portal de Torneos</Grid>
+          <Grid container spacing={1}>
+                <Grid item xs={6} sm={6} md={6} onClick={ () => history.push('/dashboard/main')} style={{ cursor: 'pointer' }}>
+                  <Typography variant="h6" noWrap >
+                    <Grid container spacing={1}>
+                      <Grid item xs={12}>Portal de Torneos</Grid>
+                    </Grid>
+                    <Grid item xs={12} style={{ fontSize: 14, fontStyle: 'italic' }}>{client.value}</Grid>
+                  </Typography>
+                </Grid>
+
+              <Grid item xs={6} sm={6} md={6} style={{ textAlign: 'right' }}>
+                <Typography variant="h6" noWrap style={{ lineHeight: 3 }} >
+                  <div>
+                    <Button
+                      startIcon={<AccountCircleIcon />}
+                      aria-controls="simple-menu"
+                      aria-haspopup="true"
+                      onClick={handleMenu}
+                      className={classes.profileButton}
+                    >
+                      {!loading && user.name}
+                    </Button>
+                    <Menu
+                      id="simple-menu"
+                      anchorEl={anchorEl}
+                      keepMounted
+                      open={Boolean(anchorEl)}
+                      onClose={handleClose}
+                    >
+                      <MenuItem>Usuario: {!loading && user.username}</MenuItem>
+                      <MenuItem>Role: {!loading && <Chip label={nameRole.name} color="primary" size="small" />}</MenuItem>
+                      <MenuItem onClick={() => handleLogout()}>Logout</MenuItem>
+                    </Menu>
+                  </div>
+                </Typography>
               </Grid>
-                  <Grid item xs={12} style={{ fontSize: 14, fontStyle: 'italic' }}>{client.value}</Grid>
-            </Typography>
-            <Typography variant="h6" noWrap style={{ lineHeight: 1 }}>
-              <div>
-                <Button
-                  startIcon={<AccountCircleIcon />}
-                  aria-controls="simple-menu"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                  className={classes.profileButton}
-                >
-                  {!loading && user.username}
-                </Button>
-                <Menu
-                  id="simple-menu"
-                  anchorEl={anchorEl}
-                  keepMounted
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                >
-                 <MenuItem>Usuario: {!loading && user.username}</MenuItem>
-                  <MenuItem>Role: {!loading && nameRole.name}</MenuItem>
-                  <MenuItem onClick={() => handleLogout()}>Logout</MenuItem> 
-                </Menu>
-              </div>
-            </Typography>
+            </Grid>
           </div>
         </Toolbar>
       </AppBar>

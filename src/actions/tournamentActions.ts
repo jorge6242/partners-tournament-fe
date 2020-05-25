@@ -213,6 +213,27 @@ export const getAvailableTournament = (id: any) => async (dispatch: Function) =>
   }
 };
 
+export const getAvailablePlayerTournament = (id: any) => async (dispatch: Function) => {
+  try {
+    const { data: { data } , status } = await API.getAvailablePlayerTournament(id);
+    let response = [];
+    if (status === 200) {
+      response = data;
+    }
+    return response;
+  } catch (error) {
+    const message = Message.exception(error);
+    snackBarUpdate({
+      payload: {
+        message,
+        status: true,
+        type: "error"
+      }
+    })(dispatch);
+    return error;
+  }
+};
+
 export const search = (term: string, perPage: number = 8) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,

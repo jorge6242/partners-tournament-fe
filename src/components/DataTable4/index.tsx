@@ -34,6 +34,9 @@ const useStyles = makeStyles( (theme: Theme) => createStyles(
   {
     root: {
       overflowX: "auto",
+      [theme.breakpoints.up('xs')]: {
+        width: '100%',
+      },
       [theme.breakpoints.down('xs')]: {
         minWidth: window.innerWidth - 20,
         width: window.innerWidth  - 20,

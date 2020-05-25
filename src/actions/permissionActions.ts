@@ -88,7 +88,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       response = apiResponse;
       snackBarUpdate({
         payload: {
-          message: "Permission ha sido Registrado!",
+          message: "Permiso ha sido Registrado!",
           type: "success",
           status: true
         }
@@ -164,7 +164,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Permission ha sido Actualizado!",
+          message: "Permiso ha sido Actualizado!",
           type: "success",
           status: true
         }
@@ -211,7 +211,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Permission ha sido Elmininado!",
+          message: "Permiso ha sido Elmininado!",
           type: "success",
           status: true
         }

@@ -36,6 +36,7 @@ import {
   createParticipant,
   getAvailableTournamentsByCategory,
   getAvailableTournament,
+  getAvailablePlayerTournament,
 } from "../../actions/tournamentActions";
 import { useDispatch, useSelector } from "react-redux";
 import CustomSelect from "../../components/FormElements/CustomSelect";
@@ -64,6 +65,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     media: {
       height: 150,
+    },
+    tournamentMedia: {
+      height: 200,
     },
     stepContainer: {
       marginBottom: 50,
@@ -225,6 +229,7 @@ export default function NewTournament() {
     let newSkipped = skipped;
     const currentStep = activeStep + 1;
     const isAvailable = selectedTournament ? await dispatch(getAvailableTournament(selectedTournament.id)) : false;
+    const isPlayerAvailable = selectedTournament ? await dispatch(getAvailablePlayerTournament(selectedTournament.id)) : false;
 
     if (activeStep === 0 && (!selectedCategory || !selectedTournament)) {
       dispatch(
@@ -241,6 +246,16 @@ export default function NewTournament() {
         snackBarUpdate({
           payload: {
             message: "Torneo no se encuentra disponible",
+            type: "error",
+            status: true,
+          },
+        })
+      );
+    } else if (activeStep === 0 && isPlayerAvailable) {
+      dispatch(
+        snackBarUpdate({
+          payload: {
+            message: `Participante ya esta registrado en el Torneo : ${selectedTournament.description}`,
             type: "error",
             status: true,
           },
@@ -345,7 +360,7 @@ export default function NewTournament() {
                     >
                       <CardActionArea>
                         <CardMedia
-                          className={classes.media}
+                          className={classes.tournamentMedia}
                           image={element.picture}
                         />
                         <CardContent className={classes.cardContent}>
@@ -379,18 +394,18 @@ export default function NewTournament() {
             className={classes.participant}
           >
             <Grid item xs={12} sm={6} className={classes.itemField}>
-              <strong>Nombre:</strong> {name}
+              <strong>Nombre: </strong> {name}
             </Grid>
             <Grid item xs={12} sm={6} className={classes.itemField}>
-              <strong>Apellido:</strong>
+              <strong>Apellido: </strong>
               {last_name}
             </Grid>
             <Grid item xs={12} sm={6} className={classes.itemField}>
-              <strong>Telefono:</strong>
+              <strong>Telefono: </strong>
               {phone_number}
             </Grid>
             <Grid item xs={12} sm={6} className={classes.itemField}>
-              <strong>Correo:</strong>
+              <strong>Correo: </strong>
               {email}
             </Grid>
           </Grid>
@@ -445,14 +460,11 @@ export default function NewTournament() {
           <Grid container spacing={2}>
             <Grid item xs={12} style={{ marginBottom: 20 }} >
               <Grid container spacing={1} className={classes.detailsContainer}>
-                <Grid item xs={12} className={classes.itemField}>
-                  <strong>Tus detalles personales</strong>
+                <Grid item xs={12} sm={6} className={classes.itemField}>
+                  <strong>Nombre: </strong> {user.name} 
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.itemField}>
-                  <strong>Nombre: </strong> {user.name} {user.last_name}
-                </Grid>
-                <Grid item xs={12} sm={6} className={classes.itemField}>
-                  <strong>Correo: </strong> {user.email}
+                  <strong>Apellido: </strong> {user.last_name}
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.itemField}>
                   <strong>Correo: </strong> {user.email}
@@ -623,14 +635,11 @@ export default function NewTournament() {
           <Grid container spacing={2}>
             <Grid xs={12} sm={12} md={8} style={{ marginBottom: 20 }}>
               <Grid container spacing={1} className={classes.detailsContainer}>
-                <Grid item xs={12} className={classes.itemField}>
-                  <strong>Tus detalles personales</strong>
+                <Grid item xs={12} sm={6} className={classes.itemField}>
+                  <strong>Nombre: </strong> {user.name} 
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.itemField}>
-                  <strong>Nombre: </strong> {user.name} {user.last_name}
-                </Grid>
-                <Grid item xs={12} sm={6} className={classes.itemField}>
-                  <strong>Correo: </strong> {user.email}
+                  <strong>Apellido: </strong> {user.last_name}
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.itemField}>
                   <strong>Correo: </strong> {user.email}
