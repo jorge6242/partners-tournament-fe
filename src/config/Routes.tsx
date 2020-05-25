@@ -41,6 +41,7 @@ import TournamentReport from "../containers/tournamentReport";
 import TCategoriesGroup from "../containers/tCategoriesGroup";
 import ParticipantInscriptions from "../containers/ParticipantInscriptions";
 import TPaymentMethod from "../containers/TPaymentMethod";
+import RegisterPassword from "../containers/registerPassword";
 
 export default function Routes() { 
   return (
@@ -49,6 +50,7 @@ export default function Routes() {
         <Switch>
           <Route path="/" exact component={Login} />
           <Route path="/register" exact component={Register} />
+          <Route path="/register-password" exact component={RegisterPassword} />
           <Route path="/template/expiration-cards" component={ExpirationCard} />
           <Route
             path="/dashboard"

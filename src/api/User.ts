@@ -27,6 +27,15 @@ const API = {
       { headers: headers() }
     );
   },
+  registerPassword(data: object) {
+    return AXIOS.post(
+      `${Prefix.api}/user-register-password`,
+      {
+        ...data
+      },
+      { headers: headers() }
+    );
+  },
   remove(id: number) {
     return AXIOS.delete(`${Prefix.api}/user/${id}`, { headers: headers() });
   },

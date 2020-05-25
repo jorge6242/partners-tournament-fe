@@ -70,6 +70,7 @@ type FormData = {
   handicapFVG: number;
   gender_id: string;
   people_id: string;
+  roles: string;
 };
 
 type FormComponentProps = {
@@ -145,11 +146,15 @@ const UserForm: FunctionComponent<FormComponentProps> = ({ id }) => {
     };
   }, [reset]);
 
-  const handleForm = (form: object) => {
+  const handleForm = (form: FormData) => {
+    const body ={
+      ...form,
+      roles: form.roles.length > 0 ? form.roles : null,
+    }
     if (id) {
-      dispatch(update({ id, ...form }));
+      dispatch(update({ id, ...body }));
     } else {
-      dispatch(create({ ...form, password: '123456' }));
+      dispatch(create({ ...body }));
     }
   };
 
@@ -193,12 +198,16 @@ const UserForm: FunctionComponent<FormComponentProps> = ({ id }) => {
                 </Grid>
                 <Grid item xs={3}>
                   <CustomTextField
-                    placeholder="ID Documento"
+                    placeholder="Ej: V10065168"
+                    label="Cedula"
+                    inputType="rif-ci"
                     field="doc_id"
                     required
                     register={register}
                     errorsField={errors.doc_id}
-                    errorsMessageField={errors.doc_id && errors.doc_id.message}
+                    errorsMessageField={
+                      errors.doc_id && errors.doc_id.message
+                    }
                   />
                 </Grid>
                 <Grid item xs={3}>
@@ -214,7 +223,7 @@ const UserForm: FunctionComponent<FormComponentProps> = ({ id }) => {
                 </Grid>
                 <Grid item xs={3}>
                   <CustomTextField
-                    placeholder="Numero"
+                    placeholder="Telefono"
                     field="phone_number"
                     required
                     register={register}

@@ -5,9 +5,6 @@ import { useLocation } from "react-router-dom";
 import queryString from 'query-string';
 
 import './index.sass';
-import { getAll, getClient } from "../../actions/personActions";
-import { updateModal } from "../../actions/modalActions";
-import PersonForm from "../../components/PersonForm";
 import DataTable4 from '../../components/DataTable4';
 import Columns from '../../interfaces/StatusAccountColumns';
 import { getStatusAccount } from "../../actions/webServiceActions";
@@ -56,7 +53,6 @@ export default function StatusAccount() {
   const dispatch = useDispatch();
   const { statusAccountList, setStatusAccountLoading } = useSelector((state: any) => state.webServiceReducer);
   const { client } = useSelector((state: any) => state.personReducer);
-  const { user } = useSelector((state: any) => state.loginReducer);
   const location = useLocation();
 
   useEffect(() => {

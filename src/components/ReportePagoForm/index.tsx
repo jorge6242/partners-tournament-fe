@@ -76,12 +76,9 @@ const ReportePagosForm: FunctionComponent<FormComponentProps> = ({ id }) => {
         register,
         errors,
         reset,
-        setValue,
         getValues
     } = useForm<FormData>();
     const loading = useSelector((state: any) => state.genderReducer.loading);
-
-    const { user } = useSelector((state: any) => state.loginReducer);
     const dispatch = useDispatch();
 
     const { listData: bancoEmisorList } = useSelector(
@@ -102,13 +99,7 @@ const ReportePagosForm: FunctionComponent<FormComponentProps> = ({ id }) => {
         };
     }, [reset]);
 
-    //     Status lo colocas en 0
-    // dFechaProceso NULL
-    // DFechaRegistro es la fecha actual
-    // EstadoCuenta no recuerdo que era lo que se guardaba aqui
-
     const handleForm = async (form: object) => {
-        const { codCuentaDestino } = getValues();
         const body = {
             ...form,
             dFechaProceso: moment().format('YYYY-MM-DD'),
@@ -120,7 +111,7 @@ const ReportePagosForm: FunctionComponent<FormComponentProps> = ({ id }) => {
         await dispatch(create(body));
         reset();
     };
-//substring(12, 16)
+
     return (
         <Container component="main">
             <div className={classes.paper}>

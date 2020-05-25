@@ -28,7 +28,6 @@ const useStyles = makeStyles(theme => ({
     marginTop: theme.spacing(1)
   },
   wrapper: {
-    margin: theme.spacing(1),
     position: 'relative',
   },
   buttonProgress: {
@@ -39,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     marginLeft: -9,
   },
   submit: {
-    margin: theme.spacing(3, 0, 2)
+    margin: theme.spacing(1, 0, 1)
   }
 }));
 
@@ -134,6 +133,21 @@ const LoginForm: FunctionComponent<LoginFormProps> = ({ handleForm, loading }) =
             onClick={() => handleRegister()}
           >
             Registro
+          </Button>
+        {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
+      </div>
+
+            <div className={classes.wrapper}>
+          <Button
+            type="button"
+            fullWidth
+            variant="contained"
+            color="primary"
+            disabled={loading}
+            className={classes.submit}
+            onClick={() => history.push('/register-password')}
+          >
+            Registro Contraseña
           </Button>
         {loading && <CircularProgress size={24} className={classes.buttonProgress} />}
       </div>

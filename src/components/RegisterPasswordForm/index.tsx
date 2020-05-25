@@ -6,13 +6,12 @@ import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+import { Grid } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
 import CustomTextField from "../FormElements/CustomTextField";
-import { create } from "../../actions/userActions";
-import { getList as getGenderList } from '../../actions/genderActions';
-import CustomSelect from "../FormElements/CustomSelect";
-import { Grid } from "@material-ui/core";
+import { registerPassword } from "../../actions/userActions";
+import snackBarUpdate from "../../actions/snackBarActions";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -54,30 +53,27 @@ type FormData = {
   email: string;
   group_id: string;
   gender_id: string;
+  password: string;
+  password2: string;
 };
 
 type ComponentProps = {
   id?: number;
 };
 
-const RegisterForm: FunctionComponent<ComponentProps> = ({
+const RegisterPasswordForm: FunctionComponent<ComponentProps> = ({
   id
 }) => {
   const classes = useStyles();
-  const { handleSubmit, register, errors, reset } = useForm<
+  const { handleSubmit, register, errors, reset, setValue } = useForm<
     FormData
   >();
   const {
     userReducer: { loading },
-    genderReducer: { listData: genderList }
   } = useSelector((state: any) => state);
 
   const history = useHistory();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getGenderList());
-  }, [dispatch]);
 
   useEffect(() => {
     return () => {
@@ -85,18 +81,26 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
     };
   }, [reset]);
 
-  const handleForm = async (form: object) => {
+  const handleForm = async (form: FormData) => {
     const body = {
       ...form,
       isParticipant: true,
-      password: null,
-      new_user: 0,
     }
-    await dispatch(create({ ...body  }));
+    if(form.password === form.password2) {
+      await dispatch(registerPassword({ ...body }));
     reset();
     setTimeout(() => {
       history.push('/');
     }, 5000);
+    } else {
+      dispatch(snackBarUpdate({
+        payload: {
+          message: 'Contraseñas no coinciden',
+          type: "error",
+          status: true
+        }
+      }))
+    }
   };
 
   const handleLogin = () => {
@@ -114,46 +118,10 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
           <Grid container spacing={3}>
             <Grid xs={12} className={classes.registerTitle} >
               <Typography component="h1" variant="h5">
-                Registro de Participante
+                Registro de Contraseña 
         </Typography>
             </Grid>
-            <Grid item xs={6}>
-              <CustomTextField
-                placeholder="Usuario"
-                field="username"
-                required
-                register={register}
-                errorsField={errors.username}
-                errorsMessageField={
-                  errors.username && errors.username.message
-                }
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <CustomTextField
-                placeholder="Nombre"
-                field="name"
-                required
-                register={register}
-                errorsField={errors.name}
-                errorsMessageField={
-                  errors.name && errors.name.message
-                }
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <CustomTextField
-                placeholder="Apellido"
-                field="last_name"
-                required
-                register={register}
-                errorsField={errors.last_name}
-                errorsMessageField={
-                  errors.last_name && errors.last_name.message
-                }
-              />
-            </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <CustomTextField
                 placeholder="Ej: V10065168"
                 label="Cedula"
@@ -167,35 +135,8 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
                 }
               />
             </Grid>
-            <Grid item xs={6}>
-              <CustomTextField
-                placeholder="Fecha de Nacimiento"
-                field="birth_date"
-                required
-                register={register}
-                errorsField={errors.birth_date}
-                errorsMessageField={errors.birth_date && errors.birth_date.message}
-                type="date"
-              />
-            </Grid>
-            <Grid item xs={6}>
-              <CustomSelect
-                label="Sexo"
-                field="gender_id"
-                required
-                register={register}
-                errorsMessageField={errors.gender_id && errors.gender_id.message}
-                selectionMessage="Seleccione"
-              >
-                {genderList.map((item: any) => (
-                  <option key={item.id} value={item.id}>
-                    {item.description}
-                  </option>
-                ))}
-              </CustomSelect>
-            </Grid>
-
-            <Grid item xs={6}>
+            
+            <Grid item xs={12}>
               <CustomTextField
                 placeholder="Correo"
                 field="email"
@@ -208,7 +149,7 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
                 inputType="email"
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid item xs={12}>
               <CustomTextField
                 placeholder="Telefono"
                 field="phone_number"
@@ -221,6 +162,32 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
                 inputType="number"
               />
             </Grid>
+            <Grid item xs={12}>
+              <CustomTextField
+                placeholder="Contraseña"
+                field="password"
+                register={register}
+                required
+                errorsField={errors.password}
+                errorsMessageField={
+                  errors.password && errors.password.message
+                }
+                type="password"
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <CustomTextField
+                placeholder="Confirmar Contraseña"
+                field="password2"
+                register={register}
+                required
+                errorsField={errors.password2}
+                errorsMessageField={
+                  errors.password2 && errors.password2.message
+                }
+                type="password"
+              />
+            </Grid>
             <Grid xs={6}>
               <div className={classes.wrapper}>
                 <Button
@@ -231,7 +198,7 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
                   disabled={loading}
                   className={classes.submit}
                 >
-                  Registrarse
+                  Registrar
             </Button>
                 {loading && (
                   <CircularProgress size={24} className={classes.buttonProgress} />
@@ -260,4 +227,4 @@ const RegisterForm: FunctionComponent<ComponentProps> = ({
   );
 };
 
-export default RegisterForm;
+export default RegisterPasswordForm;
