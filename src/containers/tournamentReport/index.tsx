@@ -256,7 +256,7 @@ export default function TournamentReport() {
     } else {
       dispatch(snackBarUpdate({
         payload: {
-          message: 'Seleccionar Categoria y Torneo',
+          message: 'Seleccionar Categoria y Evento',
           status: true,
           type: "error"
         }
@@ -276,7 +276,7 @@ export default function TournamentReport() {
     } else {
       dispatch(snackBarUpdate({
         payload: {
-          message: 'Seleccionar Categoria y Torneo',
+          message: 'Seleccionar Categoria y Evento',
           status: true,
           type: "error"
         }
@@ -287,7 +287,7 @@ export default function TournamentReport() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={6}>Reporte de Inscripcion de Torneos</Grid>
+      <Grid item xs={6}>Reporte de Inscripcion de Eventos</Grid>
       <Grid item xs={6} style={{ textAlign: 'right' }}>
         <Fab size="small" type="button" color="primary" aria-label="report" onClick={() => handleReport()}>
           <PrintIcon />
@@ -316,7 +316,7 @@ export default function TournamentReport() {
                 onChange={handleTournament}
                 style={{ fontSize: "13px" }}
               >
-                <option value={0}>Seleccione Torneo</option>
+                <option value={0}>Seleccione Evento</option>
                 {tournamentsByCategory.map((item: any, i: number) => (
                   <option value={item.id}>{item.description}</option>
                 ))}

@@ -464,7 +464,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
                 <Grid item xs={6} sm={6} md={6} onClick={ () => history.push('/dashboard/main')} style={{ cursor: 'pointer' }}>
                   <Typography variant="h6" noWrap >
                     <Grid container spacing={1}>
-                      <Grid item xs={12}>Portal de Torneos</Grid>
+                      <Grid item xs={12}>Portal de Eventos</Grid>
                     </Grid>
                     <Grid item xs={12} style={{ fontSize: 14, fontStyle: 'italic' }}>{client.value}</Grid>
                   </Typography>

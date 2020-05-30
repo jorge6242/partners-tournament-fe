@@ -199,7 +199,7 @@ export default function NewTournament() {
   };
 
   function getSteps() {
-    return ["Torneo", "Registro", "Confirmacion"];
+    return ["Evento", "Registro", "Confirmacion"];
   }
 
   function getStepContent(step: number) {
@@ -235,7 +235,7 @@ export default function NewTournament() {
       dispatch(
         snackBarUpdate({
           payload: {
-            message: "Seleccionar Categoria y Torneo",
+            message: "Seleccionar Categoria y Evento",
             type: "error",
             status: true,
           },
@@ -245,7 +245,7 @@ export default function NewTournament() {
       dispatch(
         snackBarUpdate({
           payload: {
-            message: "Torneo no se encuentra disponible",
+            message: "Evento no se encuentra disponible",
             type: "error",
             status: true,
           },
@@ -255,7 +255,7 @@ export default function NewTournament() {
       dispatch(
         snackBarUpdate({
           payload: {
-            message: `Participante ya esta registrado en el Torneo : ${selectedTournament.description}`,
+            message: `Participante ya esta registrado en el Evento : ${selectedTournament.description}`,
             type: "error",
             status: true,
           },
@@ -342,7 +342,7 @@ export default function NewTournament() {
     return (
       <Grid container spacing={3} style={{ marginTop: 30 }}>
         <Grid item xs={12}>
-          <strong>Torneos Activos</strong>
+          <strong>Eventos Activos</strong>
         </Grid>
         <Grid item xs={12}>
           <Grid container spacing={3} justify="flex-start">
@@ -478,7 +478,7 @@ export default function NewTournament() {
               <strong>Categoria: </strong> {selectedCategory.description}
             </Grid>
             <Grid item xs={12} className={classes.itemField}>
-              <strong>Nombre del Torneo: </strong>
+              <strong>Nombre del Evento: </strong>
               {selectedTournament.description}
             </Grid>
             <Grid
@@ -497,7 +497,7 @@ export default function NewTournament() {
                   id="panel1a-header"
                 >
                   <Typography className={classes.heading}>
-                    Detalles del Torneo
+                    Detalles del Evento
                   </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
@@ -653,7 +653,7 @@ export default function NewTournament() {
               <strong>Categoria: </strong> {selectedCategory.description}
             </Grid>
             <Grid item xs={12} className={classes.itemField}>
-              <strong>Nombre del Torneo: </strong>
+              <strong>Nombre del Evento: </strong>
               {selectedTournament.description}
             </Grid>
             <Grid
@@ -673,7 +673,7 @@ export default function NewTournament() {
                   id="panel1a-header"
                 >
                   <Typography className={classes.heading}>
-                    Detalles del Torneo
+                    Detalles del Evento
                   </Typography>
                 </ExpansionPanelSummary>
                 <ExpansionPanelDetails>
@@ -836,7 +836,7 @@ export default function NewTournament() {
                       onClick={handleReset}
                       className={classes.button}
                     >
-                      Registrarse en otro Torneo
+                      Registrarse en otro Evento
                     </Button>
                   ) : (
                     <React.Fragment>

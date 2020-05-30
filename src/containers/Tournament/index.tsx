@@ -172,7 +172,7 @@ export default function Tournament() {
   return (
     <div>
       <div className={classes.headerContainer}>
-        <div className={classes.headerTitle}>Torneos</div>
+        <div className={classes.headerTitle}>Eventos</div>
         <div onClick={() => handleCreate()}>
           <Fab size="small" color="primary" aria-label="add">
             <AddIcon />

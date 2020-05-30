@@ -294,7 +294,7 @@ export const create = (body: object) => async (dispatch: Function) => {
       createresponse = response;
       snackBarUpdate({
         payload: {
-          message: "Torneo Creado!",
+          message: "Evento Creado!",
           type: "success",
           status: true
         }
@@ -438,7 +438,7 @@ export const update = (body: object) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Torneo actualizado!",
+          message: "Evento actualizado!",
           type: "success",
           status: true
         }
@@ -490,7 +490,7 @@ export const remove = (id: number) => async (dispatch: Function) => {
       };
       snackBarUpdate({
         payload: {
-          message: "Torneo  Eliminado!",
+          message: "Evento  Eliminado!",
           type: "success",
           status: true
         }

@@ -439,7 +439,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
         <Container component="main">
             <div className={classes.paper}>
                 <Typography component="h1" variant="h5">
-                    Torneo
+                    Evento
                  </Typography>
                 <form
                     className={classes.form}
@@ -675,7 +675,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                     <Grid container spacing={3} className={classes.dataContainer} >
                                         <Grid item xs={12}>
                                             <Grid container spacing={3}>
-                                                <Grid item xs={6}>Detalles del Torneo:</Grid>
+                                                <Grid item xs={6}>Detalles del Evento:</Grid>
                                                 <Grid item xs={6} className={classes.templateButton} >{renderTemplateButton("descriptionDetail")}</Grid>
                                                 <Grid item xs={12}>
                                                     <CustomEditor onChange={handleChangeDescriptionDetail} content={descriptionDetailsContent} />

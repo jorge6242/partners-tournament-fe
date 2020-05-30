@@ -68,7 +68,7 @@ const LoginForm: FunctionComponent<LoginFormProps> = ({ handleForm, loading }) =
           <SupervisorAccountIcon />
         </Avatar> */}
         <Typography component="h1" variant="h5">
-          Portal de Torneos
+          Portal de Eventos
         </Typography>
         <form
           className={classes.form}

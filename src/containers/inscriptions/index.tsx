@@ -320,7 +320,7 @@ export default function Inscriptions() {
     } else {
       dispatch(snackBarUpdate({
         payload: {
-          message: 'Seleccionar Categoria y Torneo',
+          message: 'Seleccionar Categoria y Evento',
           status: true,
           type: "error"
         }
@@ -333,7 +333,7 @@ export default function Inscriptions() {
 
   return (
     <Grid container spacing={2}>
-      <Grid item xs={12}>Inscripciones de Torneos</Grid>
+      <Grid item xs={12}>Inscripciones de Eventos</Grid>
       <Grid item xs={2}>
       <TextField
             margin="dense"
@@ -370,7 +370,7 @@ export default function Inscriptions() {
                 onChange={handleTournament}
                 style={{ fontSize: "13px" }}
               >
-                <option value={0}>Seleccione Torneo</option>
+                <option value={0}>Seleccione Evento</option>
                 {tournamentsByCategory.map((item: any, i: number) => (
                   <option value={item.id}>{item.description}</option>
                 ))}

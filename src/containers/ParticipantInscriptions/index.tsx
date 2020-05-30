@@ -17,6 +17,7 @@ import TournamentUserCommentForm from '../../components/TournamentUserCommentFor
 import { Grid } from "@material-ui/core";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
+import logo from './paypal-logo.jpeg';
 
 const columns: Columns[] = [
   {
@@ -129,6 +130,13 @@ const columns: Columns[] = [
         />
       )
     }
+  },
+  {
+    id: "status",
+    label: "",
+    minWidth: 10,
+    align: "right",
+    component: (value: any) => value.value === "1" && <img src={logo} alt="example image" style={{ cursor: 'pointer' }} width="35" height="25" />
   },
 ];
 
