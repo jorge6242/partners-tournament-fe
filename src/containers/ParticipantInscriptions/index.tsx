@@ -19,127 +19,6 @@ import moment from "moment";
 import { useHistory } from "react-router-dom";
 import logo from './paypal-logo.jpeg';
 
-const columns: Columns[] = [
-  {
-    id: "id",
-    label: "Id",
-    minWidth: 10,
-    component: (value: any) => <span>{value.value}</span>
-  },
-  {
-    id: "register_date",
-    label: "Fecha/Hora Inscripcion",
-    minWidth: 10,
-    align: "right",
-    component: (value: any) => <span>{value.value && moment(value.value).format('YYYY-MM-DD')} <br /> {moment(value.value).format('hh:mm:ss A')}</span>
-  },
-  {
-    id: "tournament",
-    label: "Categoria",
-    minWidth: 10,
-    align: "right",
-    component: (value: any) => <span>{value.value && value.value.category.description}</span>
-  },
-  {
-    id: "tournament",
-    label: "Torneo",
-    minWidth: 10,
-    align: "right",
-    component: (value: any) => <span>{value.value && value.value.description}</span>
-  },
-  {
-    id: "payment",
-    label: "Forma de Pago",
-    minWidth: 10,
-    align: "right",
-    component: (value: any) => <span>{value.value.description}</span>
-  },
-  {
-    id: "attach_file",
-    label: "Comprobante",
-    minWidth: 10,
-    align: "center",
-    component: (value: any) => {
-      return (
-        <a target="_blank" href={value.value} title="comprobante" >
-          <IconButton
-            aria-label="file"
-            size="small"
-            color="primary"
-          >
-            <SearchIcon fontSize="inherit" />
-          </IconButton>
-        </a>
-      )
-    }
-  },
-  {
-    id: "date_confirmed",
-    label: "Confirmado",
-    minWidth: 10,
-    align: "center",
-    component: (value: any) => {
-      return (
-        <IconButton
-          aria-label="file"
-          size="small"
-          color={value.value ? 'primary' : 'secondary'}
-        >
-          <CheckBoxIcon fontSize="inherit" />
-        </IconButton>
-      )
-    }
-  },
-  {
-    id: "locator",
-    label: "Localizador",
-    minWidth: 10,
-    align: "right",
-    component: (value: any) => <span><strong>{value.value}</strong></span>
-  },
-  {
-    id: "status",
-    label: "Status",
-    minWidth: 10,
-    align: "center",
-    component: (value: any) => {
-      let status = '';
-      let backgroundColor = '';
-      if(value.value === "0") {
-        status = "Pendiente";
-        backgroundColor = '#2980b9';
-      }
-      if(value.value === "1") {
-        status = "Aceptado";
-        backgroundColor = '#2ecc71';
-      }
-      if(value.value === "-1") {
-        status = "Rechazado";
-        backgroundColor = '#e74c3c';
-      }
-      return (
-        <Chip
-          label={status}
-          style={{
-            backgroundColor,
-            color: "white",
-            fontWeight: "bold",
-            fontSize: "10px"
-          }}
-          size="small"
-        />
-      )
-    }
-  },
-  {
-    id: "status",
-    label: "",
-    minWidth: 10,
-    align: "right",
-    component: (value: any) => value.value === "1" && <img src={logo} alt="example image" style={{ cursor: 'pointer' }} width="35" height="25" />
-  },
-];
-
 const useStyles = makeStyles(() => ({
   headerContainer: {
     display: 'flex',
@@ -168,6 +47,137 @@ export default function ParticipantInscriptions() {
     },
   } = useSelector((state: any) => state);
 
+
+  const renderPaypal = (id: any) => {
+    const inscription = list.find((e: any) => e.id == id);
+    if(inscription && inscription.tournament &&  inscription.tournament.amount > 0 && inscription.status === "1" ) {
+      return <img src={logo} alt="example image" style={{ cursor: 'pointer' }} width="35" height="25" />
+    }
+    return <div></div>
+    
+  }
+
+  const columns: Columns[] = [
+    {
+      id: "id",
+      label: "Id",
+      minWidth: 10,
+      component: (value: any) => <span>{value.value}</span>
+    },
+    {
+      id: "register_date",
+      label: "Fecha/Hora Inscripcion",
+      minWidth: 10,
+      align: "right",
+      component: (value: any) => <span>{value.value && moment(value.value).format('YYYY-MM-DD')} <br /> {moment(value.value).format('hh:mm:ss A')}</span>
+    },
+    {
+      id: "tournament",
+      label: "Categoria",
+      minWidth: 10,
+      align: "right",
+      component: (value: any) => <span>{value.value && value.value.category.description}</span>
+    },
+    {
+      id: "tournament",
+      label: "Evento",
+      minWidth: 10,
+      align: "right",
+      component: (value: any) => <span>{value.value && value.value.description}</span>
+    },
+    {
+      id: "payment",
+      label: "Forma de Pago",
+      minWidth: 10,
+      align: "right",
+      component: (value: any) => <span>{value.value.description}</span>
+    },
+    {
+      id: "attach_file",
+      label: "Comprobante",
+      minWidth: 10,
+      align: "center",
+      component: (value: any) => {
+        return (
+          <a target="_blank" href={value.value} title="comprobante" >
+            <IconButton
+              aria-label="file"
+              size="small"
+              color="primary"
+            >
+              <SearchIcon fontSize="inherit" />
+            </IconButton>
+          </a>
+        )
+      }
+    },
+    {
+      id: "date_confirmed",
+      label: "Confirmado",
+      minWidth: 10,
+      align: "center",
+      component: (value: any) => {
+        return (
+          <IconButton
+            aria-label="file"
+            size="small"
+            color={value.value ? 'primary' : 'secondary'}
+          >
+            <CheckBoxIcon fontSize="inherit" />
+          </IconButton>
+        )
+      }
+    },
+    {
+      id: "locator",
+      label: "Localizador",
+      minWidth: 10,
+      align: "right",
+      component: (value: any) => <span><strong>{value.value}</strong></span>
+    },
+    {
+      id: "status",
+      label: "Status",
+      minWidth: 10,
+      align: "center",
+      component: (value: any) => {
+        let status = '';
+        let backgroundColor = '';
+        if(value.value === "0") {
+          status = "Pendiente";
+          backgroundColor = '#2980b9';
+        }
+        if(value.value === "1") {
+          status = "Aceptado";
+          backgroundColor = '#2ecc71';
+        }
+        if(value.value === "-1") {
+          status = "Rechazado";
+          backgroundColor = '#e74c3c';
+        }
+        return (
+          <Chip
+            label={status}
+            style={{
+              backgroundColor,
+              color: "white",
+              fontWeight: "bold",
+              fontSize: "10px"
+            }}
+            size="small"
+          />
+        )
+      }
+    },
+    {
+      id: "id",
+      label: "",
+      minWidth: 10,
+      align: "right",
+      component: (value: any) => renderPaypal(value.value),
+    },
+  ];
+
   useEffect(() => {
     dispatch(getAll());
   }, [dispatch]);
@@ -189,7 +199,7 @@ export default function ParticipantInscriptions() {
     <Grid container spacing={2}>
       <Grid item xs={12} sm={12} md={12} style={{ marginBottom: 20 }}>
         <Grid container spacing={1}>
-          <Grid item xs={6} sm={6} md={6} style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'left' }} >Mis Torneos</Grid>
+          <Grid item xs={6} sm={6} md={6} style={{ fontSize: 16, fontWeight: 'bold', textAlign: 'left' }} >Mis Eventos</Grid>
           <Grid item xs={6} sm={6} md={6} style={{ textAlign: 'right' }} onClick={() => handleInscription()} >
             <Fab size="small" color="primary" aria-label="add">
               <AddIcon />

@@ -37,6 +37,7 @@ import {
   getAvailableTournamentsByCategory,
   getAvailableTournament,
   getAvailablePlayerTournament,
+  getAvailableQuota,
 } from "../../actions/tournamentActions";
 import { useDispatch, useSelector } from "react-redux";
 import CustomSelect from "../../components/FormElements/CustomSelect";
@@ -230,6 +231,7 @@ export default function NewTournament() {
     const currentStep = activeStep + 1;
     const isAvailable = selectedTournament ? await dispatch(getAvailableTournament(selectedTournament.id)) : false;
     const isPlayerAvailable = selectedTournament ? await dispatch(getAvailablePlayerTournament(selectedTournament.id)) : false;
+    const isAvailableQuota = selectedTournament ? await dispatch(getAvailableQuota(selectedTournament.id)) : false;
 
     if (activeStep === 0 && (!selectedCategory || !selectedTournament)) {
       dispatch(
@@ -256,6 +258,18 @@ export default function NewTournament() {
         snackBarUpdate({
           payload: {
             message: `Participante ya esta registrado en el Evento : ${selectedTournament.description}`,
+            type: "error",
+            status: true,
+          },
+        })
+      );
+    }
+    else if (activeStep === 0 && isAvailableQuota) {
+      dispatch(
+        snackBarUpdate({
+          payload: {
+            message: `El cupo maximo de participantes en el Evento : ${selectedTournament.description} se ha excedido,
+            Intente nuevamente mas tarde para verificar si se libera algun cupo y se puede inscribir nuevamente.`,
             type: "error",
             status: true,
           },
@@ -473,6 +487,9 @@ export default function NewTournament() {
                   <strong>Telefono: </strong> {user.phone_number}
                 </Grid>
               </Grid>
+            </Grid>
+            <Grid item xs={12} className={classes.itemField}>
+              <strong>Cupos Disponibles: </strong> {selectedTournament.participants && selectedTournament.participants} / {selectedTournament.max_participants}
             </Grid>
             <Grid item xs={12} className={classes.itemField}>
               <strong>Categoria: </strong> {selectedCategory.description}

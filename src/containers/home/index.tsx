@@ -2,6 +2,8 @@ import React, { useEffect } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
 import AccountBalanceIcon from "@material-ui/icons/AccountBalance";
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
+import GroupAddIcon from '@material-ui/icons/GroupAdd';
 // import CardMembershipIcon from "@material-ui/icons/CardMembership";
 // import PeopleAltIcon from "@material-ui/icons/PeopleAlt";
 // import FaceIcon from "@material-ui/icons/Face";
@@ -53,7 +55,6 @@ export default function Home() {
   const {
     webServiceReducer: {
       clientBalance,
-      setBalanceLoading,
     },
     menuReducer: {
       widgetList,
@@ -74,16 +75,36 @@ export default function Home() {
   return (
     <div className="home-container">
       <Grid container spacing={3} className={classes.widgetContainer}>
-        { validateWidget('PARTNERPORTAL_saldo') &&
+        { validateWidget('PARTNEREVENTOS_inscripcion') &&
           <Grid item xs={3}>
-          {setBalanceLoading ? (
+          {setWidgetLoading ? (
             <Loader />
           ) : (
             <Paper>
               <Widgtet
-                Icon={AccountBalanceIcon}
-                title="Saldo"
+                Icon={EventAvailableIcon}
+                title="Inscribirse"
                 amount={clientBalance.saldo}
+                link="/dashboard/tournament-new"
+                internal
+              />
+            </Paper>
+          )}
+        </Grid>
+        }
+
+{ validateWidget('PARTNEREVENTOS_mis-eventos') &&
+          <Grid item xs={3}>
+          {setWidgetLoading ? (
+            <Loader />
+          ) : (
+            <Paper>
+              <Widgtet
+                Icon={GroupAddIcon}
+                title="Mis Eventos"
+                amount={clientBalance.saldo}
+                link="/dashboard/participant-inscriptions"
+                internal
               />
             </Paper>
           )}

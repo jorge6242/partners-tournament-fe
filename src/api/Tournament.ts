@@ -34,6 +34,12 @@ const API = {
       headers: headers(),
     });
   },
+  getAvailableQuota(id: any) {
+    return AXIOS.get(`${Prefix.api}/tournament-available-quota`, {
+      params: { id },
+      headers: headers(),
+    });
+  },
   getAvailablePlayerTournament(id: any) {
     return AXIOS.get(`${Prefix.api}/tournament-player-available`, {
       params: { id },

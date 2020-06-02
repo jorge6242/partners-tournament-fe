@@ -4,6 +4,7 @@ import Avatar from "@material-ui/core/Avatar";
 import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
 
 import "./index.sass";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,15 +32,28 @@ type FormComponentProps = {
   subTitle?: string;
   amount?: string;
   Icon: any;
+  link?: any;
+  internal?: boolean;
 };
 
 const Widgtet: FunctionComponent<FormComponentProps> = ({
   title,
   subTitle,
   amount,
-  Icon
+  Icon,
+  link,
+  internal
 }) => {
   const classes = useStyles();
+  const history = useHistory();
+
+  const renderLink = () => {
+    if(internal) {
+      return <div onClick={() => history.push(link)} style={{ cursor: 'pointer', color: "#2980b9" }} > Enlace </div>;
+    }
+    return <div></div>;
+  }
+
   return (
     <Card className="widget-container__card">
       <div className="widget-container__widget">
@@ -53,7 +67,11 @@ const Widgtet: FunctionComponent<FormComponentProps> = ({
           {subTitle && (
             <div className="widget-container__detail-title">{subTitle}</div>
           )}
-          <div className="widget-container__detail-amount">{amount}</div>
+          {
+            link ? renderLink()
+              :
+              <div className="widget-container__detail-amount">{amount}</div>
+          }
         </div>
       </div>
     </Card>

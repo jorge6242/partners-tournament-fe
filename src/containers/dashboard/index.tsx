@@ -172,7 +172,7 @@ const SubMenu: FunctionComponent<SubMenuProps> = ({ menu, item }) => {
       {findChildrens.length > 0 && (
         <Collapse in={item.id === menuItem || false} timeout="auto" unmountOnExit>
           <List dense>
-            {findChildrens.map((e: any, i:number) => <SubMenu key={i} menu={menu} item={e} />)}
+            {findChildrens.map((e: any, i: number) => <SubMenu key={i} menu={menu} item={e} />)}
           </List>
         </Collapse>
       )
@@ -235,15 +235,22 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
 
   useEffect(() => {
 
-    const checkLoginPromise = new Promise(function(resolve, reject) {
-      resolve(dispatch(checkLogin()));
+    const checkLoginPromise = new Promise(function (resolve, reject) {
+      const values = queryString.parse(location.search);
+      if (!_.isEmpty(values) && values.doc_id && values.token) {
+        resolve(dispatch(setForcedLogin(values.doc_id, values.token)));
+      } else {
+        resolve(dispatch(checkLogin()));
+      }
+      
     });
 
-    checkLoginPromise.then(function() {
-      if(location.pathname !== '/') {
+    checkLoginPromise.then(function () {
+      if (location.pathname !== '/') {
         dispatch(setupInterceptors());
       }
       dispatch(getMenuList(location.pathname));
+      dispatch(getWidgetList());
       dispatch(getGenderAll());
       dispatch(getCountries());
       dispatch(getParameterList());
@@ -298,14 +305,14 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
       if (item.parent === "0") {
         const findChildrens: any = menu.filter((e: any) => e.parent == item.id);
         let Icon = SettingsIcon;
-        if(item.icons) {
+        if (item.icons) {
           let currenMenutIcon = icons.find((e: any) => e.slug === item.icons.slug);
-          if(currenMenutIcon) {
+          if (currenMenutIcon) {
             Icon = currenMenutIcon.name;
           }
         }
         return (
-          <React.Fragment  key={i} >
+          <React.Fragment key={i} >
             <ListItem button onClick={() => findChildrens.length > 0 ? setSubMenu(item.id) : handeClick(item.route ? item.route : '')}>
               <ListItemIcon >
                 <Icon />
@@ -319,7 +326,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             {findChildrens.length > 0 && (
               <Collapse in={item.id === subMenuItem ? true : false} timeout="auto" unmountOnExit>
                 <List dense>
-                {findChildrens.map((e: any, i:number) => <SubMenu key={i} menu={menu} item={e} />)}
+                  {findChildrens.map((e: any, i: number) => <SubMenu key={i} menu={menu} item={e} />)}
                 </List>
               </Collapse>
             )
@@ -395,12 +402,12 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
         <Divider />
         <List dense >
           {!_.isEmpty(menuList) && buildMenu(menuList.items)}
-           {/* {renderFirstMenu(SettingsIcon, "Categoria", "/dashboard/category")}
+          {/* {renderFirstMenu(SettingsIcon, "Categoria", "/dashboard/category")}
            {renderFirstMenu(SettingsIcon, "Tipo Categoria", "/dashboard/category-type")}
-           {renderFirstMenu(SettingsIcon, "Torneo", "/dashboard/tournament")}
-           {renderFirstMenu(SettingsIcon, "Inscripcion de Torneo", "/dashboard/tournament-new")}
-           {renderFirstMenu(SettingsIcon, "Inscripciones de Torneos", "/dashboard/inscriptions")}
-           {renderFirstMenu(SettingsIcon, "Reporte Inscripcion de Torneos", "/dashboard/tournament-report")}
+           {renderFirstMenu(SettingsIcon, "Evento", "/dashboard/tournament")}
+           {renderFirstMenu(SettingsIcon, "Inscripcion de Evento", "/dashboard/tournament-new")}
+           {renderFirstMenu(SettingsIcon, "Inscripciones de Eventos", "/dashboard/inscriptions")}
+           {renderFirstMenu(SettingsIcon, "Reporte Inscripcion de Eventos", "/dashboard/tournament-report")}
            {renderFirstMenu(SettingsIcon, "Grupos", "/dashboard/group")}
           <ListItem button onClick={() => handleClick(3)}>
           <ListItemIcon >
@@ -420,7 +427,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             {renderFirstMenu(DoubleArrowIcon, "Menu Item", "/dashboard/menu-item")}
           </List>
         </Collapse> */}
-        {/* {!_.isEmpty(user) && getRole('admin') && (
+          {/* {!_.isEmpty(user) && getRole('admin') && (
               <React.Fragment>
                 {renderFirstMenu(DashboardIcon, "Inicio", "/dashboard/main")}
                 {renderFirstMenu(CommentIcon, "Notas", "")}
@@ -444,7 +451,7 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
     )
   };
   const nameRole: any = !_.isEmpty(user) ? _.first(user.roles) : '';
-  const client =Helper.getParameter(parameterList, 'CLIENT_NAME')
+  const client = Helper.getParameter(parameterList, 'CLIENT_NAME')
   return (
     <div className={classes.root}>
       <CssBaseline />
@@ -460,15 +467,15 @@ export default function Dashboard(props: ResponsiveDrawerProps) {
             <MenuIcon />
           </IconButton>
           <div className={classes.header}>
-          <Grid container spacing={1}>
-                <Grid item xs={6} sm={6} md={6} onClick={ () => history.push('/dashboard/main')} style={{ cursor: 'pointer' }}>
-                  <Typography variant="h6" noWrap >
-                    <Grid container spacing={1}>
-                      <Grid item xs={12}>Portal de Eventos</Grid>
-                    </Grid>
-                    <Grid item xs={12} style={{ fontSize: 14, fontStyle: 'italic' }}>{client.value}</Grid>
-                  </Typography>
-                </Grid>
+            <Grid container spacing={1}>
+              <Grid item xs={6} sm={6} md={6} onClick={() => history.push('/dashboard/main')} style={{ cursor: 'pointer' }}>
+                <Typography variant="h6" noWrap >
+                  <Grid container spacing={1}>
+                    <Grid item xs={12}>Portal de Eventos</Grid>
+                  </Grid>
+                  <Grid item xs={12} style={{ fontSize: 14, fontStyle: 'italic' }}>{client.value}</Grid>
+                </Typography>
+              </Grid>
 
               <Grid item xs={6} sm={6} md={6} style={{ textAlign: 'right' }}>
                 <Typography variant="h6" noWrap style={{ lineHeight: 3 }} >

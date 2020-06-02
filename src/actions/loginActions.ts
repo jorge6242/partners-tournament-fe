@@ -101,13 +101,13 @@ export function setupInterceptors() {
   };
 }
 
-export const setForcedLogin = (socio: any, token: any) => async (
+export const setForcedLogin = (docId: any, token: any) => async (
   dispatch: Function
 ) => {
   dispatch({ type: ACTIONS.SET_LOADING, payload: true });
   dispatch(mainStatusLoading(true));
   try {
-    const { data, status } = await Auth.forcedLogin(socio, token);
+    const { data, status } = await Auth.forcedLogin(docId, token);
     let response = [];
     if (status === 200) {
       response = data;

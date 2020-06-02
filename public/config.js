@@ -15,17 +15,17 @@ var TEMPLATE_DESC_PREMIACION = ``;
 
 var TEMPLATE_WELCOME = `
 <p> Estimado(a) #PARTICIPANTE#</p>
-<p>Su solicitud de registro en el Torneo #NOMBRETORNEO#&nbsp;ha sido recibida</p>
+<p>Su solicitud de registro en el Evento #NOMBRETORNEO#&nbsp;ha sido recibida</p>
 <p>Le agradecemos hacer click en el siguiente enlace para confirmar su participacion.</p>
 <p><a href="#LINKCONFIRMACION#" target="_blank">Confirmacion participacion</a></p>
 <p>Luego de eso procederemos a verificar los datos de su pago y recibira&nbsp;una confirmacion de la misma.</p>
 <p>Atentamente</p>
-<p>Comision Torneos LCC<br>Telefonos<br>Email</p>
+<p>Comision Eventos LCC<br>Telefonos<br>Email</p>
 `;
 
 var TEMPLATE_CONFIRM = `
 <p>Estimado(a) #PARTICIPANTE#</p>
-<p>Su solicitud de registro en el Torneo #NOMBRETORNEO#&nbsp;ha sido confirmada exitosamente.</p>
+<p>Su solicitud de registro en el Evento #NOMBRETORNEO#&nbsp;ha sido confirmada exitosamente.</p>
 <p><span style="letter-spacing: 0.01071em;">Atentamente</span></p>
-<p>Comision Torneos LCC<br>Telefonos<br>Email</p>
+<p>Comision Eventos LCC<br>Telefonos<br>Email</p>
 `;

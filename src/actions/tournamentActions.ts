@@ -4,18 +4,23 @@ import Prefix from "../config/ApiPrefix";
 import headers from "../helpers/headers";
 import snackBarUpdate from "./snackBarActions";
 import { updateModal } from "./modalActions";
-import { ACTIONS } from '../interfaces/actionTypes/toournamentTypes';
-import Message from '../helpers/message';
+import { ACTIONS } from "../interfaces/actionTypes/toournamentTypes";
+import Message from "../helpers/message";
 
 const attempts = window.attempts;
 
-export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch: Function) => {
+export const getAll = (page: number = 1, perPage: number = 8) => async (
+  dispatch: Function
+) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
-    payload: true
+    payload: true,
   });
   try {
-    const { data: { data }, status } = await API.getAll(page, perPage);
+    const {
+      data: { data },
+      status,
+    } = await API.getAll(page, perPage);
     let response = [];
     if (status === 200) {
       const pagination = {
@@ -23,19 +28,19 @@ export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch
         perPage: data.per_page,
         prevPageUrl: data.prev_page_url,
         currentPage: data.current_page,
-      }
+      };
       response = data.data;
       dispatch({
         type: ACTIONS.GET_ALL,
-        payload: response
+        payload: response,
       });
       dispatch({
         type: ACTIONS.SET_PAGINATION,
-        payload: pagination
+        payload: pagination,
       });
       dispatch({
         type: ACTIONS.SET_LOADING,
-        payload: false
+        payload: false,
       });
     }
     return response;
@@ -44,41 +49,48 @@ export const getAll = (page: number = 1, perPage: number = 8) => async (dispatch
       payload: {
         message: error.message,
         status: true,
-        type: "error"
-      }
+        type: "error",
+      },
     })(dispatch);
     dispatch({
       type: ACTIONS.SET_LOADING,
-      payload: false
+      payload: false,
     });
     return error;
   }
 };
 
 export const getList = (count: number = 0) => async (dispatch: Function) => {
-  dispatch(updateModal({
-    payload: {
-      isLoader: true,
-    }
-  }));
+  dispatch(
+    updateModal({
+      payload: {
+        isLoader: true,
+      },
+    })
+  );
   try {
-    const { data: { data }, status } = await API.getList();
+    const {
+      data: { data },
+      status,
+    } = await API.getList();
     let response = [];
     if (status === 200) {
       response = data;
       dispatch({
         type: ACTIONS.GET_LIST,
-        payload: response
+        payload: response,
       });
-      dispatch(updateModal({
-        payload: {
-          isLoader: false,
-        }
-      }));
+      dispatch(
+        updateModal({
+          payload: {
+            isLoader: false,
+          },
+        })
+      );
     }
     return response;
   } catch (error) {
-    if(count <= attempts) {
+    if (count <= attempts) {
       let counter = count + 1;
       dispatch(getList(counter));
     } else {
@@ -90,157 +102,275 @@ export const getList = (count: number = 0) => async (dispatch: Function) => {
         },
       })(dispatch);
     }
-    dispatch(updateModal({
-      payload: {
-        isLoader: false,
-      }
-    }));
+    dispatch(
+      updateModal({
+        payload: {
+          isLoader: false,
+        },
+      })
+    );
     return error;
   }
 };
 
 export const getByCategory = (id: any) => async (dispatch: Function) => {
-  dispatch(updateModal({
-    payload: {
-      isLoader: true,
-    }
-  }));
+  dispatch(
+    updateModal({
+      payload: {
+        isLoader: true,
+      },
+    })
+  );
   try {
-    const { data , status } = await API.getByCategory(id);
+    const { data, status } = await API.getByCategory(id);
     let response = [];
     if (status === 200) {
       response = data;
       dispatch({
         type: ACTIONS.GET_TOURNAMENTS_BY_CATEGORY,
-        payload: response
+        payload: response,
       });
-      dispatch(updateModal({
-        payload: {
-          isLoader: false,
-        }
-      }));
+      dispatch(
+        updateModal({
+          payload: {
+            isLoader: false,
+          },
+        })
+      );
     }
     return response;
   } catch (error) {
-    dispatch(updateModal({
-      payload: {
-        isLoader: false,
-      }
-    }));
+    dispatch(
+      updateModal({
+        payload: {
+          isLoader: false,
+        },
+      })
+    );
     snackBarUpdate({
       payload: {
         message: error.message,
         status: true,
-        type: "error"
-      }
+        type: "error",
+      },
     })(dispatch);
     return error;
   }
 };
 
-export const getAvailableTournamentsByCategory = (id: any) => async (dispatch: Function) => {
-  dispatch(updateModal({
-    payload: {
-      isLoader: true,
-    }
-  }));
+export const getAvailableTournamentsByCategory = (id: any) => async (
+  dispatch: Function
+) => {
+  dispatch(
+    updateModal({
+      payload: {
+        isLoader: true,
+      },
+    })
+  );
   try {
-    const { data , status } = await API.getAvailableTournamentsByCategory(id);
+    const { data, status } = await API.getAvailableTournamentsByCategory(id);
     let response = [];
     if (status === 200) {
       response = data;
       dispatch({
         type: ACTIONS.GET_TOURNAMENTS_BY_CATEGORY,
-        payload: response
+        payload: response,
       });
-      dispatch(updateModal({
-        payload: {
-          isLoader: false,
-        }
-      }));
+      dispatch(
+        updateModal({
+          payload: {
+            isLoader: false,
+          },
+        })
+      );
     }
     return response;
   } catch (error) {
-    dispatch(updateModal({
-      payload: {
-        isLoader: false,
-      }
-    }));
+    dispatch(
+      updateModal({
+        payload: {
+          isLoader: false,
+        },
+      })
+    );
     snackBarUpdate({
       payload: {
         message: error.message,
         status: true,
-        type: "error"
-      }
+        type: "error",
+      },
     })(dispatch);
     return error;
   }
 };
 
-export const getAvailableTournament = (id: any) => async (dispatch: Function) => {
-  dispatch(updateModal({
-    payload: {
-      isLoader: true,
-    }
-  }));
-  try {
-    const { data: { data } , status } = await API.getAvailableTournament(id);
-    let response = [];
-    if (status === 200) {
-      response = data;
-      dispatch(updateModal({
-        payload: {
-          isLoader: false,
-        }
-      }));
-    }
-    return response;
-  } catch (error) {
-    const message = Message.exception(error);
-    dispatch(updateModal({
+export const getAvailableTournament = (id: any) => async (
+  dispatch: Function
+) => {
+  dispatch(
+    updateModal({
       payload: {
-        isLoader: false,
-      }
-    }));
-    snackBarUpdate({
-      payload: {
-        message,
-        status: true,
-        type: "error"
-      }
-    })(dispatch);
-    return error;
-  }
-};
-
-export const getAvailablePlayerTournament = (id: any) => async (dispatch: Function) => {
-  try {
-    const { data: { data } , status } = await API.getAvailablePlayerTournament(id);
-    let response = [];
-    if (status === 200) {
-      response = data;
-    }
-    return response;
-  } catch (error) {
-    const message = Message.exception(error);
-    snackBarUpdate({
-      payload: {
-        message,
-        status: true,
-        type: "error"
-      }
-    })(dispatch);
-    return error;
-  }
-};
-
-export const search = (term: string, perPage: number = 8) => async (dispatch: Function) => {
+        isLoader: true,
+      },
+    })
+  );
   dispatch({
-    type: ACTIONS.SET_LOADING,
+    type: ACTIONS.SET_PARTICIPANT_LOADING,
+    payload: true,
+  });
+  try {
+    const {
+      data: { data },
+      status,
+    } = await API.getAvailableTournament(id);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch(
+        updateModal({
+          payload: {
+            isLoader: false,
+          },
+        })
+      );
+      dispatch({
+        type: ACTIONS.SET_PARTICIPANT_LOADING,
+        payload: false,
+      });
+    }
+    return response;
+  } catch (error) {
+    const message = Message.exception(error);
+    dispatch(
+      updateModal({
+        payload: {
+          isLoader: false,
+        },
+      })
+    );
+    dispatch({
+      type: ACTIONS.SET_PARTICIPANT_LOADING,
+      payload: false,
+    });
+    snackBarUpdate({
+      payload: {
+        message,
+        status: true,
+        type: "error",
+      },
+    })(dispatch);
+    return error;
+  }
+};
+
+export const getAvailableQuota = (id: any) => async (dispatch: Function) => {
+  dispatch(
+    updateModal({
+      payload: {
+        isLoader: true,
+      },
+    })
+  );
+  dispatch({
+    type: ACTIONS.SET_PARTICIPANT_LOADING,
     payload: true
   });
   try {
-    const { data: { data }, status } = await API.search(term, perPage);
+    const {
+      data: { data },
+      status,
+    } = await API.getAvailableQuota(id);
+    let response = [];
+    if (status === 200) {
+      response = data;
+      dispatch(
+        updateModal({
+          payload: {
+            isLoader: false,
+          },
+        })
+      );
+      dispatch({
+        type: ACTIONS.SET_PARTICIPANT_LOADING,
+        payload: false
+      });
+    }
+    return response;
+  } catch (error) {
+    const message = Message.exception(error);
+    dispatch(
+      updateModal({
+        payload: {
+          isLoader: false,
+        },
+      })
+    );
+    dispatch({
+      type: ACTIONS.SET_PARTICIPANT_LOADING,
+      payload: false
+    });
+    snackBarUpdate({
+      payload: {
+        message,
+        status: true,
+        type: "error",
+      },
+    })(dispatch);
+    return error;
+  }
+};
+
+export const getAvailablePlayerTournament = (id: any) => async (
+  dispatch: Function
+) => {
+  dispatch({
+    type: ACTIONS.SET_PARTICIPANT_LOADING,
+    payload: true,
+  });
+  try {
+    const {
+      data: { data },
+      status,
+    } = await API.getAvailablePlayerTournament(id);
+    let response = [];
+    if (status === 200) {
+      response = data;
+    }
+    return response;
+  } catch (error) {
+    const message = Message.exception(error);
+    snackBarUpdate({
+      payload: {
+        message,
+        status: true,
+        type: "error",
+      },
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_PARTICIPANT_LOADING,
+      payload: false,
+    });
+    dispatch({
+      type: ACTIONS.SET_PARTICIPANT_LOADING,
+      payload: false,
+    });
+    return error;
+  }
+};
+
+export const search = (term: string, perPage: number = 8) => async (
+  dispatch: Function
+) => {
+  dispatch({
+    type: ACTIONS.SET_LOADING,
+    payload: true,
+  });
+  try {
+    const {
+      data: { data },
+      status,
+    } = await API.search(term, perPage);
     let response = [];
     if (status === 200) {
       response = data;
@@ -249,20 +379,20 @@ export const search = (term: string, perPage: number = 8) => async (dispatch: Fu
         perPage: data.per_page,
         prevPageUrl: data.prev_page_url,
         currentPage: data.current_page,
-      }
+      };
       response = data.data;
       dispatch({
         type: ACTIONS.GET_ALL,
-        payload: response
+        payload: response,
       });
       dispatch({
         type: ACTIONS.SET_PAGINATION,
-        payload: pagination
+        payload: pagination,
       });
     }
     dispatch({
       type: ACTIONS.SET_LOADING,
-      payload: false
+      payload: false,
     });
     return response;
   } catch (error) {
@@ -270,12 +400,12 @@ export const search = (term: string, perPage: number = 8) => async (dispatch: Fu
       payload: {
         message: error.message,
         status: true,
-        type: "error"
-      }
+        type: "error",
+      },
     })(dispatch);
     dispatch({
       type: ACTIONS.SET_LOADING,
-      payload: false
+      payload: false,
     });
     return error;
   }
@@ -284,7 +414,7 @@ export const search = (term: string, perPage: number = 8) => async (dispatch: Fu
 export const create = (body: object) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
-    payload: true
+    payload: true,
   });
   try {
     const response = await API.create(body);
@@ -296,49 +426,53 @@ export const create = (body: object) => async (dispatch: Function) => {
         payload: {
           message: "Evento Creado!",
           type: "success",
-          status: true
-        }
+          status: true,
+        },
       })(dispatch);
       dispatch(getAll());
       dispatch(
         updateModal({
           payload: {
             status: false,
-            element: null
-          }
+            element: null,
+          },
         })
       );
       dispatch({
         type: ACTIONS.SET_LOADING,
-        payload: false
+        payload: false,
       });
     }
     return createresponse;
   } catch (error) {
-    let message = 'General Error';
+    let message = "General Error";
     if (error && error.response) {
-      const { data: { message: msg } } = error.response; 
-      message = msg
+      const {
+        data: { message: msg },
+      } = error.response;
+      message = msg;
     }
     snackBarUpdate({
       payload: {
         message,
         type: "error",
-        status: true
-      }
+        status: true,
+      },
     })(dispatch);
     dispatch({
       type: ACTIONS.SET_LOADING,
-      payload: false
+      payload: false,
     });
     return error;
   }
 };
 
-export const createParticipant = (body: object) => async (dispatch: Function) => {
+export const createParticipant = (body: object) => async (
+  dispatch: Function
+) => {
   dispatch({
     type: ACTIONS.SET_PARTICIPANT_LOADING,
-    payload: true
+    payload: true,
   });
   try {
     const response = await API.createParticipant(body);
@@ -350,74 +484,85 @@ export const createParticipant = (body: object) => async (dispatch: Function) =>
         payload: {
           message: "Su solicitud de inscripcion ha sido recibida exitosamente!",
           type: "success",
-          status: true
-        }
+          status: true,
+        },
       })(dispatch);
       dispatch(
         updateModal({
           payload: {
             status: false,
-            element: null
-          }
+            element: null,
+          },
         })
       );
       dispatch({
         type: ACTIONS.SET_PARTICIPANT_LOADING,
-        payload: false
+        payload: false,
       });
     }
     return createresponse;
   } catch (error) {
-    let message = 'General Error';
+    let message = "General Error";
     if (error && error.response) {
-      const { data: { message: msg } } = error.response; 
-      message = msg
+      const {
+        data: { message: msg },
+      } = error.response;
+      message = msg;
     }
     snackBarUpdate({
       payload: {
         message,
         type: "error",
-        status: true
-      }
+        status: true,
+      },
     })(dispatch);
     dispatch({
       type: ACTIONS.SET_PARTICIPANT_LOADING,
-      payload: false
+      payload: false,
     });
     throw error;
   }
 };
 
 export const get = (id: number) => async (dispatch: Function) => {
-  dispatch(updateModal({
-    payload: {
-      isLoader: true,
-    }
-  }));
+  dispatch(
+    updateModal({
+      payload: {
+        isLoader: true,
+      },
+    })
+  );
   try {
-    const { data: { data }, status } = await API.get(id);
+    const {
+      data: { data },
+      status,
+    } = await API.get(id);
     let response = [];
     if (status === 200) {
       response = data;
     }
-    dispatch(updateModal({
-      payload: {
-        isLoader: false,
-      }
-    }));
+    dispatch(
+      updateModal({
+        payload: {
+          isLoader: false,
+        },
+      })
+    );
     return response;
   } catch (error) {
-    dispatch(updateModal({
-      payload: {
-        isLoader: false,
-      }
-    }));
+    dispatch(
+      updateModal({
+        payload: {
+          isLoader: false,
+        },
+      })
+    );
     snackBarUpdate({
       payload: {
         message: error.message,
         type: "error",
-        status: true
-      }
+        status: true,
+      },
     })(dispatch);
     return error;
   }
@@ -426,7 +571,7 @@ export const get = (id: number) => async (dispatch: Function) => {
 export const update = (body: object) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.SET_LOADING,
-    payload: true
+    payload: true,
   });
   try {
     const { data, status } = await API.update(body);
@@ -434,46 +579,48 @@ export const update = (body: object) => async (dispatch: Function) => {
     if (status === 200) {
       response = {
         data,
-        status
+        status,
       };
       snackBarUpdate({
         payload: {
           message: "Evento actualizado!",
           type: "success",
-          status: true
-        }
+          status: true,
+        },
       })(dispatch);
       dispatch(
         updateModal({
           payload: {
             status: false,
-            element: null
-          }
+            element: null,
+          },
         })
       );
       dispatch(getAll());
       dispatch({
         type: ACTIONS.SET_LOADING,
-        payload: false
+        payload: false,
       });
     }
     return response;
   } catch (error) {
-    let message = 'General Error';
+    let message = "General Error";
     if (error && error.response) {
-      const { data: { message: msg } } = error.response; 
-      message = msg
+      const {
+        data: { message: msg },
+      } = error.response;
+      message = msg;
     }
     snackBarUpdate({
       payload: {
         message,
         type: "error",
-        status: true
-      }
+        status: true,
+      },
     })(dispatch);
     dispatch({
       type: ACTIONS.SET_LOADING,
-      payload: false
+      payload: false,
     });
     return error;
   }
@@ -486,14 +633,14 @@ export const remove = (id: number) => async (dispatch: Function) => {
     if (status === 200) {
       response = {
         data,
-        status
+        status,
       };
       snackBarUpdate({
         payload: {
           message: "Evento  Eliminado!",
           type: "success",
-          status: true
-        }
+          status: true,
+        },
       })(dispatch);
       dispatch(getAll());
     }
@@ -504,20 +651,27 @@ export const remove = (id: number) => async (dispatch: Function) => {
       payload: {
         message,
         type: "error",
-        status: true
-      }
+        status: true,
+      },
     })(dispatch);
     return error;
   }
 };
 
-export const getInscriptions = (page: number = 1, perPage: number = 8, query: object = {}) => async (dispatch: Function) => {
+export const getInscriptions = (
+  page: number = 1,
+  perPage: number = 8,
+  query: object = {}
+) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.GET_INSCRIPTIONS_LOADING,
-    payload: true
+    payload: true,
   });
   try {
-    const { data: { data }, status } = await API.getInscriptions(page, perPage, query);
+    const {
+      data: { data },
+      status,
+    } = await API.getInscriptions(page, perPage, query);
     let response = [];
     if (status === 200) {
       const pagination = {
@@ -525,19 +679,19 @@ export const getInscriptions = (page: number = 1, perPage: number = 8, query: ob
         perPage: data.per_page,
         prevPageUrl: data.prev_page_url,
         currentPage: data.current_page,
-      }
+      };
       response = data;
       dispatch({
         type: ACTIONS.GET_INSCRIPTIONS,
-        payload: response
+        payload: response,
       });
       dispatch({
         type: ACTIONS.SET_PAGINATION,
-        payload: pagination
+        payload: pagination,
       });
       dispatch({
         type: ACTIONS.GET_INSCRIPTIONS_LOADING,
-        payload: false
+        payload: false,
       });
     }
     return response;
@@ -546,24 +700,32 @@ export const getInscriptions = (page: number = 1, perPage: number = 8, query: ob
       payload: {
         message: error.message,
         status: true,
-        type: "error"
-      }
+        type: "error",
+      },
     })(dispatch);
     dispatch({
       type: ACTIONS.GET_INSCRIPTIONS_LOADING,
-      payload: false
+      payload: false,
     });
     return error;
-  }  
+  }
 };
 
-export const getInscriptionsByParticipant = (page: number = 1, perPage: number = 8, query: object = {}) => async (dispatch: Function) => {
+export const getInscriptionsByParticipant = (
+  page: number = 1,
+  perPage: number = 8,
+  query: object = {}
+) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.GET_INSCRIPTIONS_LOADING,
-    payload: true
+    payload: true,
   });
   try {
-    const { data, status } = await API.getInscriptionsByParticipant(page, perPage, query);
+    const { data, status } = await API.getInscriptionsByParticipant(
+      page,
+      perPage,
+      query
+    );
     let response = [];
     if (status === 200) {
       const pagination = {
@@ -571,19 +733,19 @@ export const getInscriptionsByParticipant = (page: number = 1, perPage: number =
         perPage: data.per_page,
         prevPageUrl: data.prev_page_url,
         currentPage: data.current_page,
-      }
+      };
       response = data.data;
       dispatch({
         type: ACTIONS.GET_INSCRIPTIONS,
-        payload: response
+        payload: response,
       });
       dispatch({
         type: ACTIONS.SET_PAGINATION,
-        payload: pagination
+        payload: pagination,
       });
       dispatch({
         type: ACTIONS.GET_INSCRIPTIONS_LOADING,
-        payload: false
+        payload: false,
       });
     }
     return response;
@@ -592,24 +754,31 @@ export const getInscriptionsByParticipant = (page: number = 1, perPage: number =
       payload: {
         message: error.message,
         status: true,
-        type: "error"
-      }
+        type: "error",
+      },
     })(dispatch);
     dispatch({
       type: ACTIONS.GET_INSCRIPTIONS_LOADING,
-      payload: false
+      payload: false,
     });
     return error;
-  }  
+  }
 };
 
-export const getInscriptionsReport = (page: number = 1, perPage: number = 8, query: object = {}) => async (dispatch: Function) => {
+export const getInscriptionsReport = (
+  page: number = 1,
+  perPage: number = 8,
+  query: object = {}
+) => async (dispatch: Function) => {
   dispatch({
     type: ACTIONS.GET_INSCRIPTIONS_LOADING,
-    payload: true
+    payload: true,
   });
   try {
-    const { data: { data }, status } = await API.getInscriptionsReport(page, perPage, query);
+    const {
+      data: { data },
+      status,
+    } = await API.getInscriptionsReport(page, perPage, query);
     let response = [];
     if (status === 200) {
       const pagination = {
@@ -617,19 +786,19 @@ export const getInscriptionsReport = (page: number = 1, perPage: number = 8, que
         perPage: data.per_page,
         prevPageUrl: data.prev_page_url,
         currentPage: data.current_page,
-      }
+      };
       response = data;
       dispatch({
         type: ACTIONS.GET_INSCRIPTIONS_REPORT,
-        payload: response
+        payload: response,
       });
       dispatch({
         type: ACTIONS.SET_PAGINATION,
-        payload: pagination
+        payload: pagination,
       });
       dispatch({
         type: ACTIONS.GET_INSCRIPTIONS_LOADING,
-        payload: false
+        payload: false,
       });
     }
     return response;
@@ -638,29 +807,31 @@ export const getInscriptionsReport = (page: number = 1, perPage: number = 8, que
       payload: {
         message: error.message,
         status: true,
-        type: "error"
-      }
+        type: "error",
+      },
     })(dispatch);
     dispatch({
       type: ACTIONS.GET_INSCRIPTIONS_LOADING,
-      payload: false
+      payload: false,
     });
     return error;
-  }  
+  }
 };
 
-export const getInscripcionsReportPDF = (body: object) => async (dispatch: Function) => {
+export const getInscripcionsReportPDF = (body: object) => async (
+  dispatch: Function
+) => {
   dispatch({
     type: ACTIONS.SET_REPORT_LOADING,
-    payload: true
-  })
+    payload: true,
+  });
   Axios({
     url: `${Prefix.api}/tournament-inscriptions-report-pdf`,
     method: "GET",
     responseType: "blob", // important
     params: { ...body },
-    headers: headers()
-  }).then(response => {
+    headers: headers(),
+  }).then((response) => {
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
@@ -669,7 +840,7 @@ export const getInscripcionsReportPDF = (body: object) => async (dispatch: Funct
     link.click();
     dispatch({
       type: ACTIONS.SET_REPORT_LOADING,
-      payload: false
+      payload: false,
     });
   });
 };
@@ -687,17 +858,19 @@ export const getParticipant = (id: number) => async (dispatch: Function) => {
       payload: {
         message: error.message,
         type: "error",
-        status: true
-      }
+        status: true,
+      },
     })(dispatch);
     return error;
   }
 };
 
-export const updateParticipant = (body: object, comment = false) => async (dispatch: Function) => {
+export const updateParticipant = (body: object, comment = false) => async (
+  dispatch: Function
+) => {
   dispatch({
     type: ACTIONS.SET_PARTICIPANT_LOADING,
-    payload: true
+    payload: true,
   });
   try {
     const { data, status } = await API.updateParticipant(body);
@@ -705,47 +878,51 @@ export const updateParticipant = (body: object, comment = false) => async (dispa
     if (status === 200) {
       response = {
         data,
-        status
+        status,
       };
       snackBarUpdate({
         payload: {
-          message: comment ? "Comentario Actualizado!" : "Inscripcion Actualizada",
+          message: comment
+            ? "Comentario Actualizado!"
+            : "Inscripcion Actualizada",
           type: "success",
-          status: true
-        }
+          status: true,
+        },
       })(dispatch);
 
       dispatch(
         updateModal({
           payload: {
             status: false,
-            element: null
-          }
+            element: null,
+          },
         })
       );
       dispatch(getInscriptions());
       dispatch({
         type: ACTIONS.SET_PARTICIPANT_LOADING,
-        payload: false
+        payload: false,
       });
     }
     return response;
   } catch (error) {
-    let message = 'General Error';
+    let message = "General Error";
     if (error && error.response) {
-      const { data: { message: msg } } = error.response; 
-      message = msg
+      const {
+        data: { message: msg },
+      } = error.response;
+      message = msg;
     }
     snackBarUpdate({
       payload: {
         message,
         type: "error",
-        status: true
-      }
+        status: true,
+      },
     })(dispatch);
     dispatch({
       type: ACTIONS.SET_PARTICIPANT_LOADING,
-      payload: false
+      payload: false,
     });
     return error;
   }

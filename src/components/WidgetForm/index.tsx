@@ -106,7 +106,6 @@ const WidgetForm: FunctionComponent<ComponentProps> = ({
                     roleList.itemsToAdd.push(element);
                 }
             });
-            console.log('add roleList ', roleList);
         }
         if (type === "remove") {
             console.log('remov selected ', selected);
@@ -186,9 +185,7 @@ const WidgetForm: FunctionComponent<ComponentProps> = ({
                     noValidate
                 >
                     <Grid container spacing={2}>
-                        <Grid item xs={4}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
+                    <Grid item xs={4}>
                                     <CustomTextField
                                         placeholder="Nombre"
                                         field="name"
@@ -200,7 +197,7 @@ const WidgetForm: FunctionComponent<ComponentProps> = ({
                                         }
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={4}>
                                     <CustomTextField
                                         placeholder="Clave"
                                         field="slug"
@@ -213,7 +210,7 @@ const WidgetForm: FunctionComponent<ComponentProps> = ({
                                     />
 
                                 </Grid>
-                                <Grid item xs={12}>
+                                <Grid item xs={4}>
                                     <CustomTextField
                                         placeholder="Descripcion"
                                         field="description"
@@ -225,9 +222,7 @@ const WidgetForm: FunctionComponent<ComponentProps> = ({
                                         }
                                     />
                                 </Grid>
-                            </Grid>
-                        </Grid>
-                        <Grid item xs={8}>
+                        <Grid item xs={12}>
                             <Grid item xs={12}>
                                 {list.length > 0 && (
                                     <TransferList

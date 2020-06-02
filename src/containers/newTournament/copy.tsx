@@ -117,7 +117,7 @@ export default function NewTournament() {
     const renderTournaments = () => {
         return (
             <Grid container spacing={3} style={{ marginTop: 30 }}>
-                <Grid item xs={12}>Torneos Activos</Grid>
+                <Grid item xs={12}>Eventos Activos</Grid>
                 {
                     tournamentList.map((element: any, i: number) => {
                         const active = selectedTournament && selectedTournament.id === element.id ? classes.activeCard : "";
@@ -202,7 +202,7 @@ export default function NewTournament() {
         return (
             <Grid container spacing={3}>
                 <Grid item xs={12}><strong>Categoria:</strong> {selectedCategory.description}</Grid>
-                <Grid item xs={12}><strong>Nombre del Torneo:</strong> {selectedTournament.description}</Grid>
+                <Grid item xs={12}><strong>Nombre del Evento:</strong> {selectedTournament.description}</Grid>
                 <Grid item xs={6}><strong>Fecha:</strong> {moment(selectedTournament.date_register_from).format("DD-MM-YY")}</Grid>
                 <Grid item xs={6}><strong>Fin Registro:</strong> {moment(selectedTournament.date_register_to).format("DD-MM-YY")}</Grid>
                 <Grid item xs={12}><strong>Tipo de Reglas:</strong> {selectedTournament.rules.description}</Grid>
@@ -260,7 +260,7 @@ export default function NewTournament() {
     }
 
     function getSteps() {
-        return ['Seleccione Torneo', 'Registro de Torneo', 'Confirmacion'];
+        return ['Seleccione Evento', 'Registro de Evento', 'Confirmacion'];
     }
 
     function getStepContent(step: number) {
