@@ -47,15 +47,16 @@ const Widgtet: FunctionComponent<FormComponentProps> = ({
   const classes = useStyles();
   const history = useHistory();
 
-  const renderLink = () => {
+  const handleLink = () => {
     if(internal) {
-      return <div onClick={() => history.push(link)} style={{ cursor: 'pointer', color: "#2980b9" }} > Enlace </div>;
+      window.open(link,'_blank');
+    } else {
+      window.open(link,'_blank');
     }
-    return <div></div>;
   }
 
   return (
-    <Card className="widget-container__card">
+    <Card className="widget-container__card" onClick={() => handleLink()} style={{ cursor: link ? 'pointer' : '' }}>
       <div className="widget-container__widget">
         <div className="widget-container__avatar">
           <Avatar className={classes.blue}>
@@ -67,11 +68,7 @@ const Widgtet: FunctionComponent<FormComponentProps> = ({
           {subTitle && (
             <div className="widget-container__detail-title">{subTitle}</div>
           )}
-          {
-            link ? renderLink()
-              :
-              <div className="widget-container__detail-amount">{amount}</div>
-          }
+          { !link &&  (<div className="widget-container__detail-amount">{amount}</div>) }
         </div>
       </div>
     </Card>

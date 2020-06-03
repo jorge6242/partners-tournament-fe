@@ -103,6 +103,7 @@ type FormData = {
     t_categories_id: number;
     t_category_type_id: number;
     picture: string;
+    paypal_id: string;
 };
 
 type ComponentProps = {
@@ -187,7 +188,8 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                     t_category_type_id,
                     payments,
                     groups,
-                    picture
+                    picture,
+                    paypal_id
                 } = response;
                 setValue("description", description);
                 setValue("max_participants", max_participants);
@@ -206,6 +208,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                 setValue("t_categories_id", t_categories_id);
                 setValue("t_category_type_id", t_category_type_id);
                 setValue("picture", picture);
+                setValue("paypal_id", paypal_id);
                 setImage({ ...image, preview: picture });
                 description_details && setDescriptionDetailsContent(description_details);
                 description_price && setDescriptionPriceContent(description_price);
@@ -652,6 +655,17 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                                 errorsField={errors.amount}
                                                 errorsMessageField={
                                                     errors.amount && errors.amount.message
+                                                }
+                                            />
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <CustomTextField
+                                                placeholder="Paypal ID"
+                                                field="paypal_id"
+                                                register={register}
+                                                errorsField={errors.paypal_id}
+                                                errorsMessageField={
+                                                    errors.paypal_id && errors.paypal_id.message
                                                 }
                                             />
                                         </Grid>
