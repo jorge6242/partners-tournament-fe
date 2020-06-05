@@ -59,7 +59,7 @@ export default function ParticipantInscriptions() {
   }
 
   const handlePayment = (row: any) => {
-    const clientIdTest = 'Ab8frqGsF4rlmjIH9mS9kTdaGo2-vLh-v0PK5G1ZxeKBSTbAkygWF3eRCPYydHRtQBGlRJyLPDY4v5Aw';
+    //const clientIdTest = 'Ab8frqGsF4rlmjIH9mS9kTdaGo2-vLh-v0PK5G1ZxeKBSTbAkygWF3eRCPYydHRtQBGlRJyLPDY4v5Aw';
     dispatch(
       updateModal({
         payload: {
@@ -69,7 +69,7 @@ export default function ParticipantInscriptions() {
             customId={`${row.tournament.id}-${row.user.doc_id}`}
             amountDetail={row.tournament.amount}
             amount={row.tournament.amount}
-            client={clientIdTest}
+            client={row.tournament.paypal_id}
             handleOrder={(order: string) => handleOrder(order, row.id)}
           />,
         }
@@ -79,7 +79,6 @@ export default function ParticipantInscriptions() {
 
   const renderPaypal = (id: any) => {
     const inscription = list.find((e: any) => e.id == id);
-    console.log('inscription.tournament.paypal_id ', inscription.tournament.paypal_id);
     if(inscription.tournament.paypal_id === null || inscription.tournament.paypal_id === '' ) {
       return <div></div>
     }
