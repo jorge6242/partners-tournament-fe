@@ -15,9 +15,11 @@ export default interface Columns {
     | "user"
     | "tournament"
     | "payment"
+    | "nro_comprobante"
+    | "fec_pago"
     | "user_notes";
   label: string;
-  minWidth?: number;
+  minWidth?: any;
   align?: "left" | "right" | "center";
   component?: any;
 }

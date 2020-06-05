@@ -22,6 +22,9 @@ import CustomSearch from '../../components/FormElements/CustomSearch';
 import TournamentUserCommentForm from '../../components/TournamentUserCommentForm';
 import { Grid } from "@material-ui/core";
 import snackBarUpdate from "../../actions/snackBarActions";
+import logo from './paypal-paid.jpeg';
+import moment from "moment";
+import MultipleSwitch from "../../components/common/MultipleSwitch";
 
 const useStyles = makeStyles(() => ({
   headerContainer: {
@@ -53,6 +56,7 @@ const useStyles = makeStyles(() => ({
 export default function Inscriptions() {
   const [selectedCategory, setSelectedCategory] = useState<any>(0);
   const [selectedTournament, setSelectedTournament] = useState<any>(0);
+  const [selectedBookinType, setSelectedBookingType] = useState<any>(0);
   const [selectedSearch, setSelectedSearch] = useState<any>("");
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -87,6 +91,56 @@ export default function Inscriptions() {
       })
     );
   }
+
+  const renderPaypalDetails = (row: any) => {
+    return (
+      <Grid container spacing={3}>
+        <Grid item xs={12} style={{ fontWeight: 'bold' }} >Detalles de Pago Paypal</Grid>
+        <Grid item xs={12}>Nro de Comprobante: {row.nro_comprobante} </Grid>
+        <Grid item xs={12}>Fecha de Pago: {moment(row.fec_pago).format('YYYY-MM-DD hh:mm:ss A')} </Grid>
+      </Grid>
+    )
+  }
+
+  const handlePaypal = (row: any) => {
+    dispatch(
+      updateModal({
+        payload: {
+          status: true,
+          element: renderPaypalDetails(row)
+        }
+      })
+    );
+  }
+
+  const renderPaypal = (id: any) => {
+    const inscription = list.find((e: any) => e.id == id);
+    if (inscription && inscription.nro_comprobante !== null && inscription.fec_pago !== null && inscription.canal_pago === "paypal") {
+      return <div onClick={() => handlePaypal(inscription)}><img src={logo} alt="example image" style={{ cursor: 'pointer' }} width="35" height="25" /></div>
+    }
+    return <div></div>
+
+  }
+
+  const renderInscriptionStatus = (id: any) => {
+    const inscription = list.find((e: any) => e.id == id);
+    if (inscription) {
+      return inscription;
+    }
+    return <div></div>
+  }
+
+  const handleSwitchStatus = async (currentStatus: string, row: any) => {
+    let status = '';
+    if (currentStatus !== '2') {
+      status = currentStatus;
+      const data = {
+        id: row.id,
+        status
+      };
+      await dispatch(updateParticipant(data));
+    }
+  };
 
   const columns: Columns[] = [
     {
@@ -140,7 +194,7 @@ export default function Inscriptions() {
     {
       id: "attach_file",
       label: "Comprobante",
-      minWidth: 10,
+      minWidth: 1,
       align: "center",
       component: (value: any) => {
         return (
@@ -202,6 +256,43 @@ export default function Inscriptions() {
       component: (value: any) => <span><strong>{value.value}</strong></span>
     },
     {
+      id: "tournament",
+      label: "Modalidad",
+      minWidth: 10,
+      align: "left",
+      component: (value: any) => {
+        let status = '';
+        let backgroundColor = '';
+        if (value.value.booking_type === "1") {
+          status = "Evento";
+          backgroundColor = '#2ecc71';
+        }
+        if (value.value.booking_type === "2") {
+          status = "Sorteo";
+          backgroundColor = '#2980b9';
+        }
+        return (
+          <Chip
+            label={status}
+            style={{
+              backgroundColor,
+              color: "white",
+              fontWeight: "bold",
+              fontSize: "10px"
+            }}
+            size="small"
+          />
+        )
+      }
+    },
+    {
+      id: "id",
+      label: "Paypal",
+      minWidth: 10,
+      align: "right",
+      component: (value: any) => renderPaypal(value.value),
+    },
+    {
       id: "status",
       label: "Status",
       minWidth: 10,
@@ -209,15 +300,19 @@ export default function Inscriptions() {
       component: (value: any) => {
         let status = '';
         let backgroundColor = '';
-        if(value.value === "0") {
+        if (value.value === "0") {
           status = "Pendiente";
           backgroundColor = '#2980b9';
         }
-        if(value.value === "1") {
+        if (value.value === "1") {
           status = "Aceptado";
           backgroundColor = '#2ecc71';
         }
-        if(value.value === "-1") {
+        if (value.value === "2") {
+          status = "Ganador";
+          backgroundColor = '#2ecc71';
+        }
+        if (value.value === "-1") {
           status = "Rechazado";
           backgroundColor = '#e74c3c';
         }
@@ -235,6 +330,21 @@ export default function Inscriptions() {
         )
       }
     },
+    {
+      id: "id",
+      label: "",
+      minWidth: 10,
+      align: "right",
+      component: (value: any) => {
+        const inscription = renderInscriptionStatus(value.value);
+        const pattern = [
+          { status: "0", color: "#2980b9" },
+          { status: "1", color: "#2ecc71" },
+          { status: "-1", color: "#e74c3c" },
+        ]
+        return <MultipleSwitch pattern={pattern} selected={inscription} handleClick={handleSwitchStatus} />
+      },
+    },
   ];
 
   useEffect(() => {
@@ -246,32 +356,6 @@ export default function Inscriptions() {
     fetchData();
   }, [dispatch]);
 
-  const handleEdit = (id: number) => {
-    dispatch(
-      updateModal({
-        payload: {
-          status: true,
-          element: <LockerForm id={id} />
-        }
-      })
-    );
-  };
-
-  const handleCreate = () => {
-    dispatch(
-      updateModal({
-        payload: {
-          status: true,
-          element: <LockerForm />
-        }
-      })
-    );
-  }
-
-  const handleDelete = (id: number) => {
-    dispatch(remove(id));
-  };
-
   const handleChangePage = (newPage: number) => {
     const page = pagination.currentPage === 1 ? 2 : newPage;
     dispatch(getAll(page, pagination.perPage))
@@ -281,23 +365,7 @@ export default function Inscriptions() {
     dispatch(getAll(page, perPage));
   }
 
-  const handleSwitchStatus = async (id: number, relationStatus: string) => {
-    let status = '';
-    if(relationStatus === '0') {
-      status = '1';
-    } else {
-      status = relationStatus === "1" ? '-1' : '1';
-    }
-    
-    
-    const data = {
-      id,
-      status
-    };
-    await dispatch(updateParticipant(data));
-  };
-
-  const handleCategory =(event: any) => {
+  const handleCategory = (event: any) => {
     setSelectedCategory(0);
     setSelectedTournament(0);
     dispatch(getByCategory(event.target.value))
@@ -308,15 +376,20 @@ export default function Inscriptions() {
     setSelectedTournament(event.target.value);
   }
 
+  const handleBookingType = (event: any) => {
+    setSelectedBookingType(event.target.value);
+  }
+
   const handleSearch = () => {
     const { currentPage, perPage } = pagination;
     const query = {
       category: selectedCategory,
       tournament: selectedTournament,
-      term: selectedSearch
+      term: selectedSearch,
+      // bookingType: selectedBookinType
     }
-    if(selectedCategory > 0 && selectedTournament > 0){
-      dispatch(getAll(currentPage, perPage, query ));
+    if (selectedCategory > 0 && selectedTournament > 0) {
+      dispatch(getAll(currentPage, perPage, query));
     } else {
       dispatch(snackBarUpdate({
         payload: {
@@ -326,7 +399,7 @@ export default function Inscriptions() {
         }
       }))
     }
-    
+
   }
 
   const setInputSearch = (e: any) => setSelectedSearch(e.target.value);
@@ -335,16 +408,30 @@ export default function Inscriptions() {
     <Grid container spacing={2}>
       <Grid item xs={12}>Inscripciones de Eventos</Grid>
       <Grid item xs={2}>
-      <TextField
-            margin="dense"
-            name="term"
-            label="Buscar"
-            type="term"
-            id="term"
-            size="small"
-            onChange={setInputSearch}
-          />
+        <TextField
+          margin="dense"
+          name="term"
+          label="Buscar"
+          type="term"
+          id="term"
+          size="small"
+          onChange={setInputSearch}
+        />
       </Grid>
+      {/* <Grid item xs={2}>
+        <div>
+          <select
+            className={classes.select}
+            name="modalidad"
+            onChange={handleBookingType}
+            style={{ fontSize: "13px" }}
+          >
+            <option value={0}>Seleccione Modalidad</option>
+            <option value={1}>Evento</option>
+            <option value={2}>Sorteo</option>
+          </select>
+        </div>
+      </Grid> */}
       <Grid item xs={2}>
         <div>
           <select
@@ -380,13 +467,13 @@ export default function Inscriptions() {
         )
       }
       <Grid item xs={3} style={{ marginTop: 20 }}>
-        <Button 
-          size="small" 
-          color="primary" 
+        <Button
+          size="small"
+          color="primary"
           variant="contained"
           className={classes.margin}
           onClick={() => handleSearch()}
-          >
+        >
           Buscar
         </Button>
       </Grid>
@@ -398,8 +485,6 @@ export default function Inscriptions() {
           loading={loading}
           onChangePage={handleChangePage}
           onChangePerPage={handlePerPage}
-          handleSwitch={handleSwitchStatus}
-          isInscription
         />
       </Grid>
     </Grid>

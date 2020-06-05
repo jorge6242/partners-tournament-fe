@@ -124,15 +124,24 @@ const API = {
       { headers: headers() }
     );
   },
+  updateParticipantPayment(body: object) {
+    return AXIOS.put(
+      `${Prefix.api}/tournament-participant-update-payment`,
+      {
+        ...body,
+      },
+      { headers: headers() }
+    );
+  },
   remove(id: number) {
     return AXIOS.delete(`${Prefix.api}/tournament/${id}`, {
       headers: headers(),
     });
   },
-  search(term: string, perPage: number) {
+  search(query: object, perPage: number) {
     return AXIOS.get(`${Prefix.api}/tournament-search`, {
       params: {
-        term,
+        ...query,
         perPage,
       },
       headers: headers(),

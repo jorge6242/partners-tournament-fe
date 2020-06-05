@@ -359,7 +359,7 @@ export const getAvailablePlayerTournament = (id: any) => async (
   }
 };
 
-export const search = (term: string, perPage: number = 8) => async (
+export const search = (query: object, perPage: number = 8) => async (
   dispatch: Function
 ) => {
   dispatch({
@@ -370,7 +370,7 @@ export const search = (term: string, perPage: number = 8) => async (
     const {
       data: { data },
       status,
-    } = await API.search(term, perPage);
+    } = await API.search(query, perPage);
     let response = [];
     if (status === 200) {
       response = data;
@@ -669,18 +669,18 @@ export const getInscriptions = (
   });
   try {
     const {
-      data: { data },
+      data,
       status,
     } = await API.getInscriptions(page, perPage, query);
     let response = [];
-    if (status === 200) {
+    if (status === 200) {;
       const pagination = {
         total: data.total,
         perPage: data.per_page,
         prevPageUrl: data.prev_page_url,
         currentPage: data.current_page,
       };
-      response = data;
+      response = data.data;
       dispatch({
         type: ACTIONS.GET_INSCRIPTIONS,
         payload: response,
@@ -835,7 +835,7 @@ export const getInscripcionsReportPDF = (body: object) => async (
     const url = window.URL.createObjectURL(new Blob([response.data]));
     const link = document.createElement("a");
     link.href = url;
-    link.setAttribute("download", "accessControlReport.pdf");
+    link.setAttribute("download", "event-report.pdf");
     document.body.appendChild(link);
     link.click();
     dispatch({
@@ -899,6 +899,67 @@ export const updateParticipant = (body: object, comment = false) => async (
         })
       );
       dispatch(getInscriptions());
+      dispatch({
+        type: ACTIONS.SET_PARTICIPANT_LOADING,
+        payload: false,
+      });
+    }
+    return response;
+  } catch (error) {
+    let message = "General Error";
+    if (error && error.response) {
+      const {
+        data: { message: msg },
+      } = error.response;
+      message = msg;
+    }
+    snackBarUpdate({
+      payload: {
+        message,
+        type: "error",
+        status: true,
+      },
+    })(dispatch);
+    dispatch({
+      type: ACTIONS.SET_PARTICIPANT_LOADING,
+      payload: false,
+    });
+    return error;
+  }
+};
+
+export const updateParticipantPayment = (body: object) => async (
+  dispatch: Function
+) => {
+  dispatch({
+    type: ACTIONS.SET_PARTICIPANT_LOADING,
+    payload: true,
+  });
+  try {
+    const { data, status } = await API.updateParticipantPayment(body);
+    let response: any = [];
+    if (status === 200) {
+      response = {
+        data,
+        status,
+      };
+      snackBarUpdate({
+        payload: {
+          message: "Su Pago ha sido registrado",
+          type: "success",
+          status: true,
+        },
+      })(dispatch);
+
+      dispatch(
+        updateModal({
+          payload: {
+            status: false,
+            element: null,
+          },
+        })
+      );
+      dispatch(getInscriptionsByParticipant());
       dispatch({
         type: ACTIONS.SET_PARTICIPANT_LOADING,
         payload: false,

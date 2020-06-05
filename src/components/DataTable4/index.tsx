@@ -43,7 +43,7 @@ const useStyles = makeStyles( (theme: Theme) => createStyles(
       },
     },
     container: {
-      maxHeight: 440
+      maxHeight: 440,
     },
     progress: {
       display: "flex",
@@ -51,11 +51,12 @@ const useStyles = makeStyles( (theme: Theme) => createStyles(
       padding: 10
     },
     tableCellHeader: {
+      padding: 4,
       '&:first-child': {
-        paddingLeft: 10
+        paddingLeft: 5
       },
       '&:last-child': {
-        paddingRight: 10
+        paddingRight: '0px !important'
       }
     },
   }
@@ -66,8 +67,8 @@ interface DataTableProps {
   pagination?: any;
   columns: any;
   isDelete?: boolean;
-  handleEdit?: Function;
-  handleView?: Function;
+  handleEdit?: any;
+  handleView?: any;
   handleDelete?: any;
   loading?: boolean;
   onChangePage?: any;
@@ -77,7 +78,7 @@ interface DataTableProps {
   renderSubRow?: any;
   aditionalColumn?: string;
   aditionalColumnLabel?: string;
-  handleSwitch?: Function;
+  handleSwitch?: any;
   isInscription?: boolean;
 }
 
@@ -124,38 +125,30 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
   const handleConditionSwitch = (row: any) => {
     if(row.status === "0") return false;
     if(row.status === "1") return true;
+    if(row.status === "2") return true;
     if(row.status === "-1") return false;
   }
-
-  const renderLabelColors = (row: any) => {
-    if(isInscription) {
-      if(row.status === "0") return 'blue';
-      if(row.status === "-1") return '#27ae60';
-    }
-    return '#27ae60';
-  }
-
+  
   return (
     <Paper className={classes.root}>
-      <TableContainer className={classes.container}>
-        <Table stickyHeader aria-label="sticky table" size="small">
+      <TableContainer className={classes.container} >
+        <Table aria-label="sticky table" size="small" >
           <TableHead>
-            <TableRow>
+            <TableRow >
               {columns.map((column: any) => (
                 <TableCell
                   key={column.id}
                   align={column.align}
                   className={classes.tableCellHeader}
                   style={{
-                    minWidth: column.minWidth, fontSize
+                    minWidth: column.minWidth, fontSize, fontWeight: 'bold' 
                   }}
                 >
                   {column.label}
                 </TableCell>
               ))}
-              {handleView && <TableCell style={{ minWidth: 5 }}></TableCell>}
-              {handleEdit && <TableCell style={{ minWidth: 5 }}></TableCell>}
-              {handleDelete && <TableCell style={{ minWidth: 5 }}></TableCell>}
+              {handleSwitch && <TableCell style={{ minWidth: 5, }}></TableCell>}
+              <TableCell style={{ minWidth: 6, display: !handleView && !handleEdit && !handleDelete ? 'none' : 'table-cell' }}></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -180,7 +173,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                               key={column.id}
                               align={column.align}
                               className={classes.tableCellHeader}
-                              style={{ fontSize, minWidth: column.minWidth }}
+                              style={{ fontSize, minWidth: column.minWidth}}
                               onClick={() => handleSubRowComponent ? handleSubRowComponent() : {}}
                             >
                               {column.format && typeof value === "number"
@@ -190,14 +183,14 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                           );
                         })}
                         {handleSwitch && (
-                          <TableCell style={{ minWidth: 5, fontSize }}>
+                          <TableCell style={{ minWidth: 6, fontSize }}>
                             <GreenSwitch
                               checked={handleConditionSwitch(row)}
                               onChange={() => handleSwitch(row.id, row.status)}
                             />
                           </TableCell>
                         )}
-                        <TableCell align="right" style={{ minWidth: 5 }}>
+                        <TableCell align="right" style={{ minWidth: 7, display: !handleView && !handleEdit && !handleDelete ? 'none' : 'table-cell' }}>
                           {handleView && (
                             <IconButton
                               aria-label="delete"

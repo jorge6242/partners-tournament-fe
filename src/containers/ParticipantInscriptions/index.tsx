@@ -9,7 +9,7 @@ import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import Chip from "@material-ui/core/Chip";
 import Button from '@material-ui/core/Button';
 
-import { getInscriptionsByParticipant as getAll } from "../../actions/tournamentActions";
+import { getInscriptionsByParticipant as getAll, updateParticipant, updateParticipantPayment } from "../../actions/tournamentActions";
 import { updateModal } from "../../actions/modalActions";
 import DataTable4 from '../../components/DataTable4'
 import Columns from '../../interfaces/InscriptionColumns';
@@ -17,7 +17,8 @@ import TournamentUserCommentForm from '../../components/TournamentUserCommentFor
 import { Grid } from "@material-ui/core";
 import moment from "moment";
 import { useHistory } from "react-router-dom";
-import logo from './paypal-logo.jpeg';
+import logo from './paypal-paid.jpeg';
+import Paypal from "../../components/common/Paypal";
 
 const useStyles = makeStyles(() => ({
   headerContainer: {
@@ -47,14 +48,49 @@ export default function ParticipantInscriptions() {
     },
   } = useSelector((state: any) => state);
 
+  const handleOrder = (order: string, id: string) => {
+    const data = {
+      id,
+      canal_pago: 'paypal',
+      nro_comprobante: order,
+      status: 1
+    }
+    dispatch(updateParticipantPayment(data))
+  }
+
+  const handlePayment = (row: any) => {
+    const clientIdTest = 'Ab8frqGsF4rlmjIH9mS9kTdaGo2-vLh-v0PK5G1ZxeKBSTbAkygWF3eRCPYydHRtQBGlRJyLPDY4v5Aw';
+    dispatch(
+      updateModal({
+        payload: {
+          status: true,
+          element: <Paypal
+            description={row.tournament.description}
+            customId={`${row.tournament.id}-${row.user.doc_id}`}
+            amountDetail={row.tournament.amount}
+            amount={row.tournament.amount}
+            client={clientIdTest}
+            handleOrder={(order: string) => handleOrder(order, row.id)}
+          />,
+        }
+      })
+    );
+  }
 
   const renderPaypal = (id: any) => {
     const inscription = list.find((e: any) => e.id == id);
-    if(inscription && inscription.tournament &&  inscription.tournament.amount > 0 && inscription.status === "1" ) {
-      return <img src={logo} alt="example image" style={{ cursor: 'pointer' }} width="35" height="25" />
+    console.log('inscription.tournament.paypal_id ', inscription.tournament.paypal_id);
+    if(inscription.tournament.paypal_id === null || inscription.tournament.paypal_id === '' ) {
+      return <div></div>
+    }
+    if (inscription && inscription.nro_comprobante === null && inscription.tournament && inscription.tournament.booking_type === "1" && inscription.tournament.amount > 0 && inscription.status === "0") {
+      return <div onClick={() => handlePayment(inscription)}><img src={logo} alt="example image" style={{ cursor: 'pointer' }} width="35" height="25" /></div>
+    }
+    if (inscription && inscription.nro_comprobante === null && inscription.tournament && inscription.tournament.booking_type === "2" && inscription.tournament.amount > 0 && inscription.status === "2") {
+      return <div onClick={() => handlePayment(inscription)}><img src={logo} alt="example image" style={{ cursor: 'pointer' }} width="35" height="25" /></div>
     }
     return <div></div>
-    
+
   }
 
   const columns: Columns[] = [
@@ -136,6 +172,36 @@ export default function ParticipantInscriptions() {
       component: (value: any) => <span><strong>{value.value}</strong></span>
     },
     {
+      id: "tournament",
+      label: "Modalidad",
+      minWidth: 10,
+      align: "left",
+      component: (value: any) => {
+        let status = '';
+        let backgroundColor = '';
+        if (value.value.booking_type === "1") {
+          status = "Evento";
+          backgroundColor = '#2ecc71';
+        }
+        if (value.value.booking_type === "2") {
+          status = "Sorteo";
+          backgroundColor = '#2980b9';
+        }
+        return (
+          <Chip
+            label={status}
+            style={{
+              backgroundColor,
+              color: "white",
+              fontWeight: "bold",
+              fontSize: "10px"
+            }}
+            size="small"
+          />
+        )
+      }
+    },
+    {
       id: "status",
       label: "Status",
       minWidth: 10,
@@ -143,15 +209,19 @@ export default function ParticipantInscriptions() {
       component: (value: any) => {
         let status = '';
         let backgroundColor = '';
-        if(value.value === "0") {
+        if (value.value === "0") {
           status = "Pendiente";
           backgroundColor = '#2980b9';
         }
-        if(value.value === "1") {
+        if (value.value === "1") {
           status = "Aceptado";
           backgroundColor = '#2ecc71';
         }
-        if(value.value === "-1") {
+        if (value.value === "2") {
+          status = "Ganador";
+          backgroundColor = '#2ecc71';
+        }
+        if (value.value === "-1") {
           status = "Rechazado";
           backgroundColor = '#e74c3c';
         }

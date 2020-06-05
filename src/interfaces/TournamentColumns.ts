@@ -11,6 +11,7 @@ export default interface Columns {
     | "date_register_to"
     | "participant_type"
     | "currency"
+    | "booking_type"
     | "amount";
   label: string;
   minWidth?: number;

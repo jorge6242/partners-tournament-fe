@@ -104,6 +104,7 @@ type FormData = {
     t_category_type_id: number;
     picture: string;
     paypal_id: string;
+    booking_type: number;
 };
 
 type ComponentProps = {
@@ -189,7 +190,8 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                     payments,
                     groups,
                     picture,
-                    paypal_id
+                    paypal_id,
+                    booking_type
                 } = response;
                 setValue("description", description);
                 setValue("max_participants", max_participants);
@@ -209,6 +211,7 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                 setValue("t_category_type_id", t_category_type_id);
                 setValue("picture", picture);
                 setValue("paypal_id", paypal_id);
+                setValue("booking_type", booking_type);
                 setImage({ ...image, preview: picture });
                 description_details && setDescriptionDetailsContent(description_details);
                 description_price && setDescriptionPriceContent(description_price);
@@ -668,6 +671,20 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                                     errors.paypal_id && errors.paypal_id.message
                                                 }
                                             />
+                                        </Grid>
+                                        <Grid item xs={4}>
+                                            <CustomSelect
+                                                label="Modalidad"
+                                                selectionMessage="Seleccione"
+                                                field="booking_type"
+                                                register={register}
+                                                errorsMessageField={
+                                                    errors.booking_type && errors.booking_type.message
+                                                }
+                                            >
+                                                <option value={1}> Evento </option>
+                                                <option value={2}> Sorteo </option>
+                                            </CustomSelect>
                                         </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>

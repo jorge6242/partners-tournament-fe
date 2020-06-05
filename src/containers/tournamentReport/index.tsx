@@ -146,6 +146,20 @@ export default function TournamentReport() {
         )
       }
     },
+    {
+      id: "nro_comprobante",
+      label: "Paypal Recibo",
+      minWidth: 10,
+      align: "right",
+      component: (value: any) => <span>{value.value}</span>
+    },
+    {
+      id: "fec_pago",
+      label: "Paypal Fecha",
+      minWidth: 10,
+      align: "right",
+    component: (value: any) => <span>{moment(value.value).format("DD-MM-YYYY")} <br /> {moment(value.value).format("h:mm:ss A")}</span>
+    },
     // {
     //   id: "id",
     //   label: "Comentario",
@@ -181,6 +195,10 @@ export default function TournamentReport() {
         }
         if (value.value === "1") {
           status = "Aceptado";
+          backgroundColor = '#2ecc71';
+        }
+        if (value.value === "2") {
+          status = "Ganador";
           backgroundColor = '#2ecc71';
         }
         if (value.value === "-1") {
