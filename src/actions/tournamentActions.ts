@@ -776,18 +776,18 @@ export const getInscriptionsReport = (
   });
   try {
     const {
-      data: { data },
+      data,
       status,
     } = await API.getInscriptionsReport(page, perPage, query);
-    let response = [];
+    let response = { data: [], total: 0};
     if (status === 200) {
       const pagination = {
-        total: data.total,
-        perPage: data.per_page,
-        prevPageUrl: data.prev_page_url,
-        currentPage: data.current_page,
+        total: data.data.total,
+        perPage: data.data.per_page,
+        prevPageUrl: data.data.prev_page_url,
+        currentPage: data.data.current_page,
       };
-      response = data;
+      response = {data: data.data.data, total: data.total};
       dispatch({
         type: ACTIONS.GET_INSCRIPTIONS_REPORT,
         payload: response,
@@ -865,7 +865,7 @@ export const getParticipant = (id: number) => async (dispatch: Function) => {
   }
 };
 
-export const updateParticipant = (body: object, comment = false) => async (
+export const updateParticipant = (body: object, comment = false, queryFilter: any = null) => async (
   dispatch: Function
 ) => {
   dispatch({
@@ -898,7 +898,12 @@ export const updateParticipant = (body: object, comment = false) => async (
           },
         })
       );
-      dispatch(getInscriptions());
+      if(queryFilter) {
+        dispatch(getInscriptions(queryFilter.currentPage, queryFilter.perPage, queryFilter.query))
+      } else {
+        dispatch(getInscriptions());
+      }
+      
       dispatch({
         type: ACTIONS.SET_PARTICIPANT_LOADING,
         payload: false,

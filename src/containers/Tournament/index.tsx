@@ -264,6 +264,7 @@ export default function Tournament() {
                 size="small"
                 color="primary"
                 variant="contained"
+                disabled={loading}
                 onClick={() => handleSearch()}
               >
                 Buscar

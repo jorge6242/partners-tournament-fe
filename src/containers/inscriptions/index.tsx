@@ -56,7 +56,7 @@ const useStyles = makeStyles(() => ({
 export default function Inscriptions() {
   const [selectedCategory, setSelectedCategory] = useState<any>(0);
   const [selectedTournament, setSelectedTournament] = useState<any>(0);
-  const [selectedBookinType, setSelectedBookingType] = useState<any>(0);
+  const [selectedStatus, setSelectedStatus] = useState<any>("");
   const [selectedSearch, setSelectedSearch] = useState<any>("");
   const classes = useStyles();
   const dispatch = useDispatch();
@@ -131,6 +131,7 @@ export default function Inscriptions() {
   }
 
   const handleSwitchStatus = async (currentStatus: string, row: any) => {
+    const { currentPage, perPage } = pagination;
     let status = '';
     if (currentStatus !== '2') {
       status = currentStatus;
@@ -138,7 +139,13 @@ export default function Inscriptions() {
         id: row.id,
         status
       };
-      await dispatch(updateParticipant(data));
+      const query = {
+        category: selectedCategory,
+        tournament: selectedTournament,
+        term: selectedSearch,
+        status: selectedStatus
+      }
+      await dispatch(updateParticipant(data, false, {currentPage, perPage, query}));
     }
   };
 
@@ -154,42 +161,49 @@ export default function Inscriptions() {
       label: "Rif/CI",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{value.value.doc_id}</span>
+      component: (value: any) => <span>{value.value & value.value.doc_id}</span>
     },
     {
       id: "user",
       label: "Nombre",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{value.value.name}</span>
+      component: (value: any) => <span>{value.value & value.value.name}</span>
     },
     {
       id: "user",
       label: "Apellido",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{value.value.last_name}</span>
+      component: (value: any) => <span>{value.value & value.value.last_name}</span>
     },
     {
       id: "user",
       label: "Correo",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{value.value.email}</span>
+      component: (value: any) => <span>{value.value & value.value.email}</span>
     },
     {
       id: "user",
       label: "Telefono",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{value.value.phone_number}</span>
+      component: (value: any) => <span>{value.value && value.value.phone_number}</span>
     },
     {
       id: "payment",
       label: "Forma de Pago",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{value.value.description}</span>
+      component: (value: any) => <span>{value.value && value.value.description}</span>
+    },
+    {
+      id: "tournament",
+      label: "Monto",
+      minWidth: 10,
+      align: "right",
+      component: (value: any) => <span>{value.value && value.value.amount}</span>
     },
     {
       id: "attach_file",
@@ -197,17 +211,20 @@ export default function Inscriptions() {
       minWidth: 1,
       align: "center",
       component: (value: any) => {
-        return (
-          <a target="_blank" href={value.value} title="comprobante" >
-            <IconButton
-              aria-label="file"
-              size="small"
-              color="primary"
-            >
-              <SearchIcon fontSize="inherit" />
-            </IconButton>
-          </a>
-        )
+        if(value.value) {
+          return (
+            <a target="_blank" href={value.value} title="comprobante" >
+              <IconButton
+                aria-label="file"
+                size="small"
+                color="primary"
+              >
+                <SearchIcon fontSize="inherit" />
+              </IconButton>
+            </a>
+          )
+        }
+        return  <div />
       }
     },
     {
@@ -338,9 +355,9 @@ export default function Inscriptions() {
       component: (value: any) => {
         const inscription = renderInscriptionStatus(value.value);
         const pattern = [
+          { status: "-1", color: "#e74c3c" },
           { status: "0", color: "#2980b9" },
           { status: "1", color: "#2ecc71" },
-          { status: "-1", color: "#e74c3c" },
         ]
         return <MultipleSwitch pattern={pattern} selected={inscription} handleClick={handleSwitchStatus} />
       },
@@ -351,7 +368,7 @@ export default function Inscriptions() {
     async function fetchData() {
       dispatch(getTCategoryList());
       dispatch(getTournamentList());
-      dispatch(getAll());
+      // dispatch(getAll());
     }
     fetchData();
   }, [dispatch]);
@@ -376,8 +393,8 @@ export default function Inscriptions() {
     setSelectedTournament(event.target.value);
   }
 
-  const handleBookingType = (event: any) => {
-    setSelectedBookingType(event.target.value);
+  const handleStatus = (event: any) => {
+    setSelectedStatus(event.target.value);
   }
 
   const handleSearch = () => {
@@ -386,7 +403,7 @@ export default function Inscriptions() {
       category: selectedCategory,
       tournament: selectedTournament,
       term: selectedSearch,
-      // bookingType: selectedBookinType
+      status: selectedStatus
     }
     if (selectedCategory > 0 && selectedTournament > 0) {
       dispatch(getAll(currentPage, perPage, query));
@@ -418,20 +435,21 @@ export default function Inscriptions() {
           onChange={setInputSearch}
         />
       </Grid>
-      {/* <Grid item xs={2}>
+      <Grid item xs={2}>
         <div>
           <select
             className={classes.select}
-            name="modalidad"
-            onChange={handleBookingType}
+            name="status"
+            onChange={handleStatus}
             style={{ fontSize: "13px" }}
           >
-            <option value={0}>Seleccione Modalidad</option>
-            <option value={1}>Evento</option>
-            <option value={2}>Sorteo</option>
+            <option value="">Selecione Status</option>
+            <option value={0}>Pendiente</option>
+            <option value={1}>Aceptado</option>
+            <option value={-1}>Rezhazado</option>
           </select>
         </div>
-      </Grid> */}
+      </Grid>
       <Grid item xs={2}>
         <div>
           <select
@@ -472,6 +490,7 @@ export default function Inscriptions() {
           color="primary"
           variant="contained"
           className={classes.margin}
+          disabled={loading}
           onClick={() => handleSearch()}
         >
           Buscar

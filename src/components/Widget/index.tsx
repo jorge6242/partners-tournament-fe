@@ -49,7 +49,7 @@ const Widgtet: FunctionComponent<FormComponentProps> = ({
 
   const handleLink = () => {
     if(internal) {
-      window.open(link,'_blank');
+      history.push(link);
     } else {
       window.open(link,'_blank');
     }

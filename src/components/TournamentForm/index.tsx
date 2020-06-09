@@ -662,17 +662,6 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                             />
                                         </Grid>
                                         <Grid item xs={4}>
-                                            <CustomTextField
-                                                placeholder="Paypal ID"
-                                                field="paypal_id"
-                                                register={register}
-                                                errorsField={errors.paypal_id}
-                                                errorsMessageField={
-                                                    errors.paypal_id && errors.paypal_id.message
-                                                }
-                                            />
-                                        </Grid>
-                                        <Grid item xs={4}>
                                             <CustomSelect
                                                 label="Modalidad"
                                                 selectionMessage="Seleccione"
@@ -685,6 +674,17 @@ const TournamentForm: FunctionComponent<ComponentProps> = ({
                                                 <option value={1}> Evento </option>
                                                 <option value={2}> Sorteo </option>
                                             </CustomSelect>
+                                        </Grid>
+                                        <Grid item xs={8}>
+                                            <CustomTextField
+                                                placeholder="Paypal ID"
+                                                field="paypal_id"
+                                                register={register}
+                                                errorsField={errors.paypal_id}
+                                                errorsMessageField={
+                                                    errors.paypal_id && errors.paypal_id.message
+                                                }
+                                            />
                                         </Grid>
                                     </Grid>
                                 </ExpansionPanelDetails>

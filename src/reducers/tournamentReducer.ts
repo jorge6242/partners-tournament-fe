@@ -7,7 +7,7 @@ type InitState = {
   list: Array<string | number>;
   tournamentsByCategory: Array<string | number>;
   inscriptions: Array< string | number>
-  inscriptionsReport: Array< string | number>
+  inscriptionsReport: any;
   loading: boolean;
   setParticipantLoading: boolean;
   getInscriptionsLoading: boolean;
@@ -29,7 +29,7 @@ const initialState: InitState = {
   setParticipantLoading: false,
   inscriptions: [],
   getInscriptionsLoading: false,
-  inscriptionsReport: [],
+  inscriptionsReport: { data: [], total: 0},
 };
 
 const tournamentReducer = (state = initialState, action: ActionTypes) => {

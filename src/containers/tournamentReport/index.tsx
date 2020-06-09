@@ -128,6 +128,13 @@ export default function TournamentReport() {
       component: (value: any) => <span>{value.value.description}</span>
     },
     {
+      id: "tournament",
+      label: "Monto",
+      minWidth: 10,
+      align: "right",
+      component: (value: any) => <span>{value.value && value.value.amount}</span>
+    },
+    {
       id: "attach_file",
       label: "Comprobante",
       minWidth: 10,
@@ -158,7 +165,12 @@ export default function TournamentReport() {
       label: "Paypal Fecha",
       minWidth: 10,
       align: "right",
-    component: (value: any) => <span>{moment(value.value).format("DD-MM-YYYY")} <br /> {moment(value.value).format("h:mm:ss A")}</span>
+      component: (value: any) => {
+        if(value.value) {
+          return <span>{moment(value.value).format("DD-MM-YYYY")} <br /> {moment(value.value).format("h:mm:ss A")}</span>
+        }
+        return <div />
+      }
     },
     // {
     //   id: "id",
@@ -303,11 +315,17 @@ export default function TournamentReport() {
 
   }
 
+  const customColumns = [
+    { column: 'Monto',  value: list.data.length > 0 ? list.total : 0, align: 'right'  },
+    { column: 'Verificado', value: 'Totales',  align: 'right'  },
+    { column: 'Localizador', value: list.data.length,  align: 'center'  },
+  ]
+  
   return (
     <Grid container spacing={2}>
       <Grid item xs={6}>Reporte de Inscripcion de Eventos</Grid>
       <Grid item xs={6} style={{ textAlign: 'right' }}>
-        <Fab size="small" type="button" color="primary" aria-label="report" onClick={() => handleReport()}>
+        <Fab disabled={loading} size="small" type="button" color="primary" aria-label="report" onClick={() => handleReport()}>
           <PrintIcon />
         </Fab>
       </Grid>
@@ -364,6 +382,7 @@ export default function TournamentReport() {
           color="primary"
           variant="contained"
           className={classes.margin}
+          disabled={loading}
           onClick={() => handleSearch()}
         >
           Buscar
@@ -371,12 +390,13 @@ export default function TournamentReport() {
       </Grid>
       <Grid item xs={12}>
         <DataTable4
-          rows={list}
+          rows={list.data}
           pagination={pagination}
           columns={columns}
           loading={loading}
           onChangePage={handleChangePage}
           onChangePerPage={handlePerPage}
+          customColumns={list.data.length > 0 ? customColumns: null}
         />
       </Grid>
     </Grid>

@@ -19,7 +19,7 @@ interface Get {
 
 interface GetInsscriptionsReport {
   type: typeof ACTIONS.GET_INSCRIPTIONS_REPORT;
-  payload: Array<string | number>;
+  payload: any;
 }
 
 interface SetReportLoading {

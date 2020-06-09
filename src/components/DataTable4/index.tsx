@@ -80,6 +80,7 @@ interface DataTableProps {
   aditionalColumnLabel?: string;
   handleSwitch?: any;
   isInscription?: boolean;
+  customColumns?: any;
 }
 
 const DataTable4: FunctionComponent<DataTableProps> = ({
@@ -100,6 +101,7 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
   aditionalColumnLabel,
   handleSwitch,
   isInscription = false,
+  customColumns,
 }) => {
   const classes = useStyles();
   const [selectedRow, setSelectedRow] = useState(0);
@@ -230,6 +232,23 @@ const DataTable4: FunctionComponent<DataTableProps> = ({
                   );
                 })
               )}
+              <TableRow >
+              {customColumns && columns.map((element: any) => {
+                const current: any = customColumns.find((e: any) => e.column === element.label)
+                return (
+                  <TableCell
+                    key={element.id}
+                    align={current && current.align ? current.align : element.align}
+                    className={classes.tableCellHeader}
+                    style={{
+                      minWidth: element.minWidth, fontSize, fontWeight: 'bold' 
+                    }}
+                  >
+                    { current && current.value  }
+                  </TableCell>
+                )
+              })}
+              </TableRow>
             {aditionalColumn && (
               <TableRow>
                 <TableCell
