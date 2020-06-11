@@ -337,6 +337,10 @@ export const getAvailablePlayerTournament = (id: any) => async (
     if (status === 200) {
       response = data;
     }
+    dispatch({
+      type: ACTIONS.SET_PARTICIPANT_LOADING,
+      payload: false
+    });
     return response;
   } catch (error) {
     const message = Message.exception(error);
@@ -347,10 +351,6 @@ export const getAvailablePlayerTournament = (id: any) => async (
         type: "error",
       },
     })(dispatch);
-    dispatch({
-      type: ACTIONS.SET_PARTICIPANT_LOADING,
-      payload: false,
-    });
     dispatch({
       type: ACTIONS.SET_PARTICIPANT_LOADING,
       payload: false,

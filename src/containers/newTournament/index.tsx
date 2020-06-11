@@ -108,6 +108,9 @@ const useStyles = makeStyles((theme: Theme) =>
         fontSize: 14,
       },
     },
+    maxQuota: {
+      color: 'red',
+    },
     heading: {
       fontSize: theme.typography.pxToRem(15),
       fontWeight: theme.typography.fontWeightRegular,
@@ -141,6 +144,7 @@ export default function NewTournament() {
   const [selectedNameFile, setSelectedNameFile] = useState<any>("");
   const [userContent, setUserContent] = useState<any>("");
   const [locator, setLocator] = useState<any>("");
+  const [maxQuota, setMaxQuota] = useState<boolean>(false);
   const steps = getSteps();
   const dispatch = useDispatch();
   const history = useHistory();
@@ -203,21 +207,6 @@ export default function NewTournament() {
     return ["Evento", "Registro", "Confirmacion"];
   }
 
-  function getStepContent(step: number) {
-    switch (step) {
-      case 0:
-        return <SelectCategory />;
-      case 1:
-        return <TournamentDetails />;
-      case 2:
-        return <Sumary />;
-      case 3:
-        return <Confirmation />;
-      default:
-        return "Unknown step";
-    }
-  }
-
   const isStepOptional = (step: number) => {
     return step === 1;
   };
@@ -231,7 +220,8 @@ export default function NewTournament() {
     const currentStep = activeStep + 1;
     const isAvailable = selectedTournament ? await dispatch(getAvailableTournament(selectedTournament.id)) : false;
     const isPlayerAvailable = selectedTournament ? await dispatch(getAvailablePlayerTournament(selectedTournament.id)) : false;
-    const isAvailableQuota = selectedTournament ? await dispatch(getAvailableQuota(selectedTournament.id)) : false;
+    const isAvailableQuota: any = selectedTournament && selectedTournament.booking_type === "1" ? await dispatch(getAvailableQuota(selectedTournament.id)) : false;
+    setMaxQuota(isAvailableQuota);
 
     if (activeStep === 0 && (!selectedCategory || !selectedTournament)) {
       dispatch(
@@ -268,15 +258,15 @@ export default function NewTournament() {
       dispatch(
         snackBarUpdate({
           payload: {
-            message: `El cupo maximo de participantes en el Evento : ${selectedTournament.description} se ha excedido,
-            Intente nuevamente mas tarde para verificar si se libera algun cupo y se puede inscribir nuevamente.`,
+            message: `El cupo maximo de participantes en el Evento : ${selectedTournament.description} <br> se ha completado 
+            Intente nuevamente mas tarde.`,
             type: "error",
             status: true,
           },
         })
       );
     }
-     else if (activeStep === 1 && selectedPayment === "") {
+    else if (activeStep === 1 && selectedPayment === "") {
       dispatch(
         snackBarUpdate({
           payload: {
@@ -287,7 +277,7 @@ export default function NewTournament() {
         })
       );
     } else if (currentStep === steps.length) {
-      const data: any = {           
+      const data: any = {
         t_payment_methods_id: selectedPayment,
         tournament_id: selectedTournament.id,
         user_id: user.id,
@@ -314,7 +304,11 @@ export default function NewTournament() {
     }
   };
 
-  const handleBack = () => {
+  const handleBack = async () => {
+    if (activeStep === 2) {
+      const isAvailableQuota: any = selectedTournament && selectedTournament.booking_type === "1" ? await dispatch(getAvailableQuota(selectedTournament.id)) : false;
+      setMaxQuota(isAvailableQuota);
+    }
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
@@ -475,7 +469,7 @@ export default function NewTournament() {
             <Grid item xs={12} style={{ marginBottom: 20 }} >
               <Grid container spacing={1} className={classes.detailsContainer}>
                 <Grid item xs={12} sm={6} className={classes.itemField}>
-                  <strong>Nombre: </strong> {user.name} 
+                  <strong>Nombre: </strong> {user.name}
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.itemField}>
                   <strong>Apellido: </strong> {user.last_name}
@@ -488,9 +482,20 @@ export default function NewTournament() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={12} className={classes.itemField}>
-              <strong>Cupos Disponibles: </strong> {selectedTournament.participants && selectedTournament.participants} / {selectedTournament.max_participants}
-            </Grid>
+            {
+              selectedTournament && selectedTournament.booking_type === "1" && (
+                <Grid item xs={12} className={`${classes.itemField} ${maxQuota ? classes.maxQuota : ''}`}>
+                  <strong>Cupos Disponibles: </strong> {selectedTournament.participants && selectedTournament.participants} / {selectedTournament.max_participants}
+                </Grid>
+              )
+            }
+            {
+              selectedTournament && selectedTournament.booking_type === "2" && (
+                <Grid item xs={12} className={`${classes.itemField} ${maxQuota ? classes.maxQuota : ''}`}>
+                  <strong>Total de Cupos: </strong> {selectedTournament.max_participants}
+                </Grid>
+              )
+            }
             <Grid item xs={12} className={classes.itemField}>
               <strong>Categoria: </strong> {selectedCategory.description}
             </Grid>
@@ -599,12 +604,12 @@ export default function NewTournament() {
             <Grid
               item
               xs={6}
-              sm={4} 
+              sm={4}
               className={classes.itemField}
             >
               <strong>Metodo de Pago</strong>
             </Grid>
-            <Grid item xs={6} sm={4}  className={classes.itemField}>
+            <Grid item xs={6} sm={4} className={classes.itemField}>
               <div className="custom-select-container">
                 <select
                   name="relation"
@@ -653,7 +658,7 @@ export default function NewTournament() {
             <Grid xs={12} sm={12} md={8} style={{ marginBottom: 20 }}>
               <Grid container spacing={1} className={classes.detailsContainer}>
                 <Grid item xs={12} sm={6} className={classes.itemField}>
-                  <strong>Nombre: </strong> {user.name} 
+                  <strong>Nombre: </strong> {user.name}
                 </Grid>
                 <Grid item xs={12} sm={6} className={classes.itemField}>
                   <strong>Apellido: </strong> {user.last_name}
@@ -678,7 +683,7 @@ export default function NewTournament() {
               xs={12}
               className={classes.itemField}
               style={{ marginTop: 10, display: "none" }}
-              
+
             >
               <ExpansionPanel
                 expanded={expanded === "panel1"}
@@ -763,7 +768,7 @@ export default function NewTournament() {
               item
               xs={12}
               className={classes.itemField}
-              style={{ textAlign: "left", marginBottom: 20, display: "none"  }}
+              style={{ textAlign: "left", marginBottom: 20, display: "none" }}
             >
               {selectedTournament.groups.map((e: any) => (
                 <div>{e.description}</div>
@@ -807,6 +812,26 @@ export default function NewTournament() {
         </Grid>
       </Grid>
     );
+  }
+
+  const checkQuota = async () => {
+    const quota: any = selectedTournament ? await dispatch(getAvailableQuota(selectedTournament.id)) : false;
+    setMaxQuota(quota);
+  }
+
+  function getStepContent(step: number) {
+    switch (step) {
+      case 0:
+        return SelectCategory();
+      case 1:
+        return TournamentDetails();
+      case 2:
+        return Sumary();
+      case 3:
+        return Confirmation();
+      default:
+        return "Unknown step";
+    }
   }
 
   return (
@@ -856,27 +881,27 @@ export default function NewTournament() {
                       Registrarse en otro Evento
                     </Button>
                   ) : (
-                    <React.Fragment>
-                      <Button
-                        disabled={activeStep === 0}
-                        onClick={handleBack}
-                        className={classes.button}
-                      >
-                        Regresar
+                      <React.Fragment>
+                        <Button
+                          disabled={activeStep === 0}
+                          onClick={handleBack}
+                          className={classes.button}
+                        >
+                          Regresar
                       </Button>
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={handleNext}
-                        className={classes.button}
-                        disabled={setParticipantLoading}
-                      >
-                        {activeStep === steps.length - 1
-                          ? "Inscribirse"
-                          : "Siguiente"}
-                      </Button>
-                    </React.Fragment>
-                  )}
+                        <Button
+                          variant="contained"
+                          color="primary"
+                          onClick={handleNext}
+                          className={classes.button}
+                          disabled={setParticipantLoading}
+                        >
+                          {activeStep === steps.length - 1
+                            ? "Inscribirse"
+                            : "Siguiente"}
+                        </Button>
+                      </React.Fragment>
+                    )}
                 </div>
               </div>
             </div>
