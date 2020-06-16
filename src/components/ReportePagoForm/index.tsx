@@ -76,7 +76,6 @@ const ReportePagosForm: FunctionComponent<FormComponentProps> = ({ id }) => {
         register,
         errors,
         reset,
-        getValues
     } = useForm<FormData>();
     const loading = useSelector((state: any) => state.genderReducer.loading);
     const dispatch = useDispatch();

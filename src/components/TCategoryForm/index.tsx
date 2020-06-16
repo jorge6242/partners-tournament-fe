@@ -75,7 +75,7 @@ const TCategoryForm: FunctionComponent<ComponentProps> = ({
     const [image, setImage] = useState({ preview: "", raw: "" });
     const [imageField, setImageField] = useState();
     const classes = useStyles();
-    const { handleSubmit, register, errors, reset, setValue, getValues } = useForm<
+    const { handleSubmit, register, errors, reset, setValue } = useForm<
         FormData
     >();
     const {
@@ -83,7 +83,6 @@ const TCategoryForm: FunctionComponent<ComponentProps> = ({
         tCategoryTypeReducer: { listData: categoryTypeList },
     } = useSelector((state: any) => state);
     const dispatch = useDispatch();
-    const { picture } = getValues();
 
     useEffect(() => {
         dispatch(getList());

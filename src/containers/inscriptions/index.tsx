@@ -161,28 +161,28 @@ export default function Inscriptions() {
       label: "Rif/CI",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{value.value & value.value.doc_id}</span>
+      component: (value: any) => <span>{value.value && value.value.doc_id}</span>
     },
     {
       id: "user",
       label: "Nombre",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{value.value & value.value.name}</span>
+      component: (value: any) => <span>{value.value && value.value.name}</span>
     },
     {
       id: "user",
       label: "Apellido",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{value.value & value.value.last_name}</span>
+      component: (value: any) => <span>{value.value && value.value.last_name}</span>
     },
     {
       id: "user",
       label: "Correo",
       minWidth: 10,
       align: "right",
-      component: (value: any) => <span>{value.value & value.value.email}</span>
+      component: (value: any) => <span>{value.value && value.value.email}</span>
     },
     {
       id: "user",

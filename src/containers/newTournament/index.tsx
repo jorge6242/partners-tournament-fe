@@ -22,7 +22,7 @@ import { useForm } from "react-hook-form";
 import Paper from "@material-ui/core/Paper";
 import Icon from "@material-ui/core/Icon";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import { green } from "@material-ui/core/colors";
+import { green, blue } from "@material-ui/core/colors";
 import ExpansionPanel from "@material-ui/core/ExpansionPanel";
 import ExpansionPanelDetails from "@material-ui/core/ExpansionPanelDetails";
 import MuiExpansionPanelSummary from "@material-ui/core/ExpansionPanelSummary";
@@ -491,9 +491,14 @@ export default function NewTournament() {
             }
             {
               selectedTournament && selectedTournament.booking_type === "2" && (
-                <Grid item xs={12} className={`${classes.itemField} ${maxQuota ? classes.maxQuota : ''}`}>
-                  <strong>Total de Cupos: </strong> {selectedTournament.max_participants}
+                <React.Fragment>
+                  <Grid item xs={12} className={`${classes.itemField} ${maxQuota ? classes.maxQuota : ''}`}>
+                  <strong>Total de Cupos: </strong> {selectedTournament.max_participants} <span style={{ color: 'blue', fontWeight: 'bold' }}>( Sorteable )</span>
                 </Grid>
+                <Grid item xs={12} className={`${classes.itemField} ${maxQuota ? classes.maxQuota : ''}`}>
+                  <strong>Total Aspirantes: </strong> {selectedTournament.participants}
+                </Grid>
+                </React.Fragment>
               )
             }
             <Grid item xs={12} className={classes.itemField}>

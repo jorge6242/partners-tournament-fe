@@ -7,20 +7,7 @@ import Hidden from "@material-ui/core/Hidden";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import DashboardIcon from '@material-ui/icons/Dashboard';
-import PaymentIcon from '@material-ui/icons/Payment';
 import SettingsIcon from '@material-ui/icons/Settings';
-import LockIcon from '@material-ui/icons/Lock';
-import PeopleIcon from '@material-ui/icons/People';
-// import SportsBaseballIcon from '@material-ui/icons/SportsBaseball';
-// import AccountBalanceIcon from '@material-ui/icons/AccountBalance';
-// import ListAltIcon from '@material-ui/icons/ListAlt';
-// import LockIcon from '@material-ui/icons/Lock';
-// import DoubleArrowIcon from "@material-ui/icons/DoubleArrow";
-// import PeopleIcon from '@material-ui/icons/People';
-// import CenterFocusWeakIcon from '@material-ui/icons/CenterFocusWeak';
-// import BuildIcon from '@material-ui/icons/Build';
-import AssignmentLateIcon from '@material-ui/icons/AssignmentLate';
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -41,25 +28,13 @@ import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import IconExpandLess from '@material-ui/icons/ExpandLess'
 import IconExpandMore from '@material-ui/icons/ExpandMore'
-import IconLibraryBooks from '@material-ui/icons/LibraryBooks';
-import DoubleArrowIcon from '@material-ui/icons/DoubleArrow';
-// import Collapse from '@material-ui/core/Collapse'
 import _ from 'lodash';
-import CommentIcon from '@material-ui/icons/Comment';
 import queryString from "query-string";
 import { Grid, Chip } from "@material-ui/core";
 
 import { logout, setForcedLogin, checkLogin, setupInterceptors } from "../../actions/loginActions";
-import AccessControlForm from "../../components/AccessControlForm";
-import { updateModal } from "../../actions/modalActions";
-import { getAll as getStatusPersonAll } from "../../actions/statusPersonActions";
-import { getAll as getMaritalStatusAll } from "../../actions/maritalStatusActions";
 import { getAll as getGenderAll } from "../../actions/genderActions";
 import { getAll as getCountries } from "../../actions/countryActions";
-import { getAll as getRelationTypes } from "../../actions/relationTypeActions";
-import { getAll as getPaymentMethods } from "../../actions/paymentMethodActions";
-import { getAll as getSports } from "../../actions/sportActions";
-import { getList as getLockerLocationList } from "../../actions/lockerLocationsActions";
 import { getList as getMenuList, getWidgetList } from "../../actions/menuActions";
 import { getList as getParameterList } from "../../actions/parameterActions";
 import { getList as getCategoryList } from "../../actions/tCategoryActions";
@@ -68,8 +43,6 @@ import { getList as getRuleTypeList } from "../../actions/tRuleCategoryActions";
 import { getList as getPaymentMethodList } from "../../actions/tPaymentMethodActions";
 import { getList as getCategoriesGroupList } from "../../actions/tCategoriesGroupActions";
 import Loader from "../../components/common/Loader";
-import { getClient } from "../../actions/personActions";
-import { getBalance } from "../../actions/webServiceActions";
 import icons from "../../helpers/collectionIcons";
 import Helper from '../../helpers/utilities';
 import Logo from '../../components/Logo'
