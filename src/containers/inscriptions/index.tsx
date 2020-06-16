@@ -355,9 +355,9 @@ export default function Inscriptions() {
       component: (value: any) => {
         const inscription = renderInscriptionStatus(value.value);
         const pattern = [
-          { status: "-1", color: "#e74c3c" },
-          { status: "0", color: "#2980b9" },
-          { status: "1", color: "#2ecc71" },
+          { status: "1", color: "#2ecc71", toolTip: 'Aceptado'  },
+          { status: "0", color: "#2980b9", toolTip: 'Pendiente'  },
+          { status: "-1", color: "#e74c3c", toolTip: 'Rechazado'  },
         ]
         return <MultipleSwitch pattern={pattern} selected={inscription} handleClick={handleSwitchStatus} />
       },
