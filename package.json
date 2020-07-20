@@ -27,7 +27,7 @@
     "downloadjs": "^1.4.7",
     "history": "^4.10.1",
     "jodit-react": "^1.0.42",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "material-table": "^1.57.2",
     "moment": "^2.24.0",
     "query-string": "^6.11.1",
